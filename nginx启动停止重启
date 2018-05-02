@@ -1,0 +1,27 @@
+
+
+启动nginx：
+sudo /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+
+强制停止
+sudo pkill -9 nginx
+
+
+
+
+
+
+
+
+
+启动nginx
+netstat -ano|grep 80
+　　如果查不到执行结果，则忽略上一步（ubuntu下必须用sudo启动，不然只能在前台运行）
+sudo /usr/local/nginx/nginx
+
+停止：
+1、查看进程号
+[root@LinuxServer ~]# ps -ef|grep nginx
+　　2、杀死进程
+[root@LinuxServer ~]# kill -QUIT 2072
+

@@ -1,0 +1,5 @@
+动态include:它总是会检查所含文件中的变化，适合用于包含动态页面，并且可以带参数，先编译之后再进行处理。 
+<jsp:include page="friendShipLink.jsp" />
+
+静态include:用include伪码实现,定不会检查所含文件的变化，适用于包含静态页面，直接将内容先包含后处理。
+<%@include file="footer.jsp" %>

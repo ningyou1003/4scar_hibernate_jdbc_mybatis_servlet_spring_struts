@@ -1,0 +1,25 @@
+<%@ page language="java" contentType="text/html; charset=gb2312"%>
+
+<%@ include file="/11.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+ </head>
+ <body>
+ test00.
+
+
+<%
+	String absPath=application.getRealPath(request.getRequestURI());
+	String g = request.getSession().getServletContext().getRealPath("/");//request.getRealPath("/");
+	
+ %>
+1110101   </br>
+
+页面所在路径：application.getRealPath(request.getRequestURI());<%=absPath %>  </br>
+真正的上下文路径request.getSession().getServletContext().getRealPath("/")：<%= g%> </br>
+
+
+
+ </body>
+</html>

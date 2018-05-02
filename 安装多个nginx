@@ -1,0 +1,18 @@
+在linux下安装nginx的时候，一般在./configure的阶段会要求通过prefix设置安装路径。因此，在./configure的时候指定不同的prefix就可以安装多个nginx啦。
+值得注意的是，安装完之后，两个nginx的监听端口要设置成不同的监听端口。否则，会有一个nginx无法启动。
+1
+2
+./configure --prefix=/home/work/nginx1 .....//第一个nginx的安装配置
+make && make install
+1
+2
+./configure --prefix=/home/work/nginx2 .....//第二个nginx的安装配置
+make && make install
+1
+2
+cd /home/work/nginx1/conf/nginx.conf && 修改第一个nginx的监听端口.
+./home/work/nginx1/sbin/nginx
+1
+2
+cd /home/work/nginx2/conf/nginx.conf && 修改第二个nginx的监听端口.
+./home/work/nginx2/sbin/nginx

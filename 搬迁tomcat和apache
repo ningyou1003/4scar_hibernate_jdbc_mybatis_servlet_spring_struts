@@ -1,0 +1,36 @@
+1.tomcat搬迁到新的机子后，能独立跑起来
+   
+    <Host name="localhost"  appBase="E:\tomcat_dm\webapps"
+            unpackWARs="true" autoDeploy="true">
+    <Context path="" docBase="E:\tomcat_dm\webapps" debug="0" reloadable="true"/>
+
+	
+	name="localhost":localhost:端口号
+	appBase="E:\tomcat_dm\webapps"：根目录
+
+
+2.阿帕奇虚拟机
+
+<VirtualHost *:810>
+	<Directory "E:/tomcat_dm/webapps/ROOT">--后台根目录
+		DirectoryIndex index.html	--首页
+	</Directory>
+	ServerName resource.caedin.org  --浏览器访问resource.caedin.org:810，去访问跟目录下的index.jsp
+	Alias /ewebeditor/jsp/ /ewebeditor/aaa/  --别名
+	Alias /ewebeditor/admin/ /ewebeditor/aaa/ 
+	Alias /ewebeditor/ewebeditor.js /ewebeditor/aaa/ 
+	DocumentRoot E:/tomcat_dm/webapps/ROOT/
+	ErrorDocument 404 /ewebeditor/404.html  --错误页面
+
+</VirtualHost>
+
+
+<VirtualHost *:80>
+  ServerName portal.caedin.org  --访问名
+  ServerAlias caedin.org	--访问别名
+  ProxyPass / http://localhost:8180/	--正响代理：访问portal.caedin.org时会转成http://localhost:8180/
+  ProxyPassReverse / http://localhost:8180/	--反向代理：重定响时，跳转
+  SetEnv force-proxy-request-1.0.1
+  SetEnv proxy-nokeepalive 1
+  ProxyTimeout 100000	--超时
+</VirtualHost>

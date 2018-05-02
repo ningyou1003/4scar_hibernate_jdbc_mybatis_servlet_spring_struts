@@ -1,0 +1,8 @@
+java.net.BindException: Address already in use<null>:8080
+
+那是因为你的tomcat已经启动了  tomcat自带的关闭脚本 有时候关闭看上去成功了 其实并没有关闭了 
+你可以ps -ef | grep java查看 
+
+
+如果还在 就用kill 加上tomcat的路径，把它杀掉 再启动tomcat
+如果还在 就用kill -9 pid把它杀掉 再启动tomcat

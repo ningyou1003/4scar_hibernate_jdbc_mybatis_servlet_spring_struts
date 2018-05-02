@@ -1,0 +1,5 @@
+验证码不显示，改改common.js和login.js里的ip，改成本机的ip
+
+数据库在config-properties里改
+
+前端对应后台的代码，搜索ip，改ip

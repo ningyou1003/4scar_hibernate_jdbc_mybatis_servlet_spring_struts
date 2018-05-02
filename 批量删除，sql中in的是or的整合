@@ -1,0 +1,6 @@
+delete from t_table t where t.id in(id1,id2,id3……)
+in的意思就是or的整合
+
+delete from t_table t where t.id=id1 or t.id=id2...
+
+可以在页面处理好id “1，2,3,4,5”为String类型传送

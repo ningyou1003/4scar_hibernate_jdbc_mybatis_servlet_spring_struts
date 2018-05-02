@@ -1,0 +1,16 @@
+<tr>
+					<td>
+						<ul class="forminfo">
+								<li class="row-item"><label> 示范 ：</label>
+            						<select ms-duplex="data.demonstration" maxlength="15" class="dfinput">
+                						<option  value="0">否</option>
+                						<option  value="1">是</option>
+            						</select>
+								</li>
+							</ul> 
+						<br />
+						<br /></td>
+				</tr>
+
+
+说明：ms-duplex="data.demonstration"里面的值，在option有对应的选项就显示，没有就显示空白

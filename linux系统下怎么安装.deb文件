@@ -1,0 +1,12 @@
+linux系统下怎么安装.deb文件？
+deb 是 ubuntu 、debian 的格式。
+rpm 是 redhat 、fedora 、suse 的格式。
+他们不通用（虽然可以转换一下）。
+deb是debian发行版的软件包
+ubuntu是基于debian 发行的 所有可以用
+.deb是solaris系统下的安装包后缀名。安装方法如下
+cd 到安装包的目录
+dpkg -i 安装包名字
+如果你使用的是red hat linux，然后运行以下命令安装
+cd 到安装包的目录
+rpm -ivh 安装包名字

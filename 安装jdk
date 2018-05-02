@@ -1,0 +1,13 @@
+1. 下载jdk版本的文件夹，可以自己创建一个目录来存放它
+2. 修改主目录的 .zshrc 文件，在文件里面添加下面的内容(最后加）
+export JAVA_HOME=/home/ym/jdk/jdk1.7.0_79   //放置jdk文件夹的路径
+export JRE_HOME=${JAVA_HOME}/jre  
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib  
+export PATH=${JAVA_HOME}/bin:$PATH  
+
+.zshrc 文件是一个隐藏文件，要显示它可以打开文件管理器，然后按 ctrl+h 显示隐藏文件
+
+3. 修改完之后在终端执行命令 source ~/.zshrc
+4. 如果遇到权限问题则在终端修改文件夹权限 sudo chmod 777 -R (jdk文件夹路径)
+
+

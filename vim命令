@@ -1,0 +1,24 @@
+pwd 显示工作路径 
+mkdir dir1 创建一个叫做 'dir1' 的目录' 
+mkdir dir1 dir2 同时创建两个目录 
+mkdir -p /tmp/dir1/dir2 创建一个目录树 
+rm -f file1 删除一个叫做 'file1' 的文件'
+mv dir1 new_dir 重命名/移动 一个目录 
+cp file1 file2 复制一个文件 
+
+cd,更改目录。clear，清屏命令。reset，重置终端。
+rpm -ivh,安装rpm包，rpm -e卸载rpm包 
+
+vi a.txt 创建文件a.txt 
+　:wq //在退出时，直接输入:wq会发现退不出去，退出方法是：编辑完成后按ESC，然后输入:q就是退出;还有:wq是保存后退出，加感叹号是表示强制
+
+
+yy复制当前行
+yw复制一个单词
+y$复制光标到结尾
+y^复制光标到行首
+#yy复制#行
+#yw复制#个单词
+m,ny复制m到n行内容。
+
+粘贴在命令模式下，将光标移动到将要粘贴的行处，按“p”进行粘贴

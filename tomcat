@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Server port="8005" shutdown="SHUTDOWN">//Server是顶级组件，代表一个 Tomcat 实例。可以包含一个或多个 Services ，其中每个 Service 都有自己的 Engines 和 Connectors。
+  <Listener className="org.apache.catalina.core.JasperListener" />
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+ 
+  <GlobalNamingResources>
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+ 
+  <Service name="Catalina">
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+    <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
+ 
+    <Engine name="Catalina" defaultHost="localhost">
+ 
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase"/>
+      </Realm>
+ 
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log." suffix=".txt"
+               pattern="%h %l %u %t "%r" %s %b" />
+      </Host>
+    </Engine>
+  </Service>
+</Server>
+
+
+3.9、Hosts
+
+一个 Host 定义了在 Engine 下的一个虚拟机，反过来其又支持多个 Context（web 应用）。
+
+1
+<Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true"/>
+默认配置定义了一个名为 localhost 的主机。
+
+appBase 属性定义了所有 webapp 的根目录，在这种情况下是 webapps。默认情况下，每一个 webapp 的 URL 和它所在的目录名称相同。例如，默认的 Tomcat 安装目录的 webapps 下提供了四个 web 应用：docs、examples、host-manager 和 manager。只有 ROOT 是个例外，它用一个空字符串定义。也就是说，它的 URL 是  http://localhost:8080/。
+
+unpackWARs 属性指定了放到 webapps 目录下的 WAR-file 是否应该被解压。对于 unpackWARs=”false“，Tomcat 将会直接从 WAR-file 运行应用，而不解压，这可能导致应用运行变慢。
+
+autoDeploy 属性指定了是否自动部署放到 webapps 目录下的应用。
+
+
+端口号配置80，可以用localhost访问首页

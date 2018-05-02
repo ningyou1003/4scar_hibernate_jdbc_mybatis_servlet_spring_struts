@@ -1,0 +1,19 @@
+安装教程地址：     http://www.cnblogs.com/bookwed/p/5896619.html
+		http://www.cnblogs.com/fnlingnzb-learner/p/5830622.html
+
+出现的问题：
+	Installing MySQL system tables..../bin/mysqld: error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or directory
+	（百度翻译：安装MySQL数据库系统表的…/斌/ mysqld：加载共享库时出错：该。所以。1：不能打开共享对象文件：没有这样的文件或目录）
+	解决方法：出现上述提示，说明安装过程中缺少一个依赖包：libaio,安装此依赖包即可。
+		sudo apt-get install libaio-dev
+
+	
+	Warning: Unit file of mysql.service changed on disk, ‘systemctl daemon-reload’ recommended.
+	（百度翻译：警告：mysql.service单元文件在磁盘上的改变，“systemctl守护进程加载的推荐。）
+	解决方法：CentOS下重启MariaDB的时候出现Warning: Unit file of mysql.service changed on disk, 'systemctl daemon-reload' recommended.错误，根据提示，我们可以先用systemctl daemon-reload
+		再systemctl restart mysql
+		即可。其他服务出现类似的情况，也可以使用systemctl daemon-reload来解决。
+
+
+从普通用户切换到root用户
+	sudo su root

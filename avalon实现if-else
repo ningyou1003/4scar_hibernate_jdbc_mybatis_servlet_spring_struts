@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script type="text/javascript" src="http://avalonjs.github.io/static/script/avalon.js"></script>
+		<title>avalon的if else</title>
+	</head>
+	<body>
+		<div ms-controller="test">
+			<div class="text1" ms-if="type==0">if 的内容</div>
+			<div class="text1" ms-if="type!=0">else 的内容</div>
+			
+			<div class="text2">
+				{{type==0?'if 的内容':'else 的内容'}}
+			</div>
+			
+			<div class="text3">
+				{{toHtml(type)}}
+			</div>
+		</div>
+	</body>
+    js的代码如下:
+var vm = avalon.define({
+	$id: "test",
+	type:1,
+	toHtml: function(type){
+		if(type===0){
+			return "if 的内容";
+		}else{
+			return "else 的内容";
+		}
+	}
+});

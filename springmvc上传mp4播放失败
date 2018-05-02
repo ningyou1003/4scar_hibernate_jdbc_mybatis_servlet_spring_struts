@@ -1,0 +1,20 @@
+东盟教育项目中MP4上传成功，但是播放不了，直接范围MP4视频文件报404，该文件也上传成功，路径也没错，这时要考虑是否拦截器拦截到了mp4文件交给servlet处理
+
+404错误有两种情况，1：路径错了，或者文件不存在；2：mimetype，spring mimetype 404
+
+在web.xml中加入配置，
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.MP4</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.mp4</url-pattern>
+	</servlet-mapping>
+
+在web.xml文件中经常看到这样的配置<servlet-name>default</servlet-name>，这个配置的作用是：对客户端请求的静态资源如图片、js文件等的请求交由默认的servlet进行处理
+
+
+<servlet-mapping>主要是截获请求的，  
+  如果你的url－pattern定义的是路径，那么以后所有对这个路径下资源的请求都会由servlet－name中定义的servlet处理；  
+  如果你的url－pattern定义的是资源格式例如*.do等，那么对于所有符合这种格式的资源的请求都由指定的servlet处理。

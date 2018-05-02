@@ -1,0 +1,17 @@
+select u.*, t.*, ub.barracks_level as bl, uh.house_level as hl, us.ware_level as sl, uf.factory_level as fl 
+from t_user u
+left join t_title_const t on u.title_id = t.title_id 
+left join t_barracks_process ub on ub.up_status = 1 and ub.user_id = u.user_id 
+left join t_house_process uh on uh.user_id = u.user_id and uh.up_status = 1 
+left join t_storage_process us on us.user_id = u.user_id and us.up_status = 1 
+left join t_factory_process uf on uf.user_id = u.user_id and uf.up_status = 1 
+where u.user_id = 1
+
+
+SELECT *
+  FROM 表1
+  LEFT JOIN 表2
+    ON 表1.关联字段=表2.关联字段
+  LEFT JOIN 表3
+    ON (表1/表2).关联字段=表3.关联字段
+ WHERE 条件

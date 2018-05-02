@@ -1,0 +1,13 @@
+
+				//获取当前路径
+				String root =  this.getClass().getResource("/").getPath();  
+				String imgRoot = root.substring(0,root.indexOf("ROOT")+4);
+				//获取文件名
+				File picture = new File(imgRoot+m.group(1));
+			        BufferedImage sourceImg =ImageIO.read(new FileInputStream(picture)); 
+			        //获取大小
+			        //System.out.println(String.format("%.1f",picture.length()/1024.0));
+			        //获取宽度
+			        //System.out.println(sourceImg.getWidth());
+			        //获取高度
+			       // System.out.println(sourceImg.getHeight());

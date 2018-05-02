@@ -1,0 +1,34 @@
+package com.emindsoft.zsj.vo;
+
+import java.io.Serializable;
+
+public class onlineUser implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6356858083569502720L;
+	private String uid;
+	private String uip;
+	public String getUid() {
+		return uid;
+	}
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+	public String getUip() {
+		return uip;
+	}
+	public void setUip(String uip) {
+		this.uip = uip;
+	}
+	public onlineUser(String uid, String uip) {
+		super();
+		this.uid = uid;
+		this.uip = uip;
+	}
+	public onlineUser() {
+		super();
+	}
+	
+	
+}

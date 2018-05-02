@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script src="../../../assets/ui/js/core/base.js" type="text/javascript"
+	charset="utf-8"></script>
+<link href="../../../assets/ui/skins/Aqua/css/ligerui-all.css"
+	rel="stylesheet" type="text/css" />
+<script src="../../../assets/ui/js/plugins/ligerTree.js"
+	type="text/javascript"></script>
+<script type="text/javascript">
+	var tree = null;
+	var vm = avalon.define({
+		$id : "box",
+		keyid : "",
+		selected : [],
+		selectname : [],
+	});
+
+	$(function() {
+		tree = $("#tree1")
+				.ligerTree(
+						{
+							url : Public.rootPath()
+									+ "/role/loadRoleTreeByUserRegionId",
+							idFieldName : 'id',
+							slide : true,
+							ajaxType : 'get',
+							parentIDFieldName : 'parentid',
+							textFieldName : 'dataname',
+							onSelect : onSelect,
+							checkbox : true,
+							isExpand : 2,
+							onSuccess : function() {
+								var request = Public.urlRequest();
+								if (request.queryString["keyid"] != null
+										&& request.queryString["keyid"].length > 0) {
+									vm.keyid = request.queryString["keyid"];
+									Public
+											.ajaxPost(
+													Public.rootPath()
+															+ "/role/roleUserDate",
+													{"keyid" : vm.keyid},
+													function(json) {
+														if (json.status == 001) {
+															for ( var int = 0; int < json.data.length; int++) {
+																tree.selectNode(json.data[int].keyid);
+															}
+														} else {
+															top.openeasydialog(
+																			"warn",
+																			"用户角色信息读取失败");
+														}
+													});
+								}
+							}
+						});
+
+		$("#ok").click(function() {
+			var notes = tree.getChecked();
+			var textname = "";
+			var id = "";
+			for ( var i = 0; i < notes.length; i++) {
+				if (notes[i].data.id.length > 6) {
+					vm.selected.push(notes[i].data.id);
+					vm.selectname.push(notes[i].data.dataname);
+				}
+
+			}
+		});
+
+		$("#clear").click(function() {
+			vm.selected.clear();
+			vm.selectname.clear();
+		});
+
+	});
+	
+	function onSelect(note) {
+		$("#selectname").val(note.data.dataname);
+		$("#selectid").val(note.data.id);
+	}
+</script>
+</head>
+<body style="padding:10px" ms-controller="box">
+	<div id="tree" style=" margin:10px; float:left; overflow:auto;  ">
+		<ul id="tree1"></ul>
+		<input id="selectid" type="hidden" ms-duplex="selected"/> <input
+			id="selectname" type="hidden" ms-duplex="selectname"/>
+	</div>
+
+	<div style="display:none">
+		<input id="ok" type="button" value="确定" /> <input id="clear"
+			type="button" value="清理" />
+
+	</div>
+</body>
+</html>

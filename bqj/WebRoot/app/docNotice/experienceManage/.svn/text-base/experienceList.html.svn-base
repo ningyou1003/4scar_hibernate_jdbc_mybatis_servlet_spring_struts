@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>文件列表页面</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script type="text/javascript" src="../../../assets/js/flow.js"></script>
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script type="text/javascript" src="experienceList.js" charset="utf-8"></script>
+</head>
+<body ms-controller="experienceCtrl">
+
+	<div class="rightinfo">
+
+		<div class="tools">
+
+			<ul class="toolbar">
+				<li id="add" ms-if="vm.power.addpower==1"><span><img src="../../../images/t01.png" />
+				</span>添加</li>
+				<!-- <li id="edit" ms-if="vm.power.editpower==1"><span><img
+						src="../../../images/t02.png" /> </span>修改</li> -->
+				<li id="delete" ms-if="vm.power.delpower==1"><span><img
+						src="../../../images/t03.png" /> </span>删除</li>
+				<!-- <li id="check" ms-if="vm.power.checkpower==1"><span><img
+						src="../../../images/t03.png" /> </span>审核</li> -->
+			</ul>
+
+		</div>
+
+		<table class="tablelist" style="table-layout:fixed;">
+			<thead>
+				<tr>
+					<th class="checkBoxTh"><span class="CheckBoxCss"><input id="checkalls" type="checkbox"
+							ms-click="checkAll" /> </span>
+					</th>
+					<th >{{vm.tableTop.experiencename}}</th>
+					<th width="15%">{{vm.tableTop.uploader}}</th>
+					<th width="15%">{{vm.tableTop.uploaddate}}</th>
+					<th width="15%">{{vm.tableTop.option}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ms-repeat="vm.data">
+					<td><span class="CheckBoxCss"><input ms-duplex-string="selectId"
+							class="itemCheckBox" type="checkbox" ms-attr-value="el.keyid" />
+					</span></b>
+					</td>
+					<style>
+						.td{overflow:hidden;white-space:nowrap;}
+					</style>
+					<td class="td"><a ms-attr-href="experienceDetail.html?keyid={{el.keyid}}"><font color="blue">{{el.experiencename}}</font></a></td>					
+					<td class="td">{{el.uploader}}</td>
+					<td class="td">{{el.uploaddate}}</td>
+					<td class="td">
+						<li id="edit" ms-if="vm.power.editpower==1" ><a ms-attr-href="experienceAdd.html?keyid={{el.keyid}}"><font color="blue">编辑</font></a></li>
+						<!-- <a id="approve" ms-click="approve(el.keyid)" style="cursor:pointer;"><font color="blue">上报</font></a> -->
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+	</div>
+
+	<script type="text/javascript">
+		$('.imgtable tbody tr:odd').addClass('odd');
+	</script>
+</body>
+</html>

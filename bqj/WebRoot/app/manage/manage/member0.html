@@ -1,0 +1,72 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script src="../../../assets/js/plugins/DatePicker/WdatePicker.js"
+	type="text/javascript" charset="utf-8"></script>
+<link href="../../../assets/js/plugins/DatePicker/skin/WdatePicker.css"
+	rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+	var vm = avalon.define({
+		$id : "infoLaborCtrl",
+		//业务数据
+		data : {
+			keyId : "",
+			regionCode : "",
+			job : "",//成员单位职责
+			name : "",//成员单位
+			orderid: ""
+		},
+
+	});
+	function initPage() {
+		var request = Public.urlRequest();
+		var option = request.queryString["option"];
+		var id = request.queryString["id"];
+		if (option == "edit") {
+			Public.ajaxPost(Public.rootPath() + "/manage/memberInfo", {
+				'id' : id
+			}, function(json) {
+				vm.data = json.data;
+			});
+		}
+	}
+	$(document).ready(function() {
+		initPage();
+	});
+</script>
+<style type="text/css">
+.textareainput {
+	width: 300px;
+	height: 260px;
+	line-height: 22px;
+	border-top: solid 1px #a7b5bc;
+	border-left: solid 1px #a7b5bc;
+	border-right: solid 1px #ced9df;
+	border-bottom: solid 1px #ced9df;
+	background: url(../../images/inputbg.gif) repeat-x;
+	text-indent: 10px;
+}
+</style>
+</head>
+<body style="overflow:hidden;height:100%;" ms-controller="infoLaborCtrl">
+	<div class="formbodyet">
+		<ul class="forminfo_3">
+			<br />
+			<li><label>成员单位：</label> <input id="name" type="text"
+				class="dfinput" ms-duplex="data.name" />
+			</li>
+			
+			<li><label>成员序号：</label> <input id="orderid" type="text"
+				class="dfinput" ms-duplex="data.orderid" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') "/>
+			</li>
+			<li><label>单位职责：</label> <!-- <input id="job" type="text" class="dfinput" ms-duplex="data.job"/> -->
+				<textarea name=mUResponsibility type="text" id="job"
+					ms-duplex="data.job" class="textareainput" placeholder="请输入成员单位职责"></textarea>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>

@@ -1,0 +1,464 @@
+package com.emindsoft.zsj.record.ctrl;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
+import cn.dreampie.routebind.ControllerKey;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.ValueFilter;
+import com.emindsoft.zsj.base.ctrl.AdminBaseController;
+import com.emindsoft.zsj.record.model.Record;
+import com.emindsoft.zsj.record.model.RecordMap;
+import com.emindsoft.zsj.record.vo.MonthExcelVO;
+import com.emindsoft.zsj.record.vo.RecordInfoVO;
+import com.emindsoft.zsj.record.vo.RecordMonthCountVO;
+import com.emindsoft.zsj.record.vo.RecordTreeVO;
+import com.emindsoft.zsj.record.vo.RecortTimeCountVO;
+import com.emindsoft.zsj.record.vo.TimeExcelVO;
+import com.emindsoft.zsj.system.model.Area;
+import com.emindsoft.zsj.util.ExportExcel;
+import com.emindsoft.zsj.util.PropertiesContent;
+import com.jfinal.aop.Before;
+import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.tx.Tx;
+import com.jfinal.render.JsonRender;
+
+@ControllerKey("record/map")
+public class RecordMapCtrl extends AdminBaseController<RecordMap> {
+	public RecordMapCtrl() {
+		this.modelClass = RecordMap.class;
+	}
+
+	public void center() {
+		// 用户所在区域为地图中心点
+		String regionId = "";
+		String chooseRegionId = getChooseRegionId();
+		if (StringUtils.isEmpty(chooseRegionId)
+				|| "undefined".equals(chooseRegionId)) {
+			regionId = getCurrentUserRegionId();
+			;
+		} else {
+			regionId = chooseRegionId;
+		}
+		Area area = Area.dao.findByRegionCode(regionId);
+		if (area == null) {
+			success("广西壮族自治区");
+			return;
+		}
+		success(area.getStr("region"));
+	}
+
+	public void list() {
+		/*
+		 * String regionId = getChooseRegionId(); String userRegionId =
+		 * getCurrentUserRegionId();
+		 * if(StringUtils.isEmpty(regionId)||"undefined"
+		 * .equals(regionId)||userRegionId.equals(regionId)){ regionId =
+		 * userRegionId; } List<RecordMap> list =
+		 * RecordMap.dao.findByRegion(regionId);
+		 */
+		//2017-12-07 csh start
+		/*
+		 *修改点位获取，旧的一次性取完整个表数据，数据量太大，不知到上面是谁注释掉的
+		 */
+		String regioncode=getPara("regioncode");//获取区域编码
+		String title=getPara("title");
+		if (regioncode==null || regioncode.length()<5) {//如果区域编码为null或者长度太短，区域编码默认为当前用户所属区域编码
+			regioncode=getCurrentUserRegionId();
+		}
+		int PageSize=20;//设置默认一次获取20条
+		Page<RecordMap> list=RecordMap.dao.findByRegioncode(getPageNo(), PageSize, regioncode,title);//获取记录
+		// 2017-12-07 csh end
+		
+		//2017-12-07 csh注释
+//		List<RecordMap> list = RecordMap.dao.findAll();
+		success(list);
+	}
+
+	public void info() {
+		String keyId = getPara("keyId");
+		RecordMap info = RecordMap.dao.findById(keyId);
+		List<Record> recordList = Record.dao.findByMapRecordId(keyId);
+		RecordInfoVO riVO = new RecordInfoVO(info, recordList);
+		success(riVO);
+	}
+
+	@Before(Tx.class)
+	public void save() throws Exception {
+		RecordMap info = (RecordMap) getModel2(RecordMap.class);
+		if (StrKit.isBlank(info.getStr("regionId"))) {
+			info.set("regionId", getCurrentUserRegionId());
+		}
+		String keyid = info.getStr("keyid");
+		// String checkName = info.getStr("checkName");
+		//2017-12-07 csh start
+		//更新记录变动时间，便于排序，原来的太乱了，新添加的点位都不好找
+		String nowdate = new String(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		info.set("time", nowdate);
+		//2017-12-07 csh end
+		if (StringUtils.isEmpty(keyid)) {// 如果是新增检查点
+			info.set("keyid", RecordMap.dao.getId());
+			//2017-02-22 修改info的hasproblem isSovled固定传值
+			/* info.set("hasProblem", 1);
+			 info.set("isSolved", 1);*/
+			
+			// info.set("important", 0);
+			// info.set("nationalcheckpoint", 0);
+			info.save();
+		} else {
+			info.update();
+		}
+
+		info.saveOrUpdate();// 保存检查点信息
+		String mapKeyId = info.getStr("keyid");
+		String recordJSON = getPara("recordJSON");
+		// String cName = getPara("checkName");
+		if (StringUtils.isNotEmpty(recordJSON)) {
+			recordJSON = recordJSON.replace("{\"recordsList\":", "");
+			recordJSON = recordJSON.substring(0, recordJSON.length() - 1);
+			JSONArray arr = JSON.parseArray(recordJSON);
+			boolean hasPeoblem = false;
+			boolean isSolved = true;
+			for (int i = 0; i < arr.size(); i++) {
+				JSONObject obj = arr.getJSONObject(i);
+				Record record;
+
+				// record.set("keyid", Record.dao.getId());
+				if (obj != null && !"{}".equals(obj.toString())) {
+					String recordKeyid = (String) obj.get("keyid");
+					if (StringUtils.isNotEmpty(recordKeyid)) {
+						record = Record.dao.findById(recordKeyid);
+					} else {
+						record = new Record();
+					}
+					record.set("mapRecordId", mapKeyId);
+					record.set("time",
+							"".equals(obj.get("time")) ? null : obj.get("time"));
+					record.set(
+							"outerNumber",
+							"".equals(obj.get("outernumber")) ? null : obj
+									.get("outernumber"));
+					record.set(
+							"hasProblem",
+							"".equals(obj.get("hasproblem")) ? 0 : obj
+									.get("hasproblem"));
+					record.set(
+							"description",
+							"".equals(obj.get("description")) ? null : obj
+									.get("description"));
+					record.set("isSolved", "".equals(obj.get("issolved")) ? 0
+							: obj.get("issolved"));
+					String hasPro = (String) obj.get("hasproblem");
+					if ("1".equals(hasPro)) {// 有问题
+						info.set("hasProblem", 1);
+					}else{
+						info.set("hasProblem", 0);
+					}
+					String isSolve = (String) obj.get("issolved");
+					if ("0".equals(isSolve)) {
+						info.set("isSolved", 0);
+					}else{
+						info.set("isSolved", 1);
+					}
+					// 2017-02-14增加解决情况字段
+					record.set("settle", "".equals(obj.get("settle")) ? null
+							: obj.get("settle"));
+
+					record.set(
+							"checkPicture",
+							"".equals(obj.get("checkpicture")) ? null : obj
+									.get("checkpicture"));
+					record.set("num", i + 1);
+					// 2016-11-23 增加检查人员字段 开始
+					// record.set("checkName", "".equals(getPara("checkName")) ?
+					// null
+					// : getPara("checkName"));
+					// 2017-2-13 检查人员 是每次 检查时不同的检查人
+					record.set(
+							"checkName",
+							"".equals(obj.get("checkName")) ? null : obj
+									.get("checkName"));
+					// 2016-11-23 增加检查人员字段 结束
+					record.saveOrUpdate();
+				}
+
+			}
+		}
+		//info.update();
+		info.saveOrUpdate();
+		success();
+	}
+
+	@Before(Tx.class)
+	public void delete() {
+		// String[] keyids = getPara("keyids").split(",");
+		// RecordMap.dao.deletePointsByIds(keyids);
+		String keyid = getPara("keyid");
+		RecordMap r=RecordMap.dao.findById(keyid);
+		String regioncode=getCurrentUserOrgId();
+		if (regioncode.equals(r.getStr("regionid"))) {
+			error(003, "你没有这个权限");
+		}
+		r.delete();
+		//RecordMap.dao.deleteById(keyid);
+		success("删除成功！");
+	}
+
+	// @PowerBind(code = "42_LookPower", funcName = "栏目列表")
+	public void recordsCountList() {
+		String month = getPara("month");
+		// 2017-02-16 增加地区查询和是否发现问题查询
+		String area = getPara("area");
+		String problem = getPara("problem");
+
+		List<RecordMonthCountVO> rmlist = null;
+		if (!StringUtils.isNotEmpty(month) && !StringUtils.isNotEmpty(area)
+				&& !StringUtils.isNotEmpty(problem)) {
+			rmlist = RecordMap.dao.getRecords1(month);
+		}
+		/*
+		 * if
+		 * (month==null||"".equals(month)&&area==null||"".equals(area)&&problem
+		 * ==null||"".equals(problem)) { rmlist =
+		 * RecordMap.dao.getRecords1(month); }
+		 */else {
+			rmlist = RecordMap.dao.getRecords2(month, area, problem);
+		}
+		// String text = JSON.toJSONString(rmlist);
+		String text = JSON.toJSONString(rmlist, filter);
+		text = "{\"Rows\":" + text + "}";
+		render(new JsonRender(text));
+	}
+
+	public void recordsCountList1() {
+		List<RecordTreeVO> rmlist = RecordMap.dao.getRecords(null, null, null,null,null);
+		// String text = JSON.toJSONString(rmlist);
+		String text = JSON.toJSONString(rmlist, filter);
+		text = "{\"Rows\":" + text + "}";
+		render(new JsonRender(text));
+	}
+
+	public void recordCountByTime() {
+		String startTime = getPara("startTime");
+		String endTime = getPara("endTime");
+		List<RecortTimeCountVO> rmList = RecordMap.dao.getRecordsCountByTime(
+				startTime, endTime);
+		String text = JSON.toJSONString(rmList, filter);
+		text = "{\"Rows\":" + text + "}";
+		render(new JsonRender(text));
+	}
+
+	// 可以自定义null的处理方式, 解决生成json时Null属性不显示问题
+	private ValueFilter filter = new ValueFilter() {
+		@Override
+		public Object process(Object obj, String s, Object v) {
+			if (v == null)
+				return "";
+			return v;
+		}
+	};
+
+	/**
+	 * 导出Excel(*.xls格式)表格
+	 * 
+	 * @throws IOException
+	 */
+	public void exportExcel() throws IOException {
+
+		File directory = null;
+		File fileName = null;
+
+		String month = getPara("month");// 获取查询月份
+		String startTime = getPara("startTime");// 获取时间段查询的开始月份
+		String endTime = getPara("endTime");// 获取时间段查询的结束月份
+		String tableType = getPara("tableType");
+
+		// 2017-02-16 增加地区查询 是否发现问题查询条件 对应的条件导出excel
+		String area = getPara("area");
+		String problem = getPara("problem");
+		String areaDecoder = null;
+		if(StringUtils.isNotEmpty(area)){
+			 areaDecoder = new String(area.getBytes("ISO-8859-1"), "UTF-8");
+		}
+		
+
+		RecordTreeVO rtv;
+		OutputStream out;
+		String url = PropertiesContent.get("upload_dir") + "upload/";// 临时保存地址
+		List<RecordTreeVO> rmlist = RecordMap.dao.getRecords(month, startTime,
+				endTime,areaDecoder,problem);// 获取生成表格的原始数据
+
+		// 创建路径 2016-10-28
+		directory = new File(url);
+		directory.setWritable(true, false);
+		if (!directory.exists()) {
+			directory.mkdirs();
+		}
+
+		// 判断生成表格类型
+		if (StringUtils.isNotEmpty(month)|| StringUtils.isNotEmpty(area)
+				|| StringUtils.isNotEmpty(problem)) {
+			// 根据指定月份导出excel
+
+			List<TimeExcelVO> data = new ArrayList<TimeExcelVO>();
+			for (int i = 0; i < rmlist.size(); i++) {
+				rtv = rmlist.get(i);
+				data.add(new TimeExcelVO(rtv.getLevel(), rtv.getRegionName(),
+						(rtv.getOuterNumber() == null) ? "" : rtv
+								.getOuterNumber().toString().trim(), (rtv
+								.getTime() == null) ? "" : rtv.getTime(), rtv
+								.getAddress(), rtv.getTitle(), rtv
+								.getCheckName(),
+						(rtv.getHasProblem() == null) ? "" : rtv
+								.getHasProblem().toString().trim(), rtv
+								.getContent() == null ? "" : rtv.getContent()
+								.toString().trim(),
+						rtv.getIsSolved() == null ? "" : rtv.getIsSolved(), rtv
+								.getSettle() == null ? "" : rtv.getSettle()
+								.toString().trim()));
+			}
+			ExportExcel<TimeExcelVO> ex = new ExportExcel<TimeExcelVO>();
+			// String[] headers =
+			// {"级别","市/县名","出动人次","时间","地点","检查点","检查是否发现问题","问题描述","问题是否解决"};
+			// (rtv.getTime()==null)?"":rtv.getTime()
+			String[] headers = { "级别", "市/县名", "出动人次", "时间", "地点", "检查点",
+					"检查人员", "检查是否发现问题", "问题描述", "问题是否解决", "解决情况" };
+			url += "月份统计表(" + dateTimeFormat.format(new Date()) + ").xls";
+
+			// 创建文件对象
+			fileName = new File(url);
+			// 设置权限2016-10-28
+			fileName.setWritable(true, false);
+			if (!fileName.isFile())
+				fileName.createNewFile();
+
+			// 创建文件输出流
+			out = new FileOutputStream(fileName);
+			ex.exportExcel(headers, data, out);
+			out.close();
+
+		} else if (StringUtils.isNotEmpty(startTime)
+				&& StringUtils.isNotEmpty(endTime)) {
+			// 指定时间段导出excel表格
+
+			List<MonthExcelVO> data = new ArrayList<MonthExcelVO>();
+			for (int i = 0; i < rmlist.size(); i++) {
+				rtv = rmlist.get(i);
+				data.add(new MonthExcelVO(rtv.getLevel(), rtv.getRegionName(),
+						(rtv.getCheckTimes() == null) ? "" : "1", (rtv
+								.getOuterNumber() == null) ? "" : rtv
+								.getOuterNumber().toString(), rtv
+								.getHasProblem() == null ? "0" : "否".equals(rtv
+								.getHasProblem()) ? "0" : "1", rtv
+								.getIsSolved() == null ? "0" : "否".equals(rtv
+								.getIsSolved()) ? "0" : "1"));
+			}
+			ExportExcel<MonthExcelVO> ex = new ExportExcel<MonthExcelVO>();
+			String[] headers = { "级别", "市/县名", "检查次数", "出动人次", "发现问题个数",
+					"已解决问题个数" };
+			url += "基于时间段的统计表(" + dateTimeFormat.format(new Date()) + ").xls";
+
+			// 创建文件对象 2016-10-28
+			fileName = new File(url);
+			fileName.setWritable(true, false);
+			if (!fileName.isFile())
+				fileName.createNewFile();
+			// 创建文件输出流
+			out = new FileOutputStream(fileName);
+			ex.exportExcel(headers, data, out);
+			out.close();
+
+		}  else {
+			if (tableType.equals("time")) {
+				// 导出所有数据
+				// rmlist = RecordMap.dao.getRecords1(null);
+				List<TimeExcelVO> data = new ArrayList<TimeExcelVO>();
+				for (int i = 0; i < rmlist.size(); i++) {
+					rtv = rmlist.get(i);
+					data.add(new TimeExcelVO(rtv.getLevel(), rtv
+							.getRegionName(),
+							(rtv.getOuterNumber() == null) ? "" : rtv
+									.getOuterNumber().toString().trim(), (rtv
+									.getTime() == null) ? "" : rtv.getTime(),
+							rtv.getAddress(), rtv.getTitle(), rtv
+									.getCheckName(),
+							(rtv.getHasProblem() == null) ? "" : rtv
+									.getHasProblem().toString().trim(), rtv
+									.getContent() == null ? "" : rtv
+									.getContent().toString().trim(), rtv
+									.getIsSolved() == null ? "" : rtv
+									.getIsSolved(),
+							rtv.getSettle() == null ? "" : rtv.getSettle()
+									.toString().trim()));
+				}
+				ExportExcel<TimeExcelVO> ex = new ExportExcel<TimeExcelVO>();
+
+				String[] headers = { "级别", "市/县名", "出动人次", "时间", "地点", "检查点",
+						"检查人员", "检查是否发现问题", "问题描述", "问题是否解决", "解决情况" };
+				url += "月份统计表(" + dateTimeFormat.format(new Date()) + ").xls";
+
+				// 创建文件对象
+				fileName = new File(url);
+				// 设置权限2016-10-28
+				fileName.setWritable(true, false);
+				if (!fileName.isFile())
+					fileName.createNewFile();
+
+				// 创建文件输出流
+				out = new FileOutputStream(fileName);
+				ex.exportExcel(headers, data, out);
+				out.close();
+			} else {
+				// 导出统计数据
+				List<MonthExcelVO> data = new ArrayList<MonthExcelVO>();
+				for (int i = 0; i < rmlist.size(); i++) {
+					rtv = rmlist.get(i);
+					data.add(new MonthExcelVO(rtv.getLevel(), rtv
+							.getRegionName(),
+							(rtv.getCheckTimes() == null) ? "" : "1", (rtv
+									.getOuterNumber() == null) ? "" : rtv
+									.getOuterNumber().toString(), rtv
+									.getHasProblem() == null ? "0" : "否"
+									.equals(rtv.getHasProblem()) ? "0" : "1",
+							rtv.getIsSolved() == null ? "0" : "否".equals(rtv
+									.getIsSolved()) ? "0" : "1"));
+				}
+				ExportExcel<MonthExcelVO> ex = new ExportExcel<MonthExcelVO>();
+				String[] headers = { "级别", "市/县名", "检查次数", "出动人次", "发现问题个数",
+						"已解决问题个数" };
+				url += "基于时间段的统计表(" + dateTimeFormat.format(new Date())
+						+ ").xls";
+
+				// 创建文件对象 2016-10-28
+				fileName = new File(url);
+				fileName.setWritable(true, false);
+				if (!fileName.isFile())
+					fileName.createNewFile();
+				// 创建文件输出流
+				out = new FileOutputStream(fileName);
+				ex.exportExcel(headers, data, out);
+				out.close();
+			}
+		}
+		// 返回生成的表格以下载
+		File excelFile = new File(url);
+		if (excelFile.isFile()) {
+			renderFile(excelFile);
+		}
+
+	}
+
+}

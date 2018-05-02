@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../assets/ui/js/core/base.js" type="text/javascript" charset="utf-8"></script>
+    <link href="../../../assets/ui/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script src="../../../assets/ui/js/plugins/ligerTree.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var tree = null;
+        var vm = avalon.define({
+            $id: "boxid",
+            keyid: "",
+            selectedkeyid: [],
+            selectedname: []
+        });
+        $(function () {
+            var isFirstLoad = true;
+            var orgid = "";
+            var request = Public.urlRequest();
+            if (request.queryString["orgid"] != null
+				&& request.queryString["orgid"].length > 0) {
+                orgid = request.queryString["orgid"];
+            }
+            tree = $("#tree1").ligerTree(
+				{
+				    url: Public.rootPath() + "/org/dep/loadPickLeader?orgid=" + orgid,
+				    idFieldName: 'keyid',
+				    slide: true,
+				    ajaxType: 'get',
+				    parentIDFieldName: 'parentid',
+				    textFieldName: 'departmentname',
+				    checkbox: true,
+				    isExpand: true,
+				    onSelect: onSelect,
+				    /*isLeaf : function(data) {
+				    if (!data){
+				    return false;
+				    }
+						
+				    },//*/
+				    onSuccess: function () {
+				        if (isFirstLoad) {
+				            isFirstLoad = false;
+				            //							this.expandAll();//注释：默认不全部展开节点
+				        }
+				        var keyid = getUrlParam("keyids").split(","); //循环选中已选
+				        for (var i = 0; i < keyid.length; i++) {
+				            tree.selectNode(keyid[i]);
+				        }
+				    }
+
+				});
+            $("#ok").click(function () {
+                var notes = tree.getChecked();
+                for (var i = 0; i < notes.length; i++) {
+                    if (notes[i].data.type == "isuser") {
+                        vm.selectedkeyid.push(notes[i].data.keyid);
+                        vm.selectedname.push(notes[i].data.departmentname);
+                    }
+                }
+            });
+
+            $("#clear").click(function () {
+                vm.selectedkeyid.clear();
+                vm.selectedname.clear();
+            });
+
+            $("#tree").css("height", window.screen.availHeight * 0.78);
+            $("#tree").css("width", window.screen.availWidth * 0.12);
+        });
+        function selectNode(data) {
+            alert(data);
+            var parm = function (data) {
+                return keyid.indexOf(data) == 0;
+            };
+            tree.selectNode(parm);
+        }
+        function onSelect(note) {
+            $("#keyid").val(note.data.keyid);
+            $("#parentid").val(note.data.parentid);
+            $("#parentname").val(note.data.parentname);
+            $("#name").val(note.data.departmentname);
+            $("#type").val(note.data.type);
+        }
+        //获取url中的参数
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+    </script>
+</head>
+<body style="padding: 10px; min-width: 360px;" ms-controller="boxid">
+    <div style="margin: 10px; float: left; overflow: auto;">
+        <ul id="tree1">
+        </ul>
+    </div>
+    <input type="hidden" id="keyid" />
+    <input type="hidden" id="parentid" />
+    <input type="hidden" id="parentname" />
+    <input type="hidden" id="name" />
+    <input type="hidden" id="type" />
+    <input type="hidden" id="keyids" ms-duplex="selectedkeyid" />
+    <input type="hidden" id="names" ms-duplex="selectedname" />
+    <div style="display: none">
+        <input id="ok" type="button" value="确定" />
+        <input id="clear" type="button" value="清理" />
+    </div>
+</body>
+</html>

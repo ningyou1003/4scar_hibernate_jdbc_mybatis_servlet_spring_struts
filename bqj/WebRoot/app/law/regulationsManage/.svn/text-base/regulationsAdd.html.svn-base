@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title></title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+	<!-- 编辑器相关js -->
+	<link rel="stylesheet" href="../../../assets/js/plugins/kindeditor/themes/default/default.css" />
+	<script charset="utf-8" src="../../../assets/js/plugins/kindeditor/kindeditor-all.js"></script>
+	<!-- 编辑器相关js  end-->
+	<!-- 附件相关js start, 注意必须在控制器js前引入-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/js/swfupload/css/default.css"/>
+    <script type="text/javascript" src="../../../assets/js/swfupload/swfupload.js"></script>
+    <script type="text/javascript" src="../../../assets/js/swfupload/handlers.js"></script>
+    <script type="text/javascript" src="../../../assets/js/swfupload/myswfup.js"></script>
+    <!-- 附件相关js end -->
+	<script src="../../../assets/js/plugins/DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+	<link href="../../../assets/js/plugins/DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+	<script src="regulationsAdd.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css">
+	.textarea{
+		width:300px; height:100px; line-height:32px; border-top:solid 1px #a7b5bc; 
+		border-left:solid 1px #a7b5bc; border-right:solid 1px #ced9df; border-bottom:solid 1px #ced9df;
+		 background:url(../../images/inputbg.gif) repeat-x; text-indent:10px;}
+	</style>
+</head>
+<body>
+	<div ms-controller="regulationsAddCtrl">
+		<form name="base_form" method="post" id="base_form">
+			<input type="hidden" name="KeyId" id="KeyId" ms-duplex="data.keyid" />
+			<div class="formbody">
+				<div class="formtitle">
+					<span>案例信息</span>
+				</div>
+				<table style="width: 95%">
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 标题 ：</label><input
+									name="titlename" ms-duplex="data.title" type="text" maxlength="100" style="width:700px;"
+									id="activityname" class="dfinput" data-rule="required;"
+									placeholder="请输入标题" /><font color="red">*</font></li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 发布时间 ：</label>
+								<input id="releaseTime" ms-duplex="data.releasetime" type="text" class="dfinput" placeholder="请选择时间" data-rule="required;" 
+									style="width:190px;" onFocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss',lang:'zh-cn'})"  /><font color="red">*</font>
+								</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 附件 ：</label>
+									<div style="display: inline; float: left;">
+										<form>
+											<div style="display: inline;"><span id="spanButtonPlaceholder"></span>
+												<input id="btnUpload" type="button" value="上  传" onclick="startUploadFile();" class="btn" style="height:28px;"/>
+												<input id="btnCancel" type="button" value="取消所有上传" onclick="cancelUpload();" disabled="disabled" class="btn1" />
+											</div>
+										</form>
+										<div id="divFileProgressContainer" style="display: none;"></div>
+										<div id="thumbnails">
+											<table id="infoTable" border="0" width="530" style="display: inline; padding: 2px;"></table>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td >
+							<!-- <ul style="float:left;padding-left: 48px;">附件列表：</ul> -->
+							<ul id="attList" style="padding-left: 120px;float:left;"><li></li></ul>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item" id="kindeditor"><label> 内容 ：</label><!-- <textarea
+									name="content" ms-duplex="data.content" style=" height:150px; width:50%;"
+									id="content" class="dfinput" style=" height:150px; width:50%;" ></textarea> -->
+									<textarea id="editor_id" name="content" style="width:700px;height:300px;"></textarea>
+									</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<ul class="forminfo">
+								<li><label> &nbsp;</label>
+									<input type="button" name="Button1" value="保存" id="Button1" ms-click="submit()" class="btn" /> &nbsp;
+									<input type="button" name="btback" value="返回" id="btback" class="btn" />
+								</li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

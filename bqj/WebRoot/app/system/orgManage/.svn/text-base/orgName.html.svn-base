@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>添加机构</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body style="overflow:hidden">
+		<div class="formbody" ms-controller="ctrlname">
+			<form action="base_form" method="post" id="base_form">
+				<div class="formbody">
+				<table style="width: 95%">
+					<tr>
+						<td>
+							<ul class="forminfo">
+								
+								<li class="row-item"><label for="org_fullname"> 机构中文全称 ：</label>
+									<input name="org_fullname" type="text" id="org_fullname"
+									ms-duplex="data.org_fullname" class="dfinput" maxlength="30"
+									data-rule="required;"/><font
+									color="red">*</font></li>
+								<li class="row-item"><label for="org_fullname_abroad"> 机构英文全称 ：</label>
+									<input name="org_fullname_abroad" type="text" id="org_fullname_abroad"
+									ms-duplex="data.org_fullname_abroad" class="dfinput" maxlength="30" /></li>
+								
+								<li class="row-item"><label for="org_shutcut"> 机构中文简称 ：</label> <input
+									name="org_shutcut" type="text" id="org_shutcut"
+									ms-duplex="data.org_shutcut" class="dfinput" /></li>
+								<li class="row-item"><label for="org_shutcut_abroad"> 机构英文简称 ：</label>
+									<input name="org_shutcut_abroad" type="text" id="org_shutcut_abroad"
+									ms-duplex="data.org_shutcut_abroad" class="dfinput" maxlength="30" /></li>						
+							</ul>
+						</td>						
+					</tr>
+					</table>
+				</div>
+			</form>
+		</div>
+</body>
+</html>

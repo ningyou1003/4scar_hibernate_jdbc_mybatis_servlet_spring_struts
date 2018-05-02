@@ -1,0 +1,27 @@
+## 待办 ##
+ 待处理列表
+ 已处理列表
+ 我的列表
+
+
+## 数据库表 ##
+
+title - 标题
+createUserId - 创建人id
+status - 审核状态 0未审核 1已审核
+
+
+## 列表页 ##
+
+* select * from [table] where status=1 or createUserId=?
+* 增加显示审核状态字段status, [已审核][未审核]
+
+
+## 详情页 ##
+
+* 引入 /assets/js/flow.js
+* 普通按钮[保存][返回]
+* 网页传参数opType=1 && status!=1时, 审核按钮
+- [审核通过] flowApprove("xxx", id)
+- [上报] flowSend("xxx", id)
+- [回退] flowBack("xxx", id)

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script src="../../../assets/js/plugins/DatePicker/WdatePicker.js"
+	type="text/javascript" charset="utf-8"></script>
+<link href="../../../assets/js/plugins/DatePicker/skin/WdatePicker.css"
+	rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="logList.js" charset="utf-8"></script>
+</head>
+
+<body ms-controller="logCtrl">
+
+	<div class="rightinfo">
+
+		<div class="tools">
+
+			<ul class="toolbar">
+				<li id="delete" ms-if="vm.power.delpower==1"><span><img
+						src="../../../images/t03.png" /> </span>删除</li>
+				<li id="check"><span> <img
+						src="../../../images/ico06.png" /> </span>查询</li>
+
+			</ul>
+		</div>
+		<div id="sel_div" style="display: none">
+			<ul class="seachform">
+				<li><label> 用户帐号</label> <input type="text"
+					ms-duplex="select.name" class="scinput" />
+				</li>
+				<li><label> 区域 ： </label> 
+					<input name="region" type="text" id="region" ms-duplex="select.region" class="searchBox" /> 
+					<input name="RegionCode" type="text" id="RegionCode" class="dfinput" ms-duplex="select.regionCode" style="display: none" />
+				</li>
+				<!-- <li><label> 工作单位 ： </label> 
+					<input type="text" id="org" ms-duplex="select.org" class="searchBox" onclick="selectOrg()" />
+                    <input type="hidden" ms-duplex="select.orgId" />
+				</li> -->
+				<!-- <li><label> 部门 ： </label> 
+					<input name="DepartmentName"
+					data-rule="required;" type="text" id="DepartmentName"
+					ms-duplex="select.departmentname" class="searchBox" /> <input
+					name="DepartmentID" type="text" id="DepartmentID" class="dfinput"
+					ms-duplex="select.department" style="display: none" />
+				</li> -->
+				
+				<li><label> 日期</label> <input type="text" class="scinput"
+					ms-duplex="select.beginTime"
+					onfocus="WdatePicker({dateFmt:&#39;yyyy-MM-dd 00:00:00&#39;,firstDayOfWeek:1})" />
+					至 <input type="text" class="scinput" ms-duplex="select.endTime"
+					onfocus="WdatePicker({dateFmt:&#39;yyyy-MM-dd 23:59:59&#39;,firstDayOfWeek:1})" />
+				</li>
+				<li><label> &nbsp;</label><input type="submit" name="SelButton"
+					value="查询" id="SelButton" class="scbtn" />
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<table class="tablelist">
+		<thead>
+			<tr>
+				<th class="checkBoxTh"><span class="CheckBoxCss"><input type="checkbox"  id="checkalls"
+						ms-click="checkAll" /> </span></th>
+				<th width="100px">{{vm.tableTop.module}}</th>
+				<th width="120px">{{vm.tableTop.username}}</th>
+				<th width="180px">区域</th>
+				<!-- <th width="193px">工作单位</th>
+				<th width="80px">{{vm.tableTop.department}}</th> -->
+				<th width="130px">{{vm.tableTop.uip}}</th>
+				<th width="150px">{{vm.tableTop.time}}</th>
+				<th>{{vm.tableTop.ocontent}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ms-repeat="vm.data">
+				<td><span class="CheckBoxCss"><input type="checkbox"
+						class="itemCheckBox" ms-attr-value="el.keyid"
+						ms-duplex-string="selectId" /> </span>
+				</td>
+				<td class="autocut">{{el.module}}</td>
+				<td class="autocut">{{el.username}}</td>
+				<td class="autocut">{{el.region}}</td>
+				<!-- <td class="autocut">{{el.org}}</td>
+				<td class="autocut">{{el.department}}</td> -->
+				<td class="autocut">{{el.uip}}</td>
+				<td class="autocut">{{el.time}}</td>
+				<td class="autocut">{{el.ocontent}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+</body>
+</html>

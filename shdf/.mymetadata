@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="shdf"
+  id="myeclipse.1481858955485"
+  context-root="/shdf"
+  j2ee-spec="5.0"
+  archive="shdf.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>机构列表</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <link href="../../../assets/ui/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script src="../../../assets/ui/js/core/base.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerGrid.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerResizable.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerDrag.js" type="text/javascript"></script>
+    <script type="text/javascript" src="orgList.js" charset="utf-8"></script>
+</head>
+<body ms-controller="orgCtrl">
+    <!-- <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li>首页</li>
+            <li>系统设置</li>
+            <li>机构管理</li>
+        </ul>
+    </div> -->
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li id="addOrg" ms-if="vm.power.addpower==1"><span>
+                    <img src="../../../images/t01.png" />
+                </span>添加</li>
+                <li id="edit" ms-if="vm.power.editpower==1"><span>
+                    <img src="../../../images/t02.png" />
+                </span>修改</li>
+                <li id="delete"	ms-if="vm.power.delpower==1"><span>
+                    <img src="../../../images/t03.png" />
+                </span>删除</li>
+            </ul>
+            <ul class="toolbar1">
+                <li id="check"><span>
+                    <img src="../../../images/ico06.png" />
+                </span>查询</li>
+            </ul>
+        </div>
+        <div id="sel_div" style="display: none">
+            <ul class="seachform">
+                <li>
+                    <label>机构名称</label><input name="orgname" type="text" id="orgname" ms-duplex="select.orgname" class="scinput" />
+                </li>
+                <!-- <li>
+                    <label>编码</label><input name="orgcode" type="text" id="orgcode" ms-duplex="select.orgcode" class="scinput" />
+                </li> -->
+                <li>
+                    <label>&nbsp;</label><input type="submit" name="SelButton" value="查询" id="SelButton" class="scbtn" />
+                </li>
+            </ul>
+        </div>
+        	<table class="tablelist" style="table-layout: fixed;">
+				<thead>
+					<tr>
+						<th class="checkBoxTh"><span class="CheckBoxCss"><input id="checkalls" type="checkbox"
+							ms-click="checkAll" /> </span>
+					</th>
+						<th>{{vm.tableTop.regioncode}}</th>
+						<th style="width: 200px;">{{vm.tableTop.org_fullname}}</th>
+						<th style="width: 100px;">{{vm.tableTop.workarea}}</th>
+						<th style="width: 200px;">{{vm.tableTop.address}}</th>
+						<th style="width: 100px;">{{vm.tableTop.phone}}</th>
+						<th style="width: 100px;">{{vm.tableTop.parent_orgid}}</th>
+						<th>{{vm.tableTop.relation}}</th>
+						<th>{{vm.tableTop.status}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ms-repeat="vm.data">
+						<td>
+							<span class="CheckBoxCss">
+								<input class="itemCheckBox" ms-duplex-string="selectId" type="checkbox" ms-attr-value="el.keyid;" />
+							</span>
+						</td>
+						<td>{{el.regioncode}}</td>
+						<td class="autocut"><a ms-attr-href="orgDetail.html?keyid={{el.keyid}}"><font color="blue">{{el.org_fullname}}</font></a>
+						</td>
+						<td class="autocut">{{el.workarea}}</td>
+						<td class="autocut">{{el.address}}</td>
+						<td class="autocut">{{el.phone}}</td>
+						<td class="autocut">{{el.supname}}</td>
+						<td class="autocut">{{el.suprelation}}</td>
+						<td>
+                            <b ms-if="el.status==2" style="color:black">暂存</b>
+                            <b ms-if="el.status==1" style="color:red">待审核</b>
+                            <b ms-if="el.status==0" style="color:blue">已通过</b>
+                            <b ms-if="el.status==-1" style="color:red">拒绝</b>
+                        </td>
+					</tr>
+				</tbody>
+		</table>
+        </div>
+        <div id="PageInfo" class="pagin" style="margin-bottom: 20px;">
+        </div>
+</body>
+</html>

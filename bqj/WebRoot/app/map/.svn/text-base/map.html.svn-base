@@ -1,0 +1,593 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <script src="../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../assets/ui/js/core/base.js" type="text/javascript"></script>
+    <script src="../../assets/ui/js/plugins/ligerDialog.js" type="text/javascript"></script>
+    <link href="../../assets/ui/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=aznomCVme4Z7SL3GGEEtDRuGiZXxmUyw"></script>
+    <!--加载鼠标绘制工具-->
+    <script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+    <!--加载检索信息窗口-->
+    <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
+    <title>鼠标绘制工具</title>
+    <style type="text/css">
+        body, html
+        {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+        #allmap
+        {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #result
+        {
+            width: 100%;
+            font-size: 12px;
+        }
+        dl, dt, dd, ul, li
+        {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        p
+        {
+            font-size: 12px;
+        }
+        dt
+        {
+            font-size: 14px;
+            font-family: "微软雅黑";
+            font-weight: bold;
+            border-bottom: 1px dotted #000;
+            padding: 5px 0 5px 5px;
+            margin: 5px 0;
+        }
+        dd
+        {
+            padding: 5px 0 0 5px;
+        }
+        li
+        {
+            line-height: 28px;
+        }
+        div.l-dialog-content.l-dialog-content-noimage.l-dialog-content-nopadding
+        {
+            overflow-y: hidden;
+        }
+        
+        #tagsW
+        {
+            padding: 0px 0 0 0;
+            margin: 0px;
+            width: auto;
+            height: 27px;
+            border: solid 1px #d3dbde;
+            border-bottom: none;
+            text-align: center;
+            background: #f3f7f8;
+        }
+        #tagsW li
+        {
+            margin-left: 0px;
+            float: left;
+            margin-right: 0px;
+            list-style-type: none;
+            width: 50px;
+            line-height: 27px;
+            height: 27px;
+            color: #000;
+            text-align: center;
+            border-right: solid 1px #d3dbde;
+        }
+        #tagsW li:last-child
+        {
+            border-right: none;
+        }
+        #tagsW li a
+        {
+            color: #000;
+        }
+        #tagsW li.selectTagW
+        {
+            height: 27px;
+            background: #D6D6D6;
+        }
+        #tagContentW
+        {
+            padding: 0px;
+            display: block;
+            height: auto;
+            border: solid 1px #d3dbde;
+        }
+        .tagContentW
+        {
+            display: none;
+            height: auto;
+            padding: 10px;
+            width: 98%;
+        }
+        #tagContentW .selectTagW
+        {
+            display: block;
+            
+        }
+    </style>
+</head>
+<body>
+    <!-- <div id="banner" style="margin: 5px 5px 5px 5px;height: 20px">
+	<div id="r-result">检查点查询&nbsp;:&nbsp;<input type="text" id="suggestId" size="20" value="" style="width:150px;border:1px solid #C0C0C0;" /></div>
+	<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+</div> -->
+    <div id="allmap" style="overflow: hidden; zoom: 1; position: relative;">
+        <div id="map" style="height: 100%; -webkit-transition: all 0.5s ease-in-out; transition: all 0.5s ease-in-out;">
+        </div>
+    </div>
+    <script language="JavaScript" type="text/JavaScript">
+    	function getInfoWindowHtml(pointInfo, recordList){
+    		var important = pointInfo.important==1?"(重点点位)":"";
+    		var html = "";
+			html += "<div><b style=\"font-size:14px;\">"+mapInfo.title+"</b>&nbsp;<span style=\"font-size:10px;color:red;display:inline-block\">"+important+"</span></div>";
+			html += "<ul><li>地址："+mapInfo.address+"</li><li>级别："+mapInfo.level+"</li><li>检查详情：</li></ul></div>"; 
+			var tagsWHtml = "<ul id=\"tagsW\">";
+			var tagContentHtml = "<div id=\"tagContentW\">";
+			for(var k=0;k<recordList.length;k++){
+				if(k==0){
+				tagsWHtml += '<li class="selectTagW"><a href="JavaScript:void()" onclick="selectTagW(\'tagContentW'+k+'\',this)" >第'+(k+1)+'次</a></li>';
+					tagContentHtml += "<div id=\"tagContentW"+k+"\" class=\"tagContentW selectTagW\"><div style=\"height: auto;\">";
+				} else {
+				tagsWHtml += '<li class=""><a href="JavaScript:void()" onclick="selectTagW(\'tagContentW'+k+'\',this)" >第'+(k+1)+'次</a></li>';
+					tagContentHtml += "<div id=\"tagContentW"+k+"\" class=\"tagContentW \"><div style=\"height: auto;\">";
+				}
+				if(recordList[k].checkName==null)recordList[k].checkName="";
+				if(recordList[k].outernumber==null) recordList[k].outernumber="";
+				if(recordList[k].time==null) recordList[k].time;
+				if(recordList[k].description==null) recordList[k].description="无";
+				if(recordList[k].settle==null)recordList[k].settle="无";
+				if(recordList[k].hasproblem==1){
+					recordList[k].hasproblem = "是";
+				} else {
+					recordList[k].hasproblem = "否";
+				}
+				tagContentHtml += "<ul><li>出动人次："+recordList[k].outernumber+"</li><li>检查人员："+recordList[k].checkName+"</li><li>时间："+recordList[k].time+"</li><li>是否发现问题："+recordList[k].hasproblem+"</li><li>问题描述："+recordList[k].description+"</li><li>解决情况："+recordList[k].settle+"</li></ul>";
+				//"<li>解决情况："+recordList[k].settle+"</li>"
+				tagContentHtml += "</div></div>";
+			}
+			tagsWHtml += "</ul>";
+			tagContentHtml += "</div>";
+			
+			return html+tagsWHtml+tagContentHtml;
+    	}
+
+        function selectTagW(showContent, selfObj) {
+            var tag = document.getElementById("tagsW").getElementsByTagName("li");
+            var taglength = tag.length;
+            for (i = 0; i < taglength; i++) {
+                tag[i].className = "";
+            }
+            selfObj.parentNode.className = "selectTagW";
+            for (i = 0; j = document.getElementById("tagContentW" + i); i++) {
+                j.style.display = "none";
+                if ("tagContentW" + i == showContent) window.GridsumSnapshotID = i;
+            }
+            document.getElementById(showContent).style.display = "block";
+        }
+       
+    </script>
+    <div id="tagsDiv" style="display: none">
+
+    </div>
+    <!-- <div id="result">
+    <input type="button" value="获取绘制的覆盖物个数" onclick="alert(overlays.length)"/>
+    <input type="button" value="清除所有覆盖物" onclick="clearAll()"/>
+</div> -->
+    <script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map('map');
+    var redIcon = new BMap.Icon("../../images/marker_red.png", new BMap.Size(21,25));
+    var yellowIcon = new BMap.Icon("../../images/marker_orange.png", new BMap.Size(21,25));
+    var greenIcon = new BMap.Icon("../../images/marker_green.png", new BMap.Size(21,25));
+    var blueIcon = new BMap.Icon("../../images/marker_blue.png", new BMap.Size(21,25));
+    var mapInfo ;
+    var recordList;//檢查點
+    var resultList = new Array();
+//    var poi = new BMap.Point(116.417854,39.921988);
+//    map.centerAndZoom(poi, 16);
+    map.enableScrollWheelZoom();
+    var overlays = [];
+    var overlaycomplete = function(e){
+//        overlays.push(e.overlay);
+        openEdit(null, e.overlay.getPosition().lng ,e.overlay.getPosition().lat, e.overlay);
+    };
+    //实例化鼠标绘制工具
+    var drawingManager = new BMapLib.DrawingManager(map, {
+        isOpen: false, //是否开启绘制模式
+        enableDrawingTool: true, //是否显示工具栏
+        drawingToolOptions: {
+            anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+            offset: new BMap.Size(5, 5), //偏离值
+            drawingModes : [
+                BMAP_DRAWING_MARKER,
+            ]
+        },
+    });
+    //添加鼠标绘制工具监听事件，用于获取绘制结果
+    drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+    function clearAll() {
+        for(var i = 0; i < overlays.length; i++){
+            map.removeOverlay(overlays[i]);
+        }
+        overlays.length = 0;
+    }
+
+    //加载数据
+    function loadData(){
+    	var request = Public.urlRequest();
+    	var condition = request.queryString["condition"];
+
+        Public.ajaxPost(Public.rootPath() + "/record/map/list", {
+            "XXX" : 1
+        }, function(json) {
+            if (json.status == 001) {
+            	recordList = json.data;
+            	getResultData(condition, recordList);
+                for(var i=0;i<resultList.length;i++){
+//                    var icon = json.data[i].important==1?redIcon:yellowIcon;
+					var icon = yellowIcon;
+					var borderColor = "#F4A30C";
+					if(resultList[i].important==1){
+						icon = redIcon;
+						borderColor = "#F00000";
+					} else if(resultList[i].hasproblem==1 && resultList[i].issolved==1){
+						icon = greenIcon;
+						borderColor = "#00FF21";
+					} else if(resultList[i].hasproblem==0){
+						icon = blueIcon;
+						borderColor = "#3F48CC";
+					} 
+                    var marker = new BMap.Marker(new BMap.Point(resultList[i].lng,resultList[i].lat), {icon:icon});  // 创建标注
+                    marker.enableDragging();  //设置可拖拽
+                    
+                    var markerName = resultList[i].title;
+                    var lng = resultList[i].lng;
+                    var lat = resultList[i].lat;
+
+                    //创建右键菜单
+                    var markerId = resultList[i].keyid;
+                    map.addOverlay(marker);               // 将标注添加到地图中
+                    var label = new BMap.Label(resultList[i].title,{offset:new BMap.Size(20,-10)});
+                    label.setStyle({borderColor :borderColor});
+					marker.setLabel(label);
+
+					addClickHandler(markerId, marker);
+					RightClickHandler(markerName,markerId,lng,lat,marker);
+					dragHandler(markerId, marker);
+					marker.addEventListener("rightclick", function(e) {
+						if (!e.overlay) {//判断右键单击的是否是marker
+							var s = e.point.lng;//经度
+							var w = e.point.lat;//维度
+							RightClick(e);//右键单击map出现右键菜单事件
+						} 
+					});
+				}
+				
+			} else {
+				top.openeasydialog("error", json.msg);
+			}
+		});
+	}
+	loadData();
+
+	//加载地图中心
+	Public.ajaxPost(Public.rootPath() + "/record/map/center", {
+		"xxx" : 1,
+	}, function(json) {
+		if (json.status == 001) {
+			map.centerAndZoom(json.data, 15);
+		}
+	});
+
+	function showPop(keyid){
+		Public.ajaxPost(Public.rootPath() + "/record/map/info", {
+		"keyId" : keyid
+		}, function(json) {
+			if (json.status == 001) {
+				$("#tagsDiv").html("");
+				var point = new BMap.Point(json.data.rm.lng, json.data.rm.lat);
+				map.panTo(point);
+				mapInfo = json.data.rm;
+				var recordList = json.data.recordList;
+				var length = recordList.length;
+				var html = getInfoWindowHtml(mapInfo, recordList);
+				$("#tagsDiv").append(html);
+                var tagsDiv=$("#tagsDiv").html();
+				map.openInfoWindow(new BMap.InfoWindow(tagsDiv), point);
+			}
+		});
+	}
+	
+	function addClickHandler(content, marker) {
+		marker.addEventListener("click", function(e) {
+			map.panTo(new BMap.Point(e.target.getPosition().lng, e.target
+					.getPosition().lat));		
+		Public.ajaxPost(Public.rootPath() + "/record/map/info", {
+			"keyId" : content
+		}, function(json) {
+			if (json.status == 001) {
+				var mapData = json.data;
+				mapInfo = mapData.rm;
+				var recordList = mapData.recordList;
+				var html = getInfoWindowHtml(mapInfo, recordList);
+				$("#tagsDiv").html("");
+				$("#tagsDiv").append(html);
+				var fourOpts = { 
+					width:600,
+					height:500
+				};
+				var tagsDiv=$("#tagsDiv").html();
+				marker.openInfoWindow(new BMap.InfoWindow(tagsDiv), fourOpts);
+			}
+		});
+		});
+	}
+	function addOverHandler(content, marker) {
+		marker.addEventListener("mouseover", function(e) {
+			//			map.panTo(new BMap.Point(e.target.getPosition().lng, e.target.getPosition().lat));
+			//        	openInfo(content, e.target.getPosition().lng, e.target.getPosition().lat);
+			//			this.openInfoWindow(new BMap.InfoWindow(a));
+		});
+	}
+	
+	function getInfo(keyId) {
+		var mapInfo;
+		Public.ajaxPost(Public.rootPath() + "/record/map/info", {
+			"keyId" : keyId
+		}, function(json) {
+			if (json.status == 001) {
+				mapInfo = json.data;
+			}
+		});
+		return mapInfo;
+	}
+	function openInfo(id, lng, lat) {
+		var m = $.ligerDialog.open({
+			title : "位置信息",
+			url : "point.html?id=" + id + "&lng=" + lng + "&lat=" + lat
+					+ "&random=" + Math.floor(Math.random() * 100000),
+			height : 360,
+			width : 480,
+			isResize : false,
+			slide : false,
+			isRefresh : false,
+		});
+		return m;
+	}
+
+	function openEdit(id, lng, lat, marker) {
+			   
+		var m = $.ligerDialog
+				.open({
+					title : "位置信息",
+					url : "point.html?id=" + id + "&lng=" + lng + "&lat=" + lat+"&random=" + Math.floor(Math.random() * 100000),
+					height : 360,
+					width : 500,
+					isResize : false,
+					slide : false,
+					isRefresh : false,
+					buttons : [
+							{
+								text : '保存',
+								onclick : function(item, dialog) {
+									var keyId = dialog.frame.$("#keyId").val();
+									var lng = dialog.frame.$("#lng").val();
+									var lat = dialog.frame.$("#lat").val();
+									var title = dialog.frame.$("#title").val();
+									//增加检查人员字段
+									//var checkName = dialog.frame.$("#checkName").val();
+									var address = dialog.frame.$("#address")
+											.val();
+									var important = dialog.frame
+											.$("#important").is(":checked") ? 1
+											: 0;
+									var nationalcheckpoint = dialog.frame
+											.$("#nationalcheckpoint").is(":checked") ? 1
+											: 0;
+									var valueStr = dialog.frame.$("#valStr").val();
+
+									Public.ajaxPost(Public.rootPath()
+											+ "/record/map/save", {
+										"keyId" : keyId,
+										"lng" : lng,
+										"lat" : lat,
+										"title" : title,
+										"address" : address,
+										"important" : important,
+										"nationalcheckpoint" :nationalcheckpoint,
+										"recordJSON" : valueStr,
+									}, function(json) {
+										if (json.status == 001) {
+											dialog.close();
+											top.openeasydialog("success",
+													json.msg);
+											loadData();
+											parent.location.reload() ;
+
+										} else {
+											top.openeasydialog("error",
+													json.msg);
+										}
+									});
+								},
+								cls : 'l-dialog-btn-highlight'
+							},
+							{
+								text : '删除',
+								onclick : function(item, dialog) {
+									if (!confirm("确定删除吗?")) {
+										return;
+									}
+									var keyId = dialog.frame.$("#keyId").val();
+									Public.ajaxPost(Public.rootPath()
+											+ "/record/map/delete", {
+										"keyids" : keyId,
+									}, function(json) {
+										if (json.status == 001) {
+											top.openeasydialog("success",
+													json.msg);
+											map.removeOverlay(marker);
+											dialog.close();
+										} else {
+											top.openeasydialog("error",
+													json.msg);
+										}
+									});
+								}
+							},
+							{
+								text : '取消',
+								onclick : function(item, dialog) {
+									var keyId = dialog.frame.$("#keyId").val();
+									if (keyId == null || keyId == 'null'
+											|| keyId == '') {
+										map.removeOverlay(marker);
+									}
+									dialog.close();
+								}
+							} ]
+				});
+		return m;
+	}
+	
+	function dragHandler(markerId, marker){//拖拽事件
+		marker.addEventListener("dragend", function (e) {
+//           				alert("当前位置：" + e.point.lng + ", " + e.point.lat);
+           	var gc = new BMap.Geocoder();
+     		//获取地址的数据地址
+     		var pt = e.point;
+     		var address;
+     		gc.getLocation(pt, function(rs){
+     			var addComp = rs.addressComponents;
+     			address = addComp.province +  addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+    		});
+           				Public.ajaxPost(Public.rootPath()+ "/record/map/save", {
+           						"keyId" : markerId,
+								"lng" : e.point.lng,
+								"lat" : e.point.lat,
+								"address" : address
+           					}, function(json){
+           						if (json.status != 001) {
+           							alert("操作失败");
+           						}
+           					}
+           					
+           				);
+       				});
+	}
+
+	//---------------------------------------------鼠标右键（编辑、删除）操作---------------------------------------------  
+
+	//右键单击marker出现右键菜单事件 
+	function RightClickHandler(name, id, lng, lat, marker) {
+		var menu = new BMap.ContextMenu(); //右键菜单  
+
+		var txtMenuItem = [ //右键菜单项目  
+				{
+					text : '编辑',
+					callback : function(e) {
+						/* map.panTo(new BMap.Point(
+									e.target.getPosition().lng, e.target
+											.getPosition().lat)); */
+						openEdit(id, lng, lat, marker);
+					}
+				},
+				{
+					text : '删除',
+					callback : function(e, ee, marker) {
+						if (confirm("要删除检查点 “" + name + "”吗？")) {
+							if (true) {
+								Public.ajaxPost(Public.rootPath()
+										+ "/record/map/delete", {
+									"keyid" : id,
+								}, function(json) {
+									if (json.status == 001) {
+										alert("success");
+										map.removeOverlay(marker);
+									}
+								});
+							}
+						}
+
+					}
+				} ];
+
+		for ( var i = 0; i < txtMenuItem.length; i++) {
+			menu.addItem(new BMap.MenuItem(txtMenuItem[i].text,
+					txtMenuItem[i].callback, 100)); //菜单添加项目  
+			if (i == 1 || i == 3) {
+				menu.addSeparator(); //添加右键菜单的分割线  
+			}
+		}
+		marker.addContextMenu(menu);
+	}
+
+	//右键单击map出现右键菜单事件
+	function RightClick(e) {
+		var createMarker = function(map) {
+			openEdit(null, e.point.lng, e.point.lat, e.point);
+		};
+		var markerMenu = new BMap.ContextMenu();
+		markerMenu.addItem(new BMap.MenuItem('新建检查点', createMarker.bind(map)));
+		map.addContextMenu(markerMenu);//给标记添加右键菜单
+	}
+	
+	function getResultData(condition, recordList){
+		resultList.splice(0,resultList.length);//清空数组 
+		if(typeof(condition) == "undefined"){
+			resultList = recordList;
+		}
+		if(condition == 0){//重点点位
+        	for(var i = 0; i < recordList.length; i++) {
+        		var rm = recordList[i];
+        		if(rm.important == 1){
+        			resultList.push(rm);
+        		}
+        	}
+       }
+       if(condition == 1){//有问题尚未解决
+        	for(var i = 0; i < recordList.length; i++) {
+        		var rm = recordList[i];
+        		if(rm.hasproblem == 1 && rm.issolved == 0){
+        			resultList.push(rm);
+        		}
+        	}
+       }
+       if(condition == 2){//问题已解决
+        	for(var i = 0; i < recordList.length; i++) {
+        		var rm = recordList[i];
+        		if(rm.issolved == 1){
+        			resultList.push(rm);
+        		}
+        	}
+       }
+       if(condition == 3){//检查未发现问题
+        	for(var i = 0; i < recordList.length; i++) {
+        		var rm = recordList[i];
+        		if(rm.hasproblem == 0){
+        			resultList.push(rm);
+        		}
+        	}
+       }
+	}
+</script>
+</body>
+</html>

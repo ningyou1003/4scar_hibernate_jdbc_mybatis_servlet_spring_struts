@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<style>
+ul {
+	display: block;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.toolbar {
+	float: left;
+}
+
+.toolbar li {
+	background: url(../images/toolbg.gif) repeat-x;
+	line-height: 33px;
+	height: 33px;
+	border: solid 1px #d3dbde;
+	float: left;
+	padding-right: 10px;
+	margin-right: 5px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.toolbar li span {
+	float: left;
+	margin-left: 10px;
+	margin-right: 5px;
+	margin-top: 5px;
+}
+
+a,a:focus {
+	font-size: 13px;
+	text-decoration: none;
+	color: #000;
+	outline: none;
+	blr: expression(this.onFocus =             this.blur () );
+}
+
+a:hover {
+	font-size: 13px;
+	color: #00a4ac;
+	text-decoration: none;
+}
+
+img {
+	border: 0;
+}
+</style>
+<script type="text/javascript">
+	var vm = avalon.define({
+		$id : "qrCodeCtrl",
+		keyid : "",
+		webroot : Public.rootPath()
+	});
+	$(function() {
+		var request = Public.urlRequest();
+		if (request.queryString["keyid"] != null
+				&& request.queryString["keyid"].length > 0) {
+			vm.keyid = request.queryString["keyid"];
+		}
+	});
+</script>
+
+</head>
+<body style="text-align: center;" ms-controller="qrCodeCtrl">
+
+	<div style="border: 1px solid #9caac1; width: 300px;">
+		<img id="Image1"
+			ms-attr-src="vm.webroot + '/user/BuildQRCode?keyid=' + vm.keyid"
+			style="height:300px;width:300px;border-width:0px;" />
+	</div>
+	<ul class="toolbar">
+		<li id="btnadd"><span> <img src="../../../images/ico04.png" />
+		</span><a id="Linkbutton1"
+			ms-attr-href="vm.webroot + '/user/DownloadQRCode?keyid=' + vm.keyid">下载</a>
+		</li>
+	</ul>
+</body>
+</html>

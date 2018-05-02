@@ -1,0 +1,66 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>recordList.html</title>
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script src="../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+    <style>
+        #recordList li
+        {
+            line-height:20px;
+            height:20px;
+            padding-top:10px;
+            padding-bottom:10px;
+            border-bottom:1px solid #C0C0C0;
+        }
+    </style>
+    <script type="text/javascript">
+        var url = null; //2015-05-05
+        $(function () {
+            Public.ajaxPost(Public.rootPath() + "/record/map/list", {
+                "xxx": 1
+            }, function (json) {
+                if (json.status == 001) {
+                    var len = json.data.length;
+                    for (i = 0; i < len; i++) {
+                        var important = json.data[i].important;
+                        var issolved = json.data[i].issolved;
+                        var _img = "";
+                        if (important == 1) {
+                            _img = '<img  src="../../images/marker_red.png" width="16px" />';
+                        }
+                        else if (issolved == 1) {
+                            _img = '<img  src="../../images/marker_green.png" width="16px" />';
+                        }
+                        else {
+                            _img = '<img  src="../../images/marker_orange.png" width="16px" />';
+                        }
+                        var item = ('<li style="font-size:12px"><a href="javascript:doShowPop()">' + _img + json.data[i].address + '</a></li>');
+                        $("#recordList").append(item);
+                    }
+
+                } else {
+                    top.openeasydialog("error", json.msg);
+                }
+            });
+        });
+        
+        function doShowPop(){
+        	var a = window.parent;
+        	showPop();
+        }
+		
+    </script>
+</head>
+<body>
+	
+    <div style="padding: 10px">
+        <ul id="recordList">
+      
+        </ul>
+    </div>
+</body>
+</html>

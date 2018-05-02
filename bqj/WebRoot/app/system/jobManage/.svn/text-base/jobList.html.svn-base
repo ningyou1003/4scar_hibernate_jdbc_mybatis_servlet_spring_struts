@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="jobList.js" charset="utf-8"></script>
+</head>
+
+
+<body ms-controller="jobCtrl">
+	<!-- <div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li>首页</li>
+			<li>系统设置</li>
+			<li>职务管理</li>
+		</ul>
+	</div> -->
+
+	<div class="rightinfo">
+	<div class="tools">
+	    <ul class="toolbar">
+	      <li id="add" ms-if="vm.power.addpower==1"><span><img src="../../../images/t01.png" /></span>添加</li>
+	      <li id="edit" ms-if="vm.power.editpower==1"><span><img src="../../../images/t02.png" /></span>修改</li>
+	      <li id="delete" ms-if="vm.power.delpower==1"><span><img src="../../../images/t03.png" /></span>删除</li>
+	    </ul>
+	 </div>
+	 
+	</div>
+	
+		<table class="tablelist">
+			<thead>
+				<tr>
+					<th class="checkBoxTh"><span class="CheckBoxCss"><input id="checkalls" 
+						type="checkbox" ms-click="checkAll" /> </span>
+					</th>
+					<th  width="200px">{{vm.tableTop.region}}</th>
+					<th  width="250px">{{vm.tableTop.name}}</th>
+					<th>{{vm.tableTop.msg}}</th>
+					<th width="100px"> {{vm.tableTop.order}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ms-repeat="vm.data">
+					<td><span class="CheckBoxCss"><input
+							class="itemCheckBox" ms-duplex-string="selectId" type="checkbox"
+							ms-attr-value="el.keyid" /> </span></td>
+					<td>{{el.region}}</td>
+					<td>{{el.name}}</td>
+					<td>{{el.msg}}</td>
+					<td>{{el.order}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+</body>
+</html>

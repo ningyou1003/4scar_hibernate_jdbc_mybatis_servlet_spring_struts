@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+    <title></title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <script src="../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+<link href="../../assets/js/plugins/jquery-ui/jquery-ui.css" />
+<script type="text/javascript" src="../../assets/js/plugins/jquery-ui/jquery-ui.js" ></script>
+<style type="text/css">
+*{font-size: 12px;}
+dl,dt,dd,span{margin:0;padding:0;display: inline;}
+#dBanner{ 
+    height:30px; overflow:hidden; overflow:hidden; border-bottom:1px solid #dadada;
+}
+#dPanel{ 
+    width:280px; height:100%; float:left; overflow:hidden;  border-right:1px solid #dadada; 
+    background-color:#fff;
+}
+#dContent{  overflow:hidden; height:100%; float:left; background-color:#fff;}
+#dCtxFrame{
+	width:100%; height:100%; border:none; padding:0px; margin:0px; overflow:hidden;
+}
+.stationList{
+    padding:5px; margin:0; 
+}
+.stationList li{
+    padding:0 0 2px 5px; margin:0 0 2px 0; display:block; height:40px; overflow:hidden;
+    border-bottom:1px solid #dadada;
+}
+.stationList .title{
+    display:block; height:20px; line-height:20px; overflow:hidden; color:#333;
+}
+.stationList .title:hover{
+    color:#555;
+}
+.pnlBox{
+    height:50%; background-color:#fff; border-bottom:1px solid #dadada; overflow:scroll;
+}
+.pnlBox .caption{
+    height:30px; line-height:30px; color:#425E74; font-weight:bold;font-family:"Microsoft YaHei";
+    background:url(images/groupbar.jpg) repeat-x; padding:0px 10px;
+}
+.addr{
+    display:block; height:20px; line-height:20px; overflow:hidden; font-weight:normal; color:#888;
+}
+ul#ui-id-1.ui-autocomplete.ui-front.ui-menu.ui-widget.ui-widget-content.ui-corner-all{
+	position: absolute;
+	top : 25px;
+	border: 1px solid #aaaaaa;
+    background: #ffffff 50% 50% repeat-x;
+    color: #222222;
+}
+a.ui-corner-all{
+	color : rgb(117, 110, 109)
+}
+</style>
+<script type="text/javascript">
+		var vm = avalon.define({//2017-12-07 csh start
+		$id : "areaaddCtrl",
+		data : {
+			parentcode : "123",//父级区域编码
+			parent : "",//父级区域名称
+			title:""
+		}
+		});//2017-12-07 csh end
+		
+
+        var url = null; //2015-05-05
+        var recordList ;
+        var searchWords = [];
+        var resultList = new Array() ;
+        $(function () {
+            initData();
+        });
+
+
+        function doShowPop(keyid) {        
+        	dCtxFrame.showPop(keyid);
+        }
+        
+        function initData(){
+        				//从cookie获取页码
+			 mapPageNumber = $.cookie('mapPageNumber');
+			mapPageNumber==null?1:mapPageNumber;
+			
+        	Public.ajaxPost(Public.rootPath() + "/record/map/list", {
+                "xxx": 1,
+                'page':mapPageNumber,
+                regioncode:vm.data.parentcode,
+                title:vm.data.title
+            }, function (json) {
+                if (json.status == 001) {
+                    recordList = json.data.list;
+                    
+                    $("#recordList").html("");
+                    loadingData(recordList);
+                    areainitpage(json.data);
+                     dCtxFrame.showPop(dCtxFrame.loadData());
+                }else {
+                    top.openeasydialog("error",json.msg);
+                }
+            });
+                    
+        }
+        function loadingData(recordList) {
+					
+                    for (var i = 0; i < recordList.length; i++) {
+                        searchWords.push(recordList[i].title + ',' + recordList[i].address + '');
+                    }
+                    var len = recordList.length;
+                    for (i = 0; i < len; i++) {
+                        var important = recordList[i].important;
+                        var issolved = recordList[i].issolved;
+                        var hasproblem = recordList[i].hasproblem;
+                        var _img = "";
+                        if (important == 1) {
+                            _img = '<img  src="../../images/marker_red.png" width="16px" />';
+                        }
+                        else if (hasproblem == 1&&issolved == 1) {
+                            _img = '<img  src="../../images/marker_green.png" width="16px" />';
+                        }
+                        else if(hasproblem == 0){
+                        	_img = '<img src="../../images/marker_blue.png" width="16px" />';
+                        }
+                        else {
+                            _img = '<img  src="../../images/marker_orange.png" width="16px" />';
+                        }
+                        var item = ('<li style="font-size:12px"><a href="javascript:doShowPop(\'' + recordList[i].keyid + '\')">'
+                        	+ _img + recordList[i].title + '</a><b class="addr">' + recordList[i].address + '</b></li>');
+                        $("#recordList").append(item);
+                    }
+                    //alert();
+                    //doShowPop(recordList[0].keyid);
+            $('#dSearchText').focus(function () {
+
+            }).blur(function () {
+
+            });
+            
+            $("#dSearchText").autocomplete({
+                source: searchWords,
+                messages: {
+                    noResults: '',
+                    results: function () { }
+                }
+            }).on("autocompleteselect", function (event, ui) {
+                var item = ui.item.value.split(',');
+                var address = item[1];
+                var keyid;
+                for (var i = 0; i < recordList.length; i++) {
+                    if (recordList[i].address == address) {
+                        keyid = recordList[i].keyid;
+                    }
+                }
+                doShowPop(keyid);
+            });
+        }
+        
+        //点击图标查询对应检查点
+        function search(condition){
+        	resultList.splice(0,resultList.length);//清空数组 
+        	if(condition == 0){ //重点点位
+        		for(var i = 0; i < recordList.length; i++) {
+        			var rm = recordList[i];
+        			if(rm.important == 1){
+        				resultList.push(rm);
+        			}
+        		}
+        		$("#recordList").html("");
+        		loadingData(resultList);
+        	//	document.getElementById("dCtxFrame").src = "map.html?condition=0"; 
+        	}
+        	if(condition == 1){ //有问题尚未解决
+        		for(var i = 0; i < recordList.length; i++) {
+        			var rm = recordList[i];
+        			if(rm.hasproblem == 1&&rm.issolved == 0){
+        				resultList.push(rm);
+        			}
+        		}
+        		$("#recordList").html("");
+        		loadingData(resultList);
+        	//	document.getElementById("dCtxFrame").src = "map.html?condition=1"; 
+        	}
+        	if(condition == 2){ //问题已解决
+        		for(var i = 0; i < recordList.length; i++) {
+        			var rm = recordList[i];
+        			if(rm.hasproblem == 1&&rm.issolved == 1){
+        				resultList.push(rm);
+        			}
+        		}
+        		$("#recordList").html("");
+        		loadingData(resultList);
+        	//	document.getElementById("dCtxFrame").src = "map.html?condition=2"; 
+        	}
+        	if(condition == 3){//检查没有发现问题
+        		for(var i = 0; i < recordList.length; i++) {
+        			var rm = recordList[i];
+        			if(rm.hasproblem == 0){
+        				resultList.push(rm);
+        			}
+        		}
+        		$("#recordList").html("");
+        		loadingData(resultList);
+        	//	document.getElementById("dCtxFrame").src = "map.html?condition=3"; 
+        	}
+        }
+        
+</script>
+</head>
+<body style="height: 900px;">
+	<div id="dBanner">
+        <div style="width:500px; overflow:hidden; float:left;">
+            <div id="dIconSample" style="padding:5px 5px; height:30px;">检查点图标:&nbsp;&nbsp;
+            	<a href="javascript:search(0)"><img src="../../images/red_marker.png"><span>重点点位</span></a>&nbsp;&nbsp;
+            	<a href="javascript:search(1)"><img src="../../images/orange_marker.png"><span>有问题尚未解决</span></a>&nbsp;&nbsp;
+            	<a href="javascript:search(2)"><img src="../../images/green_marker.png"><span>问题已解决</span></a>
+            	<a href="javascript:search(3)"><img src="../../images/blue_marker.png"/><span>检查没发现问题</span></a></div>
+        </div>
+        <!-- <div style="width:200px; overflow:hidden; float:left;">
+            <div id="hasproblems" style="padding:5px 5px; height:30px;">是否发现问题:&nbsp;&nbsp;
+            	<input id="yes" type="radio" name="hasproblem" value="1" onclick="search(4)"><label for="yes">是</label>
+            	<input id="no" type="radio" name="hasproblem" value="0" onclick="search(5)"><label for="no" >否</label>
+            	<input id="all" type="radio" name="hasproblem" onclick="search(6)"><label for="all" >所有</label>
+            	</div>
+        </div> -->
+        <div style="height:30px; line-height:30px; overflow:hidden; padding-right:30px; float:right;">
+            <table cellpadding="2" cellspacing="0">
+                <tbody><tr>
+                    <td>站点搜索：</td>
+                    <td>
+                    	<input id="dSearchText" type="text" value="" style="width:300px;border:1px solid #C0C0C0;" class="ui-autocomplete-input" autocomplete="off">
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+    </div>
+    <div id="dPanel" style="width: 200px;">
+    	<!-- 2017-12-07 csh start -->
+    	<!-- 添加区域选择和标题搜索 -->
+    	<ul class="forminfo" ms-controller="areaaddCtrl">
+								<li class="row-item"><label for="parent">
+										区域选择 ： </label> <input name="ParentList" data-rule="required;"
+									type="text" id="ParentList" ms-duplex="data.parent" class="searchBox" style="width:150px"/> 
+									<input name="ParentID" type="text"
+									id="ParentID" class="dfinput" ms-duplex="data.parentcode"
+									style="display: none" /><font color="red"></font></li>
+								<li class="row-item">
+										标题 ：  <input name="recodeTitle" data-rule="required;"
+									type="text" id="recodeTitle" ms-duplex="data.title" class="dfinput n-invalid" style="width:120px"/> 
+									</li>
+									<li><button style="borbackground-color: black;font-size: 15px;border-radius: 5px;height: 32px;width: 90%;border: 1px solid #aaa;font-weight: bold;" onclick="initData()">查询</button></li>
+							</ul>
+							<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+		<script >
+			//区域选择弹出
+			$("#ParentList").click(
+				function() {
+					top.openbuttondialog(
+							"选择查询区域", 400, 300,
+							"system/areaManage/TopesallAreaTreeView.html", false,
+							function(item, dialog) {
+									
+									vm.data.parentcode = dialog.frame.$("#regioncode").val();//获得所选区域编码，用于获取点位数据
+									vm.data.parent = dialog.frame.$("#region").val();//区域名，用于显示
+									dialog.hide();
+									//alert(vm.data.parentcode+'--'+vm.data.parent);
+									$("#ParentList").isValid();
+									//$("#ParentList").id();
+									initData();//区域发生变化，重新获取数据
+								
+							});
+				});
+				//翻页设计
+				function areainitpage(page){
+					//alert(1);
+					var pagehtml="<p style=\"text-align:center;\">";
+					if(page.pageNumber==1){
+						pagehtml+="<span style=\"margin-right:10px;\"><a><<</a></span>";
+					}else {
+						pagehtml+="<span style=\"margin-right:10px;\"><a href=\"javascript:page('"+(page.pageNumber-1)+"')\"><<</a></span>";
+					}
+					pagehtml+="<span style=\"margin-right:10px;\"><input type=\"text\" onkeyup=\"this.value=this.value.replace(\/[^\\d]\/g,'') \" onafterpaste=\"this.value=this.value.replace(\/[^\\d]\/g,'') \" id=\"pagenumber\" name=\"pagenumber\" style=\"margin-right:5px;border:1px solid #aaa;width:30px;\"><button style=\"border:1px solid #aaa;width:30px;\" onclick=\"tiaozhuan()\">跳转</button></span>";
+					pagehtml+="<span style=\"margin-right:10px;\">"+page.pageNumber+"/"+page.totalPage+"</span>";
+					
+					if(page.pageNumber==page.totalPage){
+						pagehtml+="<span><a>>></a></span>";
+					}else {
+						pagehtml+="<span><a href=\"javascript:page('"+(page.pageNumber+1)+"')\">>></a></span>";
+					}
+					pagehtml+="</p>";
+					$("#PageInfo").html(pagehtml);
+					
+				}
+				//翻页，跳页方法
+				function page(page){
+				//alert(1);
+				//alert(page+","+vm.areaname+","+vm.isDemonstration);
+				Public.ajaxPost(Public.rootPath() + "/record/map/list", {
+                "xxx": 1,
+                'page' : page,
+                regioncode:vm.data.parentcode,
+                title:vm.data.title
+				}, function(json) {
+			    	if (json.status == 001) {
+                    recordList = json.data.list;
+                    
+                    $("#recordList").html("");
+                    loadingData(recordList);
+                    areainitpage(json.data);
+                    //翻页的时候，地图页面去掉旧的点，重新画当前数据的点
+                    dCtxFrame.showPop(dCtxFrame.loadData());
+                }else {
+                    top.openeasydialog("error",json.msg);
+                }
+				});
+				$.cookie('mapPageNumber', page, {path: '/'}); 
+				}
+				
+				//跳转页面方法
+				function tiaozhuan(){
+					var pagenumber=$("#pagenumber").val();//获得需要跳转的页数
+					page(pagenumber);//跳转到pagenumber页
+				}
+		</script>
+		<!-- 2017-12-08 csh end -->
+    	<div id="dRecodeList" class="pnlBox" >
+    		<ul id="recordList" class="stationList" style="height: auto;"></ul>
+    		
+    	</div>
+    	
+    </div>
+    <div id="dContent" style="width: 83%; ">
+    	<iframe id="dCtxFrame" name="dCtxFrame" src="map.html" frameborder="0" scrolling="no" class="mainFrame" style="overflow: hidden;"></iframe>
+    </div>
+</body>
+</html>

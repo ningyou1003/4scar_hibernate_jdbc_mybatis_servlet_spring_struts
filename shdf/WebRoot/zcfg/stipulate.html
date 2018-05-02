@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<!-- 搜索关键字 -->
+		<title>广西扫黄打非网</title>
+		<!-- 基础样式文件 开始 -->
+		<link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
+		<link href="../css/base.css" rel="stylesheet" type="text/css">
+		<link href="../css/index.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="../css/public.css" />
+
+		<!-- 基础样式文件 结束 -->
+		<!-- 基础JS文件 开始 
+		<!--<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/base.js"></script>
+		<script type="text/javascript" src="js/index.js"></script>
+		-->
+		<script src="../assets/ui/jquery/jquery-1.3.2.min.js" type="text/javascript"></script>
+		<script src="../assets/js/common.js" charset="utf-8" type="text/javascript"></script>
+
+		<script type="text/javascript" src="../js/cypager.min.js" ></script>
+		
+		<link href="../assets/ui/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+		<script src="../js/cookie.js" charset="utf-8" type="text/javascript"></script>
+		<script src="../js/area.js" charset="utf-8" type="text/javascript"></script>
+		<!-- 轮播图 开始 -->
+		<script type="text/javascript" src="../js/lb_jcfc.js"></script>
+		<link href="../css/lbt1.css" rel="stylesheet" type="text/css">
+		
+		<!-- 基础JS文件 结束 -->
+
+        <script type="text/javascript">
+            function GetQueryString(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
+            }
+            //alert(GetQueryString('num'));
+
+            var keys = GetQueryString('key');
+            //var urls = GetQueryString('url');
+
+            var rootPath="http://222.216.1.196:38229/bqj";
+            var urls = 'stipulate/editData';
+
+            $.ajax({
+                type: 'POST',
+                url: rootPath + '/'+urls,
+                data: 'keyId='+keys,
+                dataType: "json",
+                beforeSend: function () {
+                    //alert('加载中...');
+                },
+                complete: function () {
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (json) {
+
+                    if (json.status == 001) {
+                                                
+                        $('.content_main_title').html(json.data.title);
+                        $('.content_main_dis').html(json.data.releasetime);
+                        $('.content_main_con').html(json.data.content);
+                        
+                    } else {
+                        alert(json.msg);
+                    }
+                    $('.flexslider').flexslider({
+                            directionNav: true,
+                            pauseOnAction: false
+                    });
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+
+        </script>
+        <style type="text/css">
+
+           
+	
+            /* menu */
+            
+            #menu{height:34px;margin-top:14px;background-color:#990000;}
+            #menu ul{width:990px;height:32px;margin:0 auto;}
+            #menu .m_li{float:left;width:100px;line-height:32px;text-align:left;margin:0px -2px;}
+            #menu .m_li a{display:block;color:black;min-width:114px;}
+            #menu .m_line{float:left;width:1px;height:32px;line-height:32px;/*ff下有效(图片垂直居中)*/}
+            #menu .m_line img{margin-top:expression(( 32 - this.height ) / 2);/*ie下有效(图片垂直居中)*/}
+            #menu .m_li_a{float:left;width:100px;line-height:35px;text-align:center;padding-top:3px;font-weight:bold;background:url(img/menu_bg.jpg);position:relative;height:35px;margin:-3px -2px 0 -2px;}
+            #menu .m_li_a a{display:block;color:#FF0000;width:100px;}
+           
+            /* subbox */
+            .subbox{height:32px;background-color:#F1F1F1;margin-bottom: 14px;}
+            .subbox .smenu{width:774px;margin:0px auto;height:32px;}
+            .subbox li{line-height:32px;height:32px;}
+            .subbox .s_li{display:none;}
+            .subbox .s_li_a{display:block;}
+
+           
+        </style>
+		<link href="../css/muen.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background:#f4f4f4">
+		
+		<!-- main 开始 -->
+		<div class="main">
+			<div class="main_box">
+				<div style="height:30px;line-height: 30px;">
+					<span id="myDate"></span>
+					
+				</div>
+				<!-- logo 开始 -->
+				<div class="logo">
+				<p class="logo_1">举报电话: 0771-5516026</p>
+				<p class="logo_2">[<a href="javascript:selArea()" style="font-size: 17px;">切换区域</a>]当前区域：<span id="areatxt" style="font-size: 17px;">广西壮族自治区</span></p>
+					
+				<p class="logo_3"><img src="../img/QRCodeForAndroid.png"  >扫描下载官方APP</p>
+				</div>
+				<!-- logo 结束 -->
+	
+				<!-- banner 开始 -->
+				<div id="menu">
+            
+        </div><!--menu end-->
+
+        <div class="subbox">
+            <ul class="smenu">
+                
+            </ul>
+        </div><!--subbox end-->
+				<!-- banner 结束 -->
+				
+				<!-- 路径 开始 -->
+				<div class="address">
+					<img src="../img/address_ico.png"/>
+					<a href="javascript:void(0);">首页：</a>
+					<a href="javascript:void(0);">政策法规</a>
+					<a>&gt;</a><a href="javascript:void(0);">部门规章</a>
+				</div>
+				<!-- 路径 结束 -->
+				
+				<!-- list_main 开始 -->
+                <div class="content_main">
+                    <div class="content_main_title">
+                        
+                    </div>
+                    <div class="content_main_dis">
+                        
+                    </div>
+                    <div class="content_main_con">
+                        
+                    </div>
+                    
+                </div>
+                <!-- list_main 结束 -->
+				
+				<div style="height:8px;background:#f4f4f4"></div>
+
+				<!-- 友情链接 开始 -->
+				
+				<!-- 友情链接 结束 -->
+
+				<div style="height:3px; margin:12px 0; background:#ac0000"></div>
+
+				<!-- 底部 开始 -->
+				<div style="text-align:center">
+					<p>广西“扫黄打非”工作小组办公室</p>
+					<p>全国“扫黄打非”工作小组办公室举报电话：12390</p>
+					<p>举报邮箱：gxshdf@126.com 地址：广西南宁市金湖路53号</p>
+				</div>
+				<!-- 底部 结束 -->
+				
+			</div>
+		</div>
+		<!-- main 结束 -->
+		<!-- 选择区域  -->
+		<div id="areas" style="background-color: #fff;width: 302px;height: 480px;margin:auto;position: fixed;
+            left:50%;top:50%;
+            margin-left:-151px;margin-top:-260px;
+            border: 2px solid #bbb;
+             z-index: 121;display:none;">
+            <h2 id="ernoltitle" style="text-align:center;   margin-top: 5px; margin-bottom:5px;   font-size: 20px;border-bottom: 1px solid #bbb;">选择区域</h2>
+            <div id="areahtmlDIV"></div>
+            
+			<div style="border-top: 1px solid #bbb;height:36px;">
+			<div class="l-dialog-buttons">
+				<div class="l-dialog-buttons-inner">
+					<div class="l-dialog-btn"><div class="l-dialog-btn-l"></div><div class="l-dialog-btn-r"></div><div class="l-dialog-btn-inner" onclick="breaks()">取消</div></div><div class="l-dialog-btn"><div class="l-dialog-btn-l"></div><div class="l-dialog-btn-r"></div><div class="l-dialog-btn-inner" onclick="onSelectArea()">确定</div></div><div class="l-clear"></div></div></div></div>
+		</div>
+		
+		<!-- 蒙板 开始 -->
+		<div id="mengban" onclick="breaks()" style="top: 0px;left: 0px;z-index: 98;height: 100%;width: 100%;position: fixed;filter: Alpha(opacity=30); -moz-opacity: 0.3; -khtml-opacity: 0.3;
+            opacity: 0.1; background-color: #fff; text-align: center;display:none;">
+	
+		</div>
+		<!-- 蒙板结束 -->
+	</body>
+
+</html>
+<script type="text/javascript" src="../public.js"></script>
+<script type="text/javascript">
+		
+        //当前日期
+        function dates(){
+                var mydate = new Date();
+                var str = "" + mydate.getFullYear() + "年";
+                str += (mydate.getMonth()+1) + "月";
+                str += mydate.getDate() + "日";
+                return str;
+        }
+
+        $("#myDate").html("今天是：" + dates());
+
+		$(function(){
+			$(".lanrenzhijia .tab a").mouseover(function(){
+				$(this).addClass('on').siblings().removeClass('on');
+				var index = $(this).index();
+				number = index;
+				$('.lanrenzhijia .content li').hide();
+				$('.lanrenzhijia .content li:eq('+index+')').show();
+			});
+			
+			var auto = 1;  //1则自动切换
+			if(auto ==1){
+				var number = 0;
+				var maxNumber = $('.lanrenzhijia .tab a').length;
+				function autotab(){
+					number++;
+					number == maxNumber? number = 0 : number;
+					$('.lanrenzhijia .tab a:eq('+number+')').addClass('on').siblings().removeClass('on');
+					$('.lanrenzhijia .content ul li:eq('+number+')').show().siblings().hide();
+				}
+				var tabChange = setInterval(autotab,6000);
+				//鼠标悬停暂停切换
+				$('.lanrenzhijia').mouseover(function(){
+					clearInterval(tabChange);
+				});
+				$('.lanrenzhijia').mouseout(function(){
+					tabChange = setInterval(autotab,3000);
+				});
+			  }
+		});
+
+        //设置当前频道
+            var def = "1";
+
+            function mover(object) {
+
+                //主菜单
+                var mm = document.getElementById("m_" + object);
+                mm.className = "m_li_a";
+
+                //初始主菜单先隐藏效果
+                if (def != 0) {
+                    var mdef = document.getElementById("m_" + def);
+                    mdef.className = "m_li";
+                }
+
+                //子菜单
+                var ss = document.getElementById("s_" + object);
+                ss.style.display = "block";
+
+                //初始子菜单先隐藏效果
+                if (def != 0) {
+                    var sdef = document.getElementById("s_" + def);
+                    sdef.style.display = "none";
+                }
+
+            }
+
+            function mout(object) {
+
+                //主菜单
+                var mm = document.getElementById("m_" + object);
+                mm.className = "m_li";
+
+                //初始主菜单还原效果
+                if (def != 0) {
+                    var mdef = document.getElementById("m_" + def);
+                    mdef.className = "m_li_a";
+                }
+
+                //子菜单
+                var ss = document.getElementById("s_" + object);
+                ss.style.display = "none";
+
+                //初始子菜单还原效果
+                if (def != 0) {
+                    var sdef = document.getElementById("s_" + def);
+                    sdef.style.display = "block";
+                }
+            }
+        </script>

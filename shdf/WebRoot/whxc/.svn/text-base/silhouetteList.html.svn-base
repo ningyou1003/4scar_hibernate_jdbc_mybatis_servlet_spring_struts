@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<!-- 搜索关键字 -->
+		<title>广西扫黄打非网</title>
+		<!-- 基础样式文件 开始 -->
+		<link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
+		<link href="../css/base.css" rel="stylesheet" type="text/css">
+		
+		<link rel="stylesheet" href="../css/public.css" />
+
+
+		<!-- 基础样式文件 结束 -->
+
+		<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="../js/cypager.min.js" ></script>
+		
+		<!-- 基础JS文件 结束 -->
+		
+		
+         <link href="../css/muen.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background:#f4f4f4">
+		
+		<!-- main 开始 -->
+		<div class="main">
+			<div class="main_box">
+				<div style="height:30px;line-height: 30px;">
+					<span id="myDate"></span>
+					
+				</div>
+				<!-- logo 开始 -->
+				<div class="logo"></div>
+				<!-- logo 结束 -->
+	
+				<!-- banner 开始 -->
+				<div id="menu">
+            
+        </div><!--menu end-->
+
+        <div class="subbox">
+            <ul class="smenu">
+                
+            </ul>
+        </div><!--subbox end-->
+				<!-- banner 结束 -->
+				
+				<!-- 路径 开始 -->
+				<div class="address">
+					<img src="../img/address_ico.png"/>
+					<a href="javascript:void(0);">首页：</a>
+					<a href="javascript:void(0);" id="navs">文化宣传</a>
+					<a>&gt;</a><a href="javascript:void(0);">墙报</a>
+				</div>
+				<!-- 路径 结束 -->
+				
+				<!-- list_main 开始 -->
+				<div class="list_main">
+					
+					<!-- list_con 开始 -->
+					<div class="list_con">
+						<div class="list_con_title">
+							<font>墙报</font>
+						</div>
+						<div class="list_con_content">
+							<ul id="lists">
+								
+								
+							</ul>
+
+							<div id="pagerArea" unselectable="on" onselectstart="return false;" style="-moz-user-select:none;"></div>
+
+						</div>
+					</div>
+					<!-- hot 结束 -->
+				</div>
+				<!-- list_main 结束 -->
+				
+				<div style="height:8px;background:#f4f4f4"></div>
+
+				<!-- 友情链接 开始 -->
+				
+				<!-- 友情链接 结束 -->
+
+				<div style="height:3px; margin:12px 0; background:#ac0000"></div>
+
+				<!-- 底部 开始 -->
+				<div style="text-align:center">
+					<p>广西“扫黄打非”工作小组办公室</p>
+					<p>全国“扫黄打非”工作小组办公室举报电话：12390</p>
+					<p>举报邮箱：gxshdf@126.com 地址：广西南宁市金湖路53号</p>
+				</div>
+				<!-- 底部 结束 -->
+				
+			</div>
+		</div>
+		<!-- main 结束 -->
+		
+	</body>
+
+</html>
+<script type="text/javascript" src="../public.js"></script>
+<script type="text/javascript">
+		
+
+		//当前日期
+        function dates(){
+                var mydate = new Date();
+                var str = "" + mydate.getFullYear() + "年";
+                str += (mydate.getMonth()+1) + "月";
+                str += mydate.getDate() + "日";
+                return str;
+        }
+
+        $("#myDate").html("今天是：" + dates());
+		
+		$(function(){
+			
+			
+
+		//分页
+		var pagenum = '';
+		var rows = '';
+		var urls = 'silhouette/getSilhouetteList';
+		var con = 'silhouette';
+
+		$.ajax({
+						url:"http://192.168.1.74:8080/bqj/"+urls,
+						type:"post",
+						data:{year:2016,page:1},
+						dataType: "json",
+						async : false,
+						success:function(json){
+							//alert(json.data.totalPage);
+							pagenum = json.data.totalPage;
+							rows = json.data.totalRow;
+							var len = json.data.list.length;
+							for (i = 0; i < len; i++) {
+									   if (json.data.list[i].title.length > 50) {
+									   		json.data.list[i].title = json.data.list[i].title.substring(0,50) + '...';
+									   };
+					                   var str = '<li><img src="../img/list_con_ico.png"><a href="'+con+'.html?key='+json.data.list[i].keyid+'">'+json.data.list[i].title+'</a><span>'+json.data.list[i].releasetime+'</span></li>';
+					                    $("#lists").append(str);
+
+					              //       var pag = '<a href="javascript:;">'+ y +'</a>';
+				            			// $("#page").append(pag);
+
+				            }
+				            
+
+
+						}
+				});
+				//ajax end
+				
+				
+
+				$("#pagerArea").cypager({pg_size: 10, pg_nav_count: 8, pg_total_count: rows, pg_call_fun: function(num) {
+                    
+                    $.ajax({
+						url:"http://192.168.1.74:8080/bqj/"+urls,
+						type:"post",
+						data:{year:2016,page:num},
+						dataType: "json",
+						success:function(json){
+							//var obj = eval("("+data+")");
+							$("#lists").empty();
+							var len = json.data.list.length;
+							for (i = 0; i < len; i++) {
+					                   var str = '<li><img src="../img/list_con_ico.png"><a href="'+con+'.html?key='+json.data.list[i].keyid+'">'+json.data.list[i].title+'</a><span>'+json.data.list[i].releasetime+'</span></li>';
+					                    $("#lists").append(str);
+					                    
+				            }
+				            
+				            
+						}
+					});
+                    //ajax
+
+                }});
+
+			//page end
+
+			
+		});
+
+        //设置当前频道
+            var def = "1";
+
+            function mover(object) {
+
+                //主菜单
+                var mm = document.getElementById("m_" + object);
+                mm.className = "m_li_a";
+
+                //初始主菜单先隐藏效果
+                if (def != 0) {
+                    var mdef = document.getElementById("m_" + def);
+                    mdef.className = "m_li";
+                }
+
+                //子菜单
+                var ss = document.getElementById("s_" + object);
+                ss.style.display = "block";
+
+                //初始子菜单先隐藏效果
+                if (def != 0) {
+                    var sdef = document.getElementById("s_" + def);
+                    sdef.style.display = "none";
+                }
+
+            }
+
+            function mout(object) {
+
+                //主菜单
+                var mm = document.getElementById("m_" + object);
+                mm.className = "m_li";
+
+                //初始主菜单还原效果
+                if (def != 0) {
+                    var mdef = document.getElementById("m_" + def);
+                    mdef.className = "m_li_a";
+                }
+
+                //子菜单
+                var ss = document.getElementById("s_" + object);
+                ss.style.display = "none";
+
+                //初始子菜单还原效果
+                if (def != 0) {
+                    var sdef = document.getElementById("s_" + def);
+                    sdef.style.display = "block";
+                }
+            }
+        </script>
+
+
+
+        <!-- for ( y = 1; y <= pagenum; y++) {
+
+				            var pag = '<a href="javascript:;">'+ y +'</a>';
+				            $("#page").append(pag);
+				            $('#page a:eq(0)').addClass('on');
+				};
+            
+				$("#page a").click(function(){
+					$.ajax({
+						url:"http://192.168.1.74:8080/bqj/"+urls,
+						type:"post",
+						data:"page="+$(this).html(),
+						dataType: "json",
+						success:function(json){
+							//var obj = eval("("+data+")");
+							$("#lists").empty();
+							var len = json.data.list.length;
+							for (i = 0; i < len; i++) {
+					                   var str = '<li><img src="../img/list_con_ico.png"><a href="'+con+'.html?key='+json.data.list[i].keyid+'">'+json.data.list[i].title+'</a><span>'+json.data.list[i].releasetime+'</span></li>';
+					                    $("#lists").append(str);
+					                    
+				            }
+				            
+				            
+						}
+					});
+					$('#page a:eq('+($(this).html()-1)+')').addClass('on').siblings().removeClass('on');
+				}); -->

@@ -1,0 +1,247 @@
+package com.emindsoft.zsj;
+
+import cn.dreampie.routebind.ControllerKey;
+import com.alibaba.fastjson.JSON;
+import com.emindsoft.zsj.base.ctrl.BaseController;
+import com.emindsoft.zsj.system.model.Area;
+import com.emindsoft.zsj.system.model.Power;
+import com.emindsoft.zsj.system.model.RolePower;
+import com.emindsoft.zsj.system.model.User;
+import com.emindsoft.zsj.system.vo.OnlineUserVO;
+import com.emindsoft.zsj.util.LoginValidateCode;
+import com.emindsoft.zsj.util.PropertiesContent;
+import com.emindsoft.zsj.util.safe.CipherUtil;
+import com.emindsoft.zsj.vo.LeftMenuVO;
+import com.emindsoft.zsj.vo.onlineUser;
+import com.jfinal.core.ActionKey;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * 首页调用及登录退出
+ * 
+ * @author ym
+ */
+@ControllerKey("/")
+public class IndexCtrl extends BaseController {
+
+	public void login() {
+		String userno = this.getPara("userno");
+		String pwd = this.getPara("pwd");
+		// TODO 验证码暂时注释
+		// 验证码暂时注释
+		String captcha = getPara("validCode");
+		String randomCodeKey = getPara("randomCodeKey");
+		boolean validate = LoginValidateCode.validate(randomCodeKey, captcha);
+		if (!validate) {
+			this.rendJson(false, null, "输入验证码错误！");
+			return;
+		}
+		// 密码存放方式为密码+md5code进行md5加密
+		User m = User.dao.login(userno, "123456");
+		if (m != null) {
+			String laborStatus = m.getStr("laborStatus");
+//			if("在职在岗".equals(laborStatus)){
+				String uid = m.getStr("keyid");
+				String ip = this.getRequest().getHeader("X-Real-IP");
+				String nowStr = dateTimeFormat.format(new Date());
+				int maxTime = 60 * 60 * 8;
+				boolean autoLogin = this.getParaToBoolean("autoLogin", false);
+				if (autoLogin) {
+					maxTime = 604800;// 保持一星期
+				}
+
+				Map<String, Object> userMap = new HashMap<String, Object>();
+				userMap.put("loginTime", nowStr);
+				userMap.put("ip", ip);
+				userMap.put("uid", uid);
+						
+				if(m.getStr("orgid") !=null){
+					//用户所在机构
+					Map<String, Object> orgMap = new HashMap<String, Object>();
+					orgMap.put("orgid", m.getStr("orgid"));
+					this.setCookie(PropertiesContent.get("cookie_org"),CipherUtil.encryptData(JSON.toJSONString(orgMap)), maxTime);
+				}
+			
+				this.setCookie(PropertiesContent.get("cookie_field_key"), CipherUtil.encryptData(JSON.toJSONString(userMap)), maxTime);
+				this.setCookie(PropertiesContent.get("root"), getRequest().getContextPath(), maxTime);
+				this.setCookie("autoLogin", autoLogin + "", maxTime);
+				this.setCookie("pagesize", m.getInt("UPageSize") + "", maxTime);
+
+				Map<String,Object>json=new HashMap<String,Object>();
+				json.put("success", true);
+				json.put("status", 200);
+				json.put("msg", "登录成功");
+				
+				Map dataMap = new HashMap();
+				dataMap.put(PropertiesContent.get("cookie_field_key"), CipherUtil.encryptData(JSON.toJSONString(userMap)));
+				dataMap.put(PropertiesContent.get("root"), getRequest().getContextPath());
+				dataMap.put("autoLogin", autoLogin + "");
+				dataMap.put("pagesize", m.getInt("UPageSize"));
+				dataMap.put("regionCode", m.getStr("regionId"));
+				dataMap.put("areaLevel", Area.getAreaLevel(m.getStr("regionId")));
+				List<String> parentcodes=Area.dao.getAllParentAreaRegionId(m.getStr("regionId"));
+				parentcodes.add(m.getStr("regionId"));
+				
+				dataMap.put("userRegion", Area.dao.getAllParentNames(parentcodes));
+				System.out.println(JSON.toJSONString(dataMap));
+				
+//				ServletContext application=getRequest().getServletContext();
+//				Map<String, String> onlineUser=(Map<String, String>) application.getAttribute("onlineUser");
+//				if (onlineUser==null) {
+//					onlineUser=new HashMap<String, String>();
+//				}
+//				onlineUser.put(uid, getIpAddr(getRequest()));
+//				//onlineUser.put(uid, getRequest().getRemoteAddr());
+//				application.setAttribute("onlineUser", onlineUser);
+//				
+//				dataMap.put("onlineUserNumber", onlineUser.size());
+//				
+//				getSession().setAttribute("onlineUser", uid);
+				
+				json.put("data",dataMap);
+				rendJson(json);
+
+				return;
+//			} else {
+//				this.rendJson(false, null, "该用户已不是在岗人员！");
+//				return;
+//			}
+		} else {
+			this.rendJson(false, null, "用户名或密码错误！");
+			return;
+		}
+
+	}
+	@ActionKey("user/addOnline")
+	public void addOnline(){
+		String uid=getCurrentUserId();
+		String uip=getPara("ip");
+		String address=getPara("address");
+		onlineUser ou=new onlineUser(uid, uip, address);
+		ServletContext application=getRequest().getServletContext();
+		List<onlineUser> onlineUsers=(List<onlineUser>) application.getAttribute("onlineUser");
+		if (onlineUsers==null) {
+			onlineUsers=new ArrayList<onlineUser>();
+		}
+		if (!onlineUsers.contains(ou)) {
+			onlineUsers.add(ou);
+			application.setAttribute("onlineUser", onlineUsers);
+		}
+		success();
+	}
+	
+	@ActionKey("user/getOnlineUser")
+	public void getOnlineUser(){
+		ServletContext application=getRequest().getServletContext();
+		List<onlineUser> onlineUsers=(List<onlineUser>) application.getAttribute("onlineUser");
+		if (onlineUsers==null) {
+			onlineUsers=new ArrayList<onlineUser>();
+		}
+//		List<onlineUser> us=new ArrayList<onlineUser>();
+//		Set<String> keys=onlineUser.keySet();
+//		for(String id:keys){
+//			us.add(new onlineUser(id, onlineUser.get(id)));
+//		}
+		renderJson(onlineUsers);
+		
+	}
+	
+	protected String getIpAddr(HttpServletRequest request) {
+        // 通过请求头获取ip地址
+        String ip = request.getHeader("x-forwarded-for");
+        // 判断ip地址是否是代理地址
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        // 判断ip地址是否是代理地址
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        // 判断ip地址是否是代理地址
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
+
+	/**
+	 * 获取登录验证码
+	 * */
+	public void captcha() {
+		String randomCodeKey = getPara("random");
+		render(new LoginValidateCode(randomCodeKey, 60, 22, 4, true));
+	}
+
+	public void logout() {
+		this.removeCookie(PropertiesContent.get("cookie_field_key"))
+				.removeCookie(PropertiesContent.get("root"))
+				.removeCookie("autoLogin");
+		String uid=getCurrentUserId();
+		
+		ServletContext application=getRequest().getServletContext();
+		List<onlineUser> onlineUsers=(List<onlineUser>) application.getAttribute("onlineUser");
+		if (onlineUsers!=null) {
+			for(onlineUser u:onlineUsers){
+				if (u.getUid().equals(uid)) {
+					onlineUsers.remove(u);
+					application.setAttribute("onlineUser", onlineUsers);
+					break;
+				}
+			}
+		}
+		
+		this.rendJson(true, 001, StatusCode.get("001"));
+	}
+
+	public void loadLeft() {
+		LeftMenuVO menu = null;
+		String index = this.getPara("index");
+		String uid = this.getCurrentUserId();
+		
+		if (!StringUtils.isEmpty(uid)) {
+			User u = User.dao.findById(uid);
+			String regionId = "";
+			String chooseRegionId = getChooseRegionId();
+			if(StringUtils.isEmpty(chooseRegionId)||"undefined".equals(chooseRegionId)){
+				regionId = u.getStr("regionid");
+			} else {
+				regionId = chooseRegionId;
+			}
+			menu = Power.dao.getLeftMenuList1(regionId);
+		}
+
+		this.renderJson(menu);
+	}
+
+	public void loadTop() {
+		List<Power> menu = null;
+		String uid = this.getCurrentUserId();
+		if (!StringUtils.isEmpty(uid)) {
+			menu = Power.dao.getTopMenuList(uid);
+		}
+
+		this.renderJson(menu);
+	}
+
+	public void loadPage() {
+		String pid = getPara("powerid");
+		String uid = this.getCurrentUserId();
+		RolePower rp = RolePower.dao.getPagePower(pid, uid);
+		if (rp != null) {
+			this.renderJson(rp);
+		} else {
+			this.rendJson(false, null, "您没有查看该页面的权限！");
+		}
+	}
+}

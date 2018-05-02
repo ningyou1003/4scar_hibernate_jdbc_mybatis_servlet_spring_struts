@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../../assets/js/common.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=aznomCVme4Z7SL3GGEEtDRuGiZXxmUyw"></script>
+    <script src="../../assets/js/plugins/DatePicker/WdatePicker.js" type="text/javascript"
+        charset="utf-8"></script>
+    <link href="../../assets/js/plugins/DatePicker/skin/WdatePicker.css" rel="stylesheet"
+        type="text/css" />
+    <script src="point.js" type="text/javascript" charset="utf-8"></script>
+    <!-- 附件相关js start, 注意必须在控制器js前引入-->
+    <link rel="stylesheet" type="text/css" href="../../assets/js/swfupload/css/default.css" />
+    <script type="text/javascript" src="../../assets/js/swfupload/swfupload.js"></script>
+    <script type="text/javascript" src="../../assets/js/swfupload/handlersmap.js"></script>
+    <script type="text/javascript" src="../../assets/js/swfupload/myswfupmap.js"></script>
+    <!-- 附件相关js end -->
+    <style type="text/css">
+        /* td
+        {
+            font-size: 25px;
+            text-align: center;
+            border: solid 1px #b7d5df;
+        } */
+        /* td{text-align: right;} */
+        .forminfo li label
+        {
+            width: 125px;
+            line-height: 34px;
+            display: block;
+            float: left;
+        }
+        
+        select
+        {
+            font-size: 13px;
+        }
+        
+        .listtitle
+        {
+            background: url(../../images/tbg.png) repeat-x;
+            height: 36px;
+            line-height: 36px;
+            border-bottom: solid 1px #d3dbde;
+            text-indent: 14px; /* font-weight: bold; */
+            font-size: 14px;
+        }
+        #tagsW li.selectTagW
+        {
+            height: 27px;
+            background: #D6D6D6;
+        }
+        li
+        {
+            float: left;
+        }
+        .imgList
+        {
+            width: 100%;
+             margin-left:50px;
+        }
+        .imgList li
+        {
+            float: left;
+            width: 80px;
+        }
+    </style>
+    <script language="javascript" type="text/javascript">
+					
+    </script>
+</head>
+<body style="padding: 10px; min-width: 400px; min-height: 200px;" ms-controller="pointCtrl">
+    
+    <input id="keyId" type="hidden" />
+    <input id="lng" type="hidden" ms-duplex="data.lng" />
+    <input id="lat" type="hidden" ms-duplex="data.lat" />
+    <table style="width: 100%">
+        <tr>
+            <td>
+                <ul class="forminfo">
+                    <li class="row-item">
+                        <label for="">
+                            检查点 ：</label>
+                        <input name="title" type="text" id="title" ms-duplex="data.title" class="dfinput"
+                            maxlength="250" data-rule="required;" style="width: 260px" /><font color="red">*</font>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <ul class="forminfo">
+                    <li class="row-item">
+                        <label for="">
+                            监测点类型：</label>
+                        <input name="nationalcheckpoint" type="checkbox" id="nationalcheckpoint" value="1" />全国扫黄打非检查点
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input name="important" type="checkbox" id="important" value="1" />重点点位 </li>
+                </ul>
+            </td>
+        </tr>
+        <!-- <tr>
+            <td>
+                <ul class="forminfo">
+                    <li class="row-item">
+                        <label for="">
+                            检查人员 ：</label>
+                        <input name="checkName" type="text" id="checkName" ms-duplex="data.checkName" class="dfinput"
+                            maxlength="250" data-rule="required;" style="width: 260px" /><font color="red">*</font>
+                    </li>
+                </ul>
+            </td>
+        </tr> -->
+        <tr>
+            <td>
+                <ul class="forminfo">
+                    <li class="row-item">
+                        <label for="">
+                            地址 ：</label>
+                        <input name="address" type="text" id="address" ms-duplex="data.address" class="dfinput"
+                            maxlength="250" data-rule="required;" style="width: 260px" />
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <ul class="forminfo">
+                    <li class="row-item">
+                        <label for="">
+                            级别 ：</label>
+                        <!-- <select ms-duplex="selectedLevel" class="searchBox">
+                						<option  ms-repeat="vm.Level">{{el}}</option>
+            			</select></li> -->
+                        <input name="level" type="text" id="level" ms-duplex="data.level" class="dfinput"
+                            maxlength="250" data-rule="required;" style="width: 260px" readonly="readonly" /><font
+                                color="red">(只读)</font> </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <ul class="forminfo">
+                    <li class="row-item">
+                        <label style="width: 70px;">
+                            检查详情:</label>
+                        <img id="addCheck" src="../../images/t01.png" style="width: 23px; vertical-align: middle;" />
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td id="checkRecords">
+                <div>
+                    <div class="listtitle">
+                        <ul id="tagsW">
+                        </ul>
+                    </div>
+                </div>
+                <div id="tagContentW">
+                </div>
+                <!-- <div id="tagContentW_edit" ms-repeat = "vm.records">
+                </div>
+                <div id="tagContentW_add" >
+                </div> -->
+            </td>
+        </tr>
+    </table>
+    <input id="valStr" type="hidden" />
+</body>
+<script>
+
+</script>
+</html>

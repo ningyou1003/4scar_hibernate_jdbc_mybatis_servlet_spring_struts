@@ -1,0 +1,693 @@
+
+        #OSC_Screen
+        {
+            width: 97%;
+            margin: 0 auto;
+            text-align: left;
+            margin-top:15px;
+            margin-left:10px;
+            margin-right:10px;
+            margin-bottom: 50px;
+            float:left;
+        }
+        h1
+        {
+            font-size: 14pt;
+            color: #9a130d;
+            font-weight: normal;
+            border-bottom: 1px solid #ccc;
+            line-height: 36px;
+        }
+        
+        #TopTweets
+        {
+            padding-right: 20px;
+        }
+        
+        #TopTweets ul li .tweet
+        {
+            width: 100%;
+        }
+        
+        #HotTweets
+        {
+            background: #f6f6f6;
+            padding: 0 10px;
+        }
+        
+        #HotTweets ul li .tweet
+        {
+            width: 300px;
+        }
+        
+        .logs ul
+        {
+            list-style-type: none;
+            margin: 20px 0 0 0;
+        }
+        
+        .logs ul li
+        {
+            overflow: hidden;
+            padding: 0 0 10px 0;
+            margin: 0 0 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .logs ul li a
+        {
+            text-decoration: none;
+        }
+        
+        .logs ul li .portrait
+        {
+            float: left;
+            width: 50px;
+        }
+        
+        .logs ul li .portrait img
+        {
+            width: 40px;
+            height: 40px;
+            margin-top: 2px;
+        }
+        
+        .logs ul li .tweet
+        {
+            float: left;
+        }
+        
+        .logs ul li .tweet p
+        {
+            color: #000;
+            overflow: hidden;
+            word-break: break-all;
+            line-height: 22px;
+        }
+        
+        .logs ul li .tweet .outline
+        {
+            color: #888;
+            font-size: 9pt;
+        }
+        
+        .logs ul li .img
+        {
+            margin: 5px 0;
+        }
+        
+        #OSC_Banner dl
+        {
+            margin: 6px 0 0 12px;
+            font-size: 10pt;
+        }
+        
+        #OSC_Banner dl dt strong
+        {
+            margin: 0 5px 0 0;
+            color: #000;
+        }
+        
+        #OSC_Banner dl dt strong a
+        {
+            color: #000;
+            margin-right: 0;
+            font-size: 10.5pt;
+        }
+        
+        #OSC_Banner dl dt strong.se
+        {
+            margin: 0 5px;
+        }
+        
+        #OSC_Banner dl dt a
+        {
+            margin-right: 5px;
+        }
+        
+        #OSC_Banner dl dt a.last
+        {
+            margin-right: 0px;
+        }
+        
+        #OSC_Banner dl dt a.hl
+        {
+            font-weight: bold;
+            color: #C00;
+        }
+        
+        #OSC_Banner .search
+        {
+            margin-top: 5px;
+        }
+        
+        #OSC_Banner .search .TXT
+        {
+            width: 200px;
+        }
+        
+        .audio .wechat-audio
+        {
+            display: inline-block;
+            vertical-align: middle;
+            cursor: pointer;
+            background: #F1F2F3;
+            border-radius: 8px;
+            width: 90px;
+        }
+        
+        .audio .wechat-audio img
+        {
+            height: 28px;
+            margin: 4px 2px;
+        }
+        
+        .audio .wechat-audio .duration
+        {
+            font-size: 9px;
+            color: #aaa;
+            font-style: normal;
+            margin-top: 10px;
+            margin-right: 5px;
+            display: inline-block;
+            float: right;
+            line-height: 20px;
+        }
+        
+        /*点赞的样式设置*/
+        .love
+        {
+            display: block;
+            float: right;
+        }
+        
+        /*点赞链接演示*/
+        .love a
+        {
+            font-size: 14px;
+            color: #9A9A9A;
+        }
+        
+        .love a:hover
+        {
+            color: #6cabe1;
+        }
+        
+        .loveOfCount
+        {
+            font-size: 12px !important;
+        }
+        
+        
+        #HotTopics
+        {
+            width: 280px;
+            background: none repeat scroll 0 0 #f6f6f6;
+            padding: 0 10px;
+        }
+        
+        #HotTopics li
+        {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border-bottom: 1px solid #eee;
+  
+        }
+        
+        #HotTopics a
+        {
+            color: #333333;
+            text-decoration: none;
+        }
+  
+    .md-emoji-nav li {
+        color: #999;
+        display: inline-block;
+        border: 1px solid #ddd;
+        border-bottom: none;
+        margin-left: 2px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        width: 45px;
+        text-align: center;
+    }
+
+    .md-emoji-nav .active {
+        background-color: #ffc;
+    }
+
+    #emoji-list {
+        height: 345px;
+        overflow-y: auto;
+    }
+
+    .emoji-block {
+        display: inline-block;
+        font-size: 1.4em;
+        line-height: 36px;
+        text-align: center;
+        vertical-align: top;
+        margin: 0;
+        padding: 0;
+        width: 36px;
+        height: 34px;
+        cursor: pointer;
+        border: 1px solid #f6f6f6;
+        background-color: #ffffff;
+    }
+
+    #emoji-list .emoji-block:hover {
+        width: 36px;
+        height: 34px;
+        border: 1px solid #9a130d;
+    }
+
+    :focus {
+        outline: 0;
+    }
+
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .md-emoji-nav li {
+        color: #999;
+        display: inline-block;
+        border: 1px solid #ddd;
+        border-bottom: none;
+        margin-left: 2px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        width: 45px;
+        text-align: center;
+    }
+
+    .md-emoji-nav .active {
+        background-color: #ffc;
+    }
+
+    #emoji-list {
+        height: 345px;
+        overflow-y: auto;
+    }
+
+    .emoji-block {
+        display: inline-block;
+        font-size: 1.4em;
+        line-height: 36px;
+        text-align: center;
+        vertical-align: top;
+        margin: 0;
+        padding: 0;
+        width: 36px;
+        height: 34px;
+        cursor: pointer;
+        border: 1px solid #f6f6f6;
+        background-color: #ffffff;
+    }
+
+    #emoji-list .emoji-block:hover {
+        width: 36px;
+        height: 34px;
+        border: 1px solid #9a130d;
+    }
+
+    a {
+        color: #4466bb;
+        outline: 0;
+    }
+
+    a:hover {
+        color: #0000aa;
+    }
+
+    ul,
+    ol {
+        list-style-type: none;
+    }
+
+    img {
+        border: 0;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    body {
+        background: #f9f9f9;
+        text-align: center;
+        font-size: 10pt;
+    }
+
+    label.SELECTED {
+        color: #A00;
+        font-weight: bold;
+    }
+
+    .clear {
+        clear: both;
+        font-size: 1px;
+        line-height: 0;
+    }
+
+    .NoData {
+        text-align: center;
+        padding: 20px 0;
+        color: #999999;
+    }
+
+    a.tag {
+        background-color: #E0EAF1;
+        border-bottom: 1px solid #3E6D8E;
+        border-right: 1px solid #7F9FB6;
+        color: #3E6D8E;
+        font-size: 8pt;
+        line-height: 2.4;
+        margin: 2px 2px 2px 0;
+        padding: 2px 4px;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    a.tag:hover {
+        background-color: #3E6D8E;
+        color: #fff;
+    }
+
+    a.project:hover {
+        background-color: #9a130d;
+        color: #fff;
+    }
+
+    a.rndbutton {
+        asdfasd background: #9a130d;
+        color: #fff;
+        text-decoration: none;
+        height: 30px;
+        float: left;
+        margin: 0;
+        border: 0px solid #000;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    a.rndbutton:hover {
+        background: #40ab54;
+    }
+
+    a.rndbutton:hover span {
+        background: #40ab54;
+        color: #fff;
+    }
+
+    a.rndbutton span {
+        background: #9a130d;
+        color: #fff;
+        float: left;
+        margin: 0 0 0 12px;
+        padding: 0 12px 0 0;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    em.corner {
+        font-size: 13px;
+        font-weight: normal;
+        color: #FFF;
+        display: inline-block;
+        line-height: 20px;
+        background: #9a130d;
+        font-style: normal;
+        padding: 1px 8px;
+        margin-right: 10px;
+    }
+
+    ul.LogTabs {
+        border-bottom: 1px solid #7798cb;
+        padding-left: 10px;
+        height: 28px;
+        line-height: 28px;
+    }
+
+    ul.LogTabs li {
+        float: left;
+        margin-right: 5px;
+    }
+
+    ul.LogTabs li a {
+        display: block;
+        background: #f6f6f6;
+        text-decoration: none;
+        font-size: 10.5pt;
+        padding: 0 10px;
+        color: #999999;
+    }
+
+    ul.LogTabs li a:hover {
+        color: #666666;
+    }
+
+    ul.LogTabs li.active a {
+        background: #7798cb;
+        color: #fff;
+    }
+
+    ul.LogFilter {
+        padding: 0 0 0 10px;
+        margin-top: 10px;
+        height: 20px;
+        line-height: 20px;
+    }
+
+    ul.LogFilter li {
+        float: left;
+        margin-right: 15px;
+    }
+
+    ul.LogFilter li a {
+        text-decoration: none;
+        display: block;
+        padding: 0 5px;
+    }
+
+    ul.LogFilter li a.active {
+        border: 1px solid #7798cb;
+    }
+
+    a.tag.success {
+        background-color: #9a130d;
+    }
+
+    #MyTweetForm {
+        padding: 10px 15px;
+        border: 1px solid #eee;
+        background: #fff;
+        width:95%;
+    }
+
+    #TForm #TFormEditor {
+        border: 2px solid #9a130d;
+        padding: 2px;
+        margin: 2px 0 0 0;
+        background: #fff;
+        width: 100%;
+    }
+
+    #TForm textarea {
+        border: 0;
+        width: 80%;
+        height: 50px;
+        padding: 5px;
+        font-size: 10pt;
+        overflow: auto;
+        scroll: none;
+        background: #fff;
+    }
+
+    #TFormTitle {
+        color: #888;
+        position: relative;
+        width: 100%;
+    }
+
+    #TFormTitle .r {
+        float: right;
+        margin: 0px 10px 0 0;
+        font-size: 9pt;
+    }
+
+    #TFormTitle .r em {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 10.5pt;
+        color: #A00;
+        margin: 0 3px 0 0;
+    }
+
+    #TForm #TFormOpts {
+        margin: 0 0 0 5px;
+        width: 100%;
+    }
+
+    #TForm #TFormOpts ul {
+        float: left;         margin: 2px 0 0 0;
+        padding: 1px;
+        width: 300px;
+        }
+
+    #TForm #TFormOpts ul li {
+        display: inline;
+        margin-right: 5px;
+        height: 22px;         float: left;     }
+
+    #TForm #TFormOpts ul li a {
+        font-size: 9pt;
+        text-decoration: none;
+        color: #666666;
+        padding-left:20px;
+        height:20px;
+        line-height:20px;
+    }
+
+    #TForm #TFormOpts ul li a:hover {
+        }
+
+    #TForm #TFormOpts ul li.t {
+        color: #666666;
+        margin-right: 0;
+        width: 50px;
+        float: left;
+        padding-top: 1px;
+    }
+
+    #TForm #TFormOpts ul li.emotion a {
+        background: url('emotion.gif') no-repeat left center;
+        float: left;
+    }
+
+    #TForm #TFormOpts ul li.img a {
+        background: url('img.gif') no-repeat 2px center;
+        padding-left: 20px;
+        float: left;
+    }
+
+
+
+    #TForm #TFormOpts input.B {
+        width: 100px;
+        cursor: pointer;
+        border: 0px none;
+        float: right;
+        font-size: 12pt;
+        padding: 5px 30px 5px;
+        margin-right: 7px;
+        margin-top:5px;
+        color: #FFF;
+        background: none repeat scroll 0% 0% #9a130d;
+    }
+
+    #TweetFormPopupWraper {
+        display: none;
+        position: absolute;
+        z-index: 9999;
+            margin-left: 26px;
+
+    }
+
+    #TweetFormPopupArrow {
+
+        background-repeat: no-repeat;
+        padding-top: 5px;
+    }
+
+    #TweetFormPopupWraper .emotions {
+        background-position: 51px 0px;
+    }
+
+    #TweetFormPopupWraper .images {
+        background-position: 107px 0px;
+    }
+
+    #TweetFormPopupWraper .code {
+        background-position: 165px 0px;
+    }
+
+    #TweetFormPopup {
+        width: 397px;
+        border: 2px solid #cccccc;
+        background: #ffc;
+        padding: 5px;
+    }
+
+    #TweetFormPopup a.close {
+        float: right;
+        font-size: 8pt;
+        font-weight: bold;
+        -webkit-text-size-adjust: none;
+    }
+
+    #TweetFormPopup a.emotion {
+        float: left;
+        width: 24px;
+        height: 24px;
+        background-repeat: no-repeat;
+        margin: 0 2px 4px 0;
+        border: 1px solid #f6f6f6;
+    }
+
+    #TweetFormPopup a.emotion:hover {
+        border: 1px solid #9a130d;
+    }
+
+    #TweetFormPopup .TweetPopupTitle {
+        background: #666666;
+        color: #fff;
+        padding: 3px 5px;
+        margin: 0 0 10px 0;
+        font-weight: bold;
+    }
+
+    #TweetFormPopup .TweetPopupTitle a {
+        float: right;
+        color: #FFF;
+    }
+
+    #TweetImages .l {
+        margin: 0 0 10px 0;
+    }
+
+    #TweetImages .tip {
+        color: #666666;
+    }
+
+    #TweetCode {
+        padding: 5px;
+    }
+
+    #TweetCode textarea {
+        width: 100%;
+        height: 250px;
+        display: block;
+        margin: 10px 0;
+    }
+
+    #TweetCode pre {
+        font-size: 9pt;
+        font-family: Courier New, Arial;
+        border: 1px solid #ddd;
+        border-left: 5px solid #6CE26C;
+        background: #f6f6f6;
+        padding: 5px;
+        margin: 0 0 10px 0;
+    }
+

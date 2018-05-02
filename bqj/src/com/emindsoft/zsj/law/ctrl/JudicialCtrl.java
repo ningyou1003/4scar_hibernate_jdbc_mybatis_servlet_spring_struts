@@ -1,0 +1,110 @@
+package com.emindsoft.zsj.law.ctrl;
+
+import org.apache.commons.lang.StringUtils;
+import com.emindsoft.zsj.base.ctrl.AdminBaseController;
+import com.emindsoft.zsj.law.model.Judicial;
+import com.emindsoft.zsj.system.model.RolePower;
+import com.emindsoft.zsj.system.model.User;
+import com.emindsoft.zsj.vo.PageVO;
+import com.jfinal.aop.ClearInterceptor;
+import com.jfinal.aop.ClearLayer;
+import com.jfinal.plugin.activerecord.Page;
+
+import cn.dreampie.routebind.ControllerKey;
+
+@ControllerKey("judicial")
+public class JudicialCtrl extends AdminBaseController<Judicial> {
+	
+	public JudicialCtrl() {
+		this.modelClass = Judicial.class;
+	}
+	
+	/**
+	 * 添加
+	 */
+	public void add() {
+		Judicial judicial;
+		try {
+			judicial = getModel();
+			judicial.set("Keyid", Judicial.dao.getId());
+//			judicial.set("releaseTime",dateTimeFormat.format(new Date()));
+			judicial.set("userId",getCurrentUserId());
+			judicial.set("regionId",getCurrentUserRegionId());
+			judicial.save();
+			processAttachment(judicial.getStr("keyid"));//附件
+			success();
+		} catch (Exception e) {
+			log.error("添加异常！",e);
+			error(003, "保存失败");
+		}
+	}
+	
+	/**
+	 * 删除
+	 */
+	public void delete() {
+		String[] keyids = getPara("keyids").split(",");
+		Judicial.dao.deleteById(keyids);
+		success(001);
+	}
+	
+	/**
+	 * 更新
+	 */
+	public void edit() {
+		Judicial judicial;
+		try {
+			judicial = getModel();
+			judicial.set("userId",getCurrentUserId());
+//			judicial.set("releaseTime",dateTimeFormat.format(new Date()));
+			judicial.update();
+			success(judicial.getStr("keyid"));
+		} catch (Exception e) {
+			log.error("更新异常！", e);
+			error(002, "保存失败");
+		}
+	}
+	
+	/**
+	 * 获取更新数据
+	 */
+	@ClearInterceptor(ClearLayer.ALL)
+	public void editData() {
+		String keyid = getPara("keyId");
+		Judicial judicial = Judicial.dao.findById(keyid);
+		success(judicial);
+	}
+	
+	/**
+	 * 列表分页
+	 */
+	public void List() {
+		String selectRegionId;
+		RolePower rp;
+		String SelecTitle = getPara("SelecTitle");
+		String userRegionId = getCurrentUserRegionId();
+		String chooseRegionId =getChooseRegionId();
+		if(StringUtils.isEmpty(chooseRegionId) || "undefined".equals(chooseRegionId) ||userRegionId.equals(chooseRegionId)) {
+			rp = RolePower.dao.getOperPower("615", getCurrentUserId());
+			selectRegionId = userRegionId;
+		} else {
+			rp = RolePower.dao.getLookPower("615",getCurrentUserId());
+			selectRegionId = chooseRegionId;
+		}
+		Page<Judicial> pageList = Judicial.dao.page(getPageNo(), getPageSize(),SelecTitle,selectRegionId);
+		success(new PageVO(pageList,rp));
+	}
+	
+	/**
+	 * 列表分页
+	 * 
+	 */
+	@ClearInterceptor(ClearLayer.ALL)
+	public void getJudicialList() {
+		String regioncode=getPara("regioncode");
+		Page<Judicial> pageList = Judicial.dao.page(getPageNo(), getPageSize(),regioncode);
+		success(pageList);
+	}
+	
+
+}

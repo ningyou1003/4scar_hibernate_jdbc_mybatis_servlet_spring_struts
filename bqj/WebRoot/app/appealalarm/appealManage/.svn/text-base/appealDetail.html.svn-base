@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>诉求详细页面</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../../../assets/js/jquery.js"></script>
+    <script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <link href="../../../assets/ui/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script src="../../../assets/ui/js/core/base.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerGrid.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerResizable.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerDrag.js" type="text/javascript"></script>
+    <script src="../../../assets/js/plugins/DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+	<link href="../../../assets/js/plugins/DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+	<script src="../../../assets/js/flow.js" type="text/javascript" charset="utf-8"></script>
+	<!-- 附件相关js, 注意必须在控制器js前引入-->
+	<link rel="stylesheet" type="text/css" href="../../../assets/js/swfupload/css/default.css"/>
+	<script type="text/javascript" src="../../../assets/js/swfupload/swfupload.js"></script>
+	<script type="text/javascript" src="../../../assets/js/swfupload/handlers.js"></script>
+	<script type="text/javascript" src="../../../assets/js/swfupload/myswfup.js"></script>
+	<!-- 附件相关js end -->
+    <script src="appealDetail.js" type="text/javascript" charset="utf-8"></script>
+    
+</head>
+<body>
+    <div ms-controller="appealDetailCtrl">
+        <form name="base_form" method="post" id="base_form">
+        <div class="formbody">
+	        <div class="formtitle">
+					<span>基本信息</span>
+			</div>            
+            <table style="width: 95%">
+            	<!-- <tr>
+                    <td colspan="2">
+                        <ul class="forminfo">
+                            <li>
+                                <label>
+                                    &nbsp;</label>
+                                <input type="button" name="Button1" value="保存" id="Button3" ms-click="submit()" class="btn" />
+                                &nbsp;&nbsp;
+                                <input type="button" name="report" value="上报" id="report" ms-click="report()" class="btn" style="display: none;"/>
+                                &nbsp;&nbsp;
+                                <input type="button" name="btback" value="返回" id="btback" class="btn" /></li>
+                        </ul>
+                    </td>
+                </tr> -->
+                <tr>
+                    <td>
+                        <ul class="forminfo">
+                            <li class="row-item">
+                                <label for="">
+                                    标题 ：</label>
+                                <input name="title" type="text" id="title" ms-duplex="data.title"
+                                    class="dfinput" maxlength="50" data-rule="required;" /><font color="red">*</font>
+                            </li>
+                            <li class="row-item">
+                                <label for="">
+                                    反馈人 ：</label>
+                                <input name="feedbacker" type="text" id="feedbacker" ms-duplex="data.feedbacker"
+                                    class="dfinput" maxlength="50" />
+                            </li>                              
+                            <li class="row-item">
+                                <label>
+                                    联系电话 ：</label>
+                                <input name="phone" type="text" id="phone" class="dfinput" maxlength="50" ms-duplex="data.phone"
+                                    data-rule="contact;" />
+                            </li>
+                            <li class="row-item">
+	                                <label for="">
+	                                    发布时间 ：</label>
+	                                <input name="time" type="text" id="time" ms-duplex="data.time"
+	                                    class="dfinput" maxlength="250" data-rule="required;" 
+	                                    onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',firstDayOfWeek:1})"/><font color="red">*</font>
+	                        </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <ul class="forminfo">
+                            <li class="row-item">
+                                <label>
+                                    投诉内容 ：</label>
+                                <textarea id="describe" name="describe" cols="20" rows="2" class="dfinput" ms-duplex="data.describe" style=" height:200px; width:70%;"></textarea>
+                            </li>
+                            
+                            <!-- <li class="row-item">
+                                <label for="">录入人：</label>
+                                <input name="" type="text" id="" ms-duplex=""
+                                    class="dfinput" maxlength="250"/>
+                            </li>
+                            <li class="row-item">
+                                <label for="">部门编号：</label>
+                                <input name="" type="text" id="" ms-duplex=""
+                                    class="dfinput" maxlength="250"/>
+                            </li>
+                            <li class="row-item">
+                                <label for="">部门名称：</label>
+                                <input name="" type="text" id="" ms-duplex=""
+                                    class="dfinput" maxlength="250"/>
+                            </li>
+                            <li class="row-item">
+                                <label for="">上报人：</label>
+                                <input name="" type="text" id="" ms-duplex=""
+                                    class="dfinput" maxlength="250"/>
+                            </li>
+                            <li class="row-item">
+                                <label for="">上报时间：</label>
+                                <input name="" type="text" id="" ms-duplex=""
+                                    class="dfinput" maxlength="50"/>
+                            </li> -->
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            
+            <div class="formbody">
+	            <div class="formtitle">
+						<span>处理结果</span>
+				</div>
+				<tr>
+	                  <td colspan="2">
+	                      <ul class="forminfo">
+	                          <!-- <li class="row-item">
+	                              <label for="">处理部门：</label>
+	                              <input name="" type="text" id="" ms-duplex=""
+	                                  class="dfinput" maxlength="250"/>
+	                          </li> -->
+	
+	                          <li class="row-item">
+	                              <label>处理意见 ：</label>
+	                              <textarea id="opinion" name="opinion" cols="20" rows="5" class="dfinput" ms-duplex="data.opinion" style=" height:200px; width:70%;"></textarea>
+	                          </li>
+	                          <li class="row-item">
+	                              <label for="">处理时间：</label>
+	                              <input name="opiniontime" type="text" id="opiniontime" ms-duplex="data.opiniontime"
+	                                   class="dfinput" maxlength="50" 
+	                                   onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',firstDayOfWeek:1})"/>
+	                          </li>
+	                      </ul>
+	                  </td>
+	                </tr>
+			</div>
+        </div>
+        </form>
+        <!-- 附件列表 start -->
+    <table id="attTable" cellspacing="0" cellpadding="0" border="1" style="border-color: #B5D6E6; width: 100%; border-collapse: collapse; border-collapse: collapse; min-height: 50px">
+        <tr>
+            <td align="left" valign="middle" style="width: 12%; min-height: 50px;padding-left: 68px">
+                附件列表:
+            </td>
+            <td align="left" style="width: 88%;">
+                <ul id="attList">
+                    <li></li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+    <!-- 附件列表 end -->
+
+    <!-- 附件按钮 start -->
+    <div style="display: inline; float: left; padding-left: 68px; padding-top: 10px">
+        <form>
+        <label> 附件 ：</label>
+            <div style="display: inline;padding-left: 48px;">
+                <span id="spanButtonPlaceholder"></span>
+                <input id="btnUpload" type="button" value="上  传" onclick="startUploadFile();" class="btn" style="height: 28px;"/>
+                <input id="btnCancel" type="button" value="取消所有上传" onclick="cancelUpload();" disabled="disabled" class="btn1" />
+            </div>
+        </form>
+        <div id="divFileProgressContainer" style="display: none;">
+        </div>
+        <div id="thumbnails">
+            <table id="infoTable" border="0" width="530" style="display: inline; padding: 2px;">
+            </table>
+        </div>
+    </div>
+    <!-- 附件按钮 end -->
+    <table style="width: 95%;margin-left: -80px;margin-top: 70px">
+			   <tr>
+			       <td colspan="2">
+                        <ul class="forminfo">
+                            <li>
+                                <label>
+                                    &nbsp;</label>
+                                <input type="button" name="Button1" value="保存" id="Button3" ms-click="submit()" class="btn" />
+                                &nbsp;&nbsp;
+                                <input type="button" name="report" value="上报" id="report" ms-click="report()" class="btn" style="display: none;"/>
+                                &nbsp;&nbsp;
+                                <input type="button" name="flowApproved" value="审核通过" id="flowApproved" class="btn" style="display: none;" />&nbsp;&nbsp;
+                                <input type="button" name="btback" value="返回" id="btback" class="btn" /></li>
+                        </ul>
+                    </td>
+			   </tr>
+		</table>
+    </div>
+</body>
+</html>

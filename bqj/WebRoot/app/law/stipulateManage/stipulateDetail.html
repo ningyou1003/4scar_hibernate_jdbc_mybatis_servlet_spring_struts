@@ -1,0 +1,42 @@
+<!DOCTYPE ht<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+	<!-- 附件相关js start, 注意必须在控制器js前引入-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/js/swfupload/css/default.css"/>
+    <script type="text/javascript" src="../../../assets/js/swfupload/swfupload.js"></script>
+    <script type="text/javascript" src="../../../assets/js/swfupload/handlers.js"></script>
+    <script type="text/javascript" src="../../../assets/js/swfupload/myswfup.js"></script>
+	<!--     附件相关js end -->
+<script src="stipulateDetail.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+	#detail {text-align: center;margin-top:15px;}
+	#buttons {text-align: left;margin:10px;}
+	#title {height: auto; font-size: 24px;font-weight: 900;color: #000;line-height:28px; padding:25px 10px 10px 10px; }
+	#time {line-height:35px;}
+	#content {margin:0 auto;width: 800px;text-align: left;line-height:28px;}
+	#content img {width:100%;height:100%}
+	#detail_attList{margin:10px 200px 10px 205px;text-align: left;}
+</style>
+</head>
+<body>
+	<div id="detail" ms-controller="stipulateDetailCtrl">
+		<div id="buttons">
+			<input type="button" name="btback"value="返回" id="btback" class="btn" />
+		</div>
+		<div>
+			<div id="title"></div>
+			<div id="time">【编辑日期：{{data.releasetime}}】</div>
+			<div id="content"></div>
+			<div id="detail_attList">
+				<label>【附件列表】：</label>
+				<ul id="attList">
+					<li></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,142 @@
+var vm = avalon.define({
+	$id : "formulaAddCtrl",
+	data : {
+		keyid : "",
+		year : "",
+		title : "",
+		content : "",
+		sendcode : "",
+		randomNum: randomNum,
+		ispublic : "1",//默认否
+		releasetime : "",//发布时间
+		ftype : "0"//类型
+	},
+	year : "",
+	regionCode : "",
+	msg : "",
+	msgImg : Public.rootPath() + "/images/ticon.png",
+	submit : function(){
+		$("#base_form").trigger("validate");
+	}
+});
+
+var kindeditor;//编辑器
+var saveData = false;
+THISPAGE = {
+	init : function() {
+		this.initDom();
+		this.initEvent();
+		this.initData();
+	},
+	initEvent : function() {
+		$("#btback").click(function() {
+			window.location = "formulaPage.html?regionCode=" + vm.regionCode + "&year=" + vm.year;
+		});
+		$("#report").click(function() {
+			if(saveData == true)
+				flowSend("formula",vm.data.keyid);
+			else
+				top.openeasydialog("warn", "请先保存数据！");
+		});
+
+	},
+	initData : function() {
+		var request = Public.urlRequest();
+		vm.regionCode = request.queryString["regionCode"];
+		vm.year = request.queryString["year"];
+		if (request.queryString["keyid"] != null
+				&& request.queryString["keyid"].length > 0) {
+			vm.data.keyid = request.queryString["keyid"];
+			saveData = true;
+			Public.ajaxPost(Public.rootPath() + "/formula/editData", "keyId="
+					+ vm.data.keyid, function(json) {
+				if (json.status == 001) {
+					vm.data=json.data.formula;
+					//if(vm.data.status==3 || vm.data.status==1){//弃用
+					if(vm.data.status==3 ){
+						$("#report,#Button1").css("background","gray");
+						$("#report,#Button1").attr("disabled","true");
+					}
+					kindeditor.html(vm.data.content);
+				} else {
+					top.openeasydialog("error",json.msg);
+				}
+			});
+		} 
+	},
+	initDom : function() {
+	}
+};
+function postData() {
+	var request = Public.urlRequest();
+	vm.data.sendcode = request.queryString["regionCode"];
+	var url=null;
+	vm.data.content = kindeditor.html();
+	if(vm.data.keyid != "" && vm.data.keyid != null&& vm.data.keyid !=undefined){
+		url= Public.rootPath() + "/formula/edit";
+	}else{
+		url= Public.rootPath() + "/formula/add";
+	}
+	Public.ajaxPost(url, vm.data.$model, function(
+			json) {
+		if (json.status == 001) {
+			vm.data.keyid = json.data.formula;
+			top.openeasydialog("success", json.msg, function(item, dialog){
+				dialog.close();
+				saveData = true;
+			});
+		} else {
+			top.openeasydialog("error", json.msg);
+		}
+	});
+}
+function initValidator() {
+	$("#base_form").validator({
+		messages : {
+			required : "请填写{0}"
+		},
+		display : function(e) {
+			var text = $(e).closest(".row-item").find("label").text().trim();
+			return text.substring(0, text.length - 2);
+		},
+		valid : function() {
+			postData();
+		},
+		ignore : ":hidden",
+		theme : "yellow_bottom",
+		timely : 1,
+		stopOnError : true
+	});
+}
+function KE(){
+	kindeditor = KindEditor.create('textarea[name="content"]', {
+		resizeType : 1,
+		uploadJson : Public.rootPath() + "/ke/fileUpload",
+		fileManagerJson : Public.rootPath() + "/ke/fileManager",
+		allowPreviewEmoticons : false,
+		allowImageUpload : true,
+		allowImageRemote : true,
+		pasteType : 2,//HTML粘贴
+		cssPath : Public.rootPath() + "/assets/js/plugins/kindeditor/plugins/image/imgAuto.css",//图片自适应编辑器
+	});
+}
+
+$(document).ready(function(e) {
+	KE();//初始化编辑控件
+	initValidator();// 需要先初始化表单验证配置
+	THISPAGE.init();
+	initUpload("formula",vm.data.keyid);
+	
+//	$("#btback").click(function(){
+//		 window.history.go(-1); 
+//		 window.location.reload(); 
+//	 });
+	
+	var regionid=$.cookie("regionCode");
+	if (regionid!=null && regionid=='450000000000') {
+		$("#report").css("display","none");
+	}else {
+		$("#report").css("display","");
+	}
+	
+});

@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script src="../../../assets/ui/js/core/base.js" type="text/javascript"
+	charset="utf-8"></script>
+<link href="../../../assets/ui/skins/Aqua/css/ligerui-all.css"
+	rel="stylesheet" type="text/css" />
+<script src="../../../assets/ui/js/plugins/ligerTree.js"
+	type="text/javascript"></script>
+<script type="text/javascript">
+	$(function() {
+		var tree = $("#tree1").ligerTree(
+				{
+					url : Public.rootPath() + "/area/loadAreaTreeByUserRegionId",
+					idFieldName : 'regioncode',
+					slide : true,
+					ajaxType : 'get',
+					parentIDFieldName : 'parentcode',
+					textFieldName : 'region',
+					checkbox : false,
+					isExpand : false,
+					onSelect : onSelect,
+					isLeaf : function(data) {
+						if (!data)
+							return false;
+						var a = data.regioncode.substring(
+								data.regioncode.length - 2,
+								data.regioncode.length);
+						return a != "00";
+					},
+					delay : function(e) {
+						var data = e.data;
+						return {
+							url : Public.rootPath()
+									+ "/area/loadAreaTreeByUserRegionId?regioncode="
+									+ data.regioncode
+									
+						};
+					}
+
+				});
+		$("#tree").css("height", window.screen.availHeight * 0.78);
+		$("#tree").css("width", window.screen.availWidth * 0.12);
+	});
+
+	function onSelect(note) {
+		$("#region").val(note.data.region);
+		$("#regioncode").val(note.data.regioncode);
+	}
+</script>
+</head>
+<body style="padding:10px">
+	<div id="tree" style=" margin:10px; float:left; overflow:auto;  ">
+		<ul id="tree1"></ul>
+	</div>
+	<input type="hidden" id="region"/>
+	<input type="hidden" id="regioncode"/>
+	<div style="display:none"></div>
+</body>
+</html>

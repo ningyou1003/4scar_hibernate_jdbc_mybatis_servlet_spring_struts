@@ -1,0 +1,187 @@
+var vm = avalon.define({
+	$id : "activityAddCtrl",
+	data : {
+		keyid : "",
+		title : "",
+		type : "",
+		content : "",
+		publishtime : "",
+		ispublic : 1,
+		randomNum : randomNum
+	},
+	selected : "",
+	types : ["清源","净网","护苗","固边","秋风","其他"],
+	typeid : "",
+	sendType : "",
+	msg : "",
+	msgImg : Public.rootPath() + "/images/ticon.png",
+	submit : function(){
+		$("#base_form").trigger("validate");
+	}
+});
+var flag = 0;//记录是否已保存，0表示尚未保存，1表示已保存
+var kindeditor;
+THISPAGE = {
+	init : function() {
+		this.initDom();
+		this.initEvent();
+		this.initData();
+	},
+	initEvent : function() {
+		$("#btback").click(function() {
+			window.location = "activityList.html?type="+vm.sendType;
+		});
+		$("#add").click(function() {
+			window.location = "activityAdd.html?typeid="+vm.sendType ;
+		});
+		//上报
+		$("#report").click(function() {
+			if(flag==0){
+				top.openeasydialog("warn", "请先保存数据！");
+			} else {
+				flowSend("activity", vm.data.keyid, vm.typeid);
+			}
+			
+		});
+	},
+	initData : function() {
+		var request = Public.urlRequest();
+		vm.sendType = request.queryString["typeid"];
+		if (request.queryString["keyid"] != null
+				&& request.queryString["keyid"].length > 0) {
+			vm.data.keyid = request.queryString["keyid"];
+			Public.ajaxPost(Public.rootPath() + "/activity/editData", "keyid="
+					+ vm.data.keyid, function(json) {
+				if (json.status == 001) {
+					flag = 1;
+					vm.data=json.data.act;
+					/*if(!vm.data.status=='0'){//注释掉该端代码，使信息可以多次编辑以及上报
+//						document.getElementById("btapprove").style.display = "";
+						$("#btapprove,#Button1").css({"background":"#ccc","cursor":"default"});
+						$("#btapprove,#Button1").attr("disabled","true");
+					}*/
+					kindeditor.html(vm.data.content);
+					vm.typeid = vm.data.type;
+					selectType(vm.typeid );
+				} else {
+					top.openeasydialog("error",json.msg);
+				}
+			});
+		} else {
+//			document.getElementById("btapprove").style.display = "";
+			vm.sendType = request.queryString["typeid"];
+			selectType(vm.sendType);
+			vm.data.publishtime = Public.getNowFormatDate();
+            $("#publishtime").val(vm.data.publishtime);
+		}
+	},
+	initDom : function() {
+	}
+};
+function postData() {
+	var typename = vm.selected;
+	if(typename=="清源"){
+		vm.typeid =  vm.data.type = 1;
+	} else if(typename=="净网"){
+		vm.typeid = vm.data.type = 2;
+	} else if(typename=="护苗"){
+		vm.typeid = vm.data.type = 3;
+	} else if(typename=="固边"){
+		vm.typeid = vm.data.type = 4;
+	} else if(typename=="秋风"){
+		vm.typeid = vm.data.type = 5;
+	} else {
+		vm.typeid = vm.data.type = 6;
+	}
+	vm.data.content = kindeditor.html();
+	var url=null;
+	if(vm.data.keyid != "" && vm.data.keyid != null&& vm.data.keyid !=undefined){
+		url= Public.rootPath() + "/activity/edit";
+	}else{
+		url= Public.rootPath() + "/activity/add";
+	}
+	Public.ajaxPost(url, vm.data.$model, function(
+			json) {
+		if (json.status == 001) {
+			vm.data.keyid = json.data;
+			flag = 1;
+			top.openeasydialog("success", json.msg);
+		} else {
+			top.openeasydialog("error", json.msg);
+		}
+	});
+}
+function initValidator() {
+	$("#base_form").validator({
+		messages : {
+			required : "请填写{0}"
+		},
+		display : function(e) {
+			var text = $(e).closest(".row-item").find("label").text().trim();
+			return text.substring(0, text.length - 2);
+		},
+		valid : function() {
+			postData();
+		},
+		ignore : ":hidden",
+		theme : "yellow_bottom",
+		timely : 1,
+		stopOnError : true
+	});
+}
+function selectType(type){
+	if(type==1){
+		vm.selected = "清源";
+	} else if(type==2){
+		vm.selected = "净网";
+	} else if(type== 3){
+		vm.selected = "护苗";
+	} else if(type== 4){
+		vm.selected = "固边";
+	} else if(type== 5){
+		vm.selected = "秋风";
+	} else {
+		vm.selected = "其他";
+	}
+}
+function KE(){
+	kindeditor = KindEditor.create('textarea[name="content"]', {
+		resizeType : 1,
+		uploadJson : Public.rootPath() + "/ke/fileUpload",
+		fileManagerJson : Public.rootPath() + "/ke/fileManager",
+		allowPreviewEmoticons : false,
+		allowImageUpload : true,
+		allowImageRemote : true,
+		pasteType : 2,//HTML粘贴
+		cssPath : Public.rootPath() + "/assets/js/plugins/kindeditor/plugins/image/imgAuto.css",//图片自适应编辑器
+		filterMode : false
+		/*items : [
+			'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+			'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+			'insertunorderedlist', '|', 'emoticons', 'image', 'link']*/
+	});
+}
+$(document).ready(function(e) {
+	// 需要先初始化表单验证配置
+	initValidator();
+	KE();
+	THISPAGE.init();
+	initUpload("activity", vm.data.keyid);
+	
+	
+	var regionid=$.cookie("regionCode");
+	if (regionid!=null && regionid=='450000000000') {
+		$("#report").css("display","none");
+	}else {
+		$("#report").css("display","");
+	}
+	var request = Public.urlRequest();
+	var status = request.queryString["status"];
+	if (status!=null && status==0) {
+		$("#flowApproved").attr("style","");
+		$("#flowApproved").click(function() {
+			flowApprove("activity", vm.data.keyid);
+		});
+	}
+	
+});

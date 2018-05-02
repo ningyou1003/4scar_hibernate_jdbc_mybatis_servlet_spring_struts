@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script type="text/javascript" src="roleList.js" charset="utf-8"></script>
+</head>
+
+
+<body ms-controller="roleCtrl">
+
+	<div class="rightinfo">
+
+		<div class="tools">
+
+			<ul class="toolbar">
+				<li id="add" ms-if="vm.power.addpower==1"><span><img src="../../../images/t01.png" />
+				</span>添加</li>
+				<!-- <li id="edit" ms-if="vm.power.editpower==1"><span><img
+						src="../../../images/t02.png" /> </span>修改</li> -->
+				<li id="delete" ms-if="vm.power.delpower==1"><span><img
+						src="../../../images/t03.png" /> </span>删除</li>
+			</ul>
+
+		</div>
+
+		<table class="tablelist" style="table-layout:fixed;">
+			<thead>
+				<tr>
+					<th class="checkBoxTh"><span class="CheckBoxCss"><input id="checkalls" type="checkbox"
+							ms-click="checkAll" /> </span>
+					</th>
+					<th width="42%">{{vm.tableTop.roleName}}</th>
+					<th width="42%">{{vm.tableTop.level}}</th>
+					<th >{{vm.tableTop.option}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ms-repeat="vm.data">
+					<td><span class="CheckBoxCss"><input ms-duplex-string="selectId"
+							class="itemCheckBox" type="checkbox" ms-attr-value="el.keyid" />
+					</span></b>
+					</td>
+					<style>
+						.td{overflow:hidden;white-space:nowrap;}
+					</style>
+					<td class="td">{{el.name}}</td>					
+					<td class="td">
+						<li ms-if="el.level=='0'">省/自治区/直辖市级</li>
+						<li ms-if="el.level=='1'">市级</li>
+						<li ms-if="el.level=='2'">县/区级</li>
+						<li ms-if="el.level=='3'">乡/镇级</li>
+						<li ms-if="el.level=='4'">基层</li>
+					</td>
+					<!-- <td class="td">{{el.orderid}}</td> -->
+					<td class="autocut">
+                    	<li id="edit" ms-if="vm.power.editpower==1" style="float:left;"><a id="edit_a" ms-attr-href="roleedit.html?keyid={{el.keyid}}" style="cursor:pointer;"><font color="blue">编辑</font></a></li>
+                    </td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+	</div>
+
+	<script type="text/javascript">
+		$('.imgtable tbody tr:odd').addClass('odd');
+	</script>
+</body>
+</html>

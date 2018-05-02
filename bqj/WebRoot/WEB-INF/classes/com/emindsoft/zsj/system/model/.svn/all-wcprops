@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 159
+/svn/ym/!svn/ver/29499/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model
+END
+RolePower.java
+K 25
+svn:wc:ra_dav:version-url
+V 174
+/svn/ym/!svn/ver/27377/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/RolePower.java
+END
+OrgLeader.java
+K 25
+svn:wc:ra_dav:version-url
+V 174
+/svn/ym/!svn/ver/26507/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/OrgLeader.java
+END
+Area.java
+K 25
+svn:wc:ra_dav:version-url
+V 169
+/svn/ym/!svn/ver/31459/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/Area.java
+END
+User.java
+K 25
+svn:wc:ra_dav:version-url
+V 169
+/svn/ym/!svn/ver/31454/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/User.java
+END
+JobUser.java
+K 25
+svn:wc:ra_dav:version-url
+V 172
+/svn/ym/!svn/ver/26507/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/JobUser.java
+END
+JobUserParttime.java
+K 25
+svn:wc:ra_dav:version-url
+V 180
+/svn/ym/!svn/ver/26507/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/JobUserParttime.java
+END
+AreaMember.java
+K 25
+svn:wc:ra_dav:version-url
+V 175
+/svn/ym/!svn/ver/28915/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/AreaMember.java
+END
+Power.java
+K 25
+svn:wc:ra_dav:version-url
+V 170
+/svn/ym/!svn/ver/29499/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/Power.java
+END
+Log.java
+K 25
+svn:wc:ra_dav:version-url
+V 168
+/svn/ym/!svn/ver/30248/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/Log.java
+END
+Org.java
+K 25
+svn:wc:ra_dav:version-url
+V 168
+/svn/ym/!svn/ver/26507/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/Org.java
+END
+RoleUser.java
+K 25
+svn:wc:ra_dav:version-url
+V 173
+/svn/ym/!svn/ver/27440/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/RoleUser.java
+END
+Job.java
+K 25
+svn:wc:ra_dav:version-url
+V 168
+/svn/ym/!svn/ver/26507/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/Job.java
+END
+OrgTemp.java
+K 25
+svn:wc:ra_dav:version-url
+V 172
+/svn/ym/!svn/ver/26507/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/OrgTemp.java
+END
+Role.java
+K 25
+svn:wc:ra_dav:version-url
+V 169
+/svn/ym/!svn/ver/31459/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/Role.java
+END
+Dictionary.java
+K 25
+svn:wc:ra_dav:version-url
+V 175
+/svn/ym/!svn/ver/26507/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/Dictionary.java
+END
+OrgDepartment.java
+K 25
+svn:wc:ra_dav:version-url
+V 178
+/svn/ym/!svn/ver/26507/%E9%A1%B9%E7%9B%AE/%E7%89%88%E6%9D%83%E5%B1%80/1.%E5%8A%A8%E6%80%81%E5%BA%93/4.%E4%BB%A3%E7%A0%81/bqj/src/com/emindsoft/zsj/system/model/OrgDepartment.java
+END

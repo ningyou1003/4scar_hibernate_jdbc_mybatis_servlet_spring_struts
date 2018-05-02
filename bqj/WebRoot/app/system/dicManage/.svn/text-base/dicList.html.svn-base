@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script type="text/javascript" src="../../../assets/js/common.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="dicList.js" charset="utf-8"></script>
+</head>
+
+<body ms-controller="dicCtrl">
+
+<!-- 	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li>首页</li>
+			<li>系统设置</li>
+			<li>数据字典管理</li>
+		</ul>
+	</div>
+ -->
+	<div class="rightinfo">
+
+		<div class="tools">
+
+			<ul class="toolbar">
+				<li id="add" ms-if="vm.power.addpower==1"><span><a
+						href="dicadd.html"><img src="../../../images/t01.png" />
+				</span>添加</a>
+				</li>
+				<li id="edit" ms-if="vm.power.editpower==1"><span><img
+						src="../../../images/t02.png" /> </span>修改</li>
+				<li id="delete" ms-if="vm.power.delpower==1"><span><img
+						src="../../../images/t03.png" /> </span>删除</li>
+			</ul>
+			<ul class="toolbar1">
+				<li id="check"><span><img
+						src="../../../images/ico06.png" /> </span>查询</li>
+			</ul>
+		</div>
+
+		<div id="sel_div" style="display: none">
+			<ul class="seachform">
+				<li><label> 类型名称</label> <select name="DictionaryType"
+					class="dfinput" style="width:200px;" ms-each="vm.selectdata"
+					ms-duplex="selectType">
+						<option ms-attr-value="el.dictionarytype">{{el.dictionarytype}}</option>
+				</select>
+				</li>
+				<li><label> &nbsp;</label><input type="submit" name="SelButton"
+					value="查询" id="SelButton" class="scbtn" /></li>
+			</ul>
+		</div>
+	</div>
+
+	<table class="tablelist" style="table-layout: fixed;">
+		<thead>
+			<tr>
+				<th class="checkBoxTh"><span class="CheckBoxCss"><input type="checkbox"  id="checkalls"
+						ms-click="checkAll" /> </span></th>
+				<th>{{vm.tableTop.dictionaryname}}</th>
+				<th>{{vm.tableTop.dictionarytype}}</th>
+				<th>{{vm.tableTop.orderid}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ms-repeat="vm.data">
+				<td><span class="CheckBoxCss"><input class="itemCheckBox"
+						ms-duplex-string="selectId" type="checkbox"
+						ms-attr-value="el.keyid" /> </span></b></td>
+				<td width="700px">{{el.dictionaryname}}</td>
+				<td width="330px">{{el.dictionarytype}}</td>
+				<td>{{el.orderid}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+</body>
+</html>

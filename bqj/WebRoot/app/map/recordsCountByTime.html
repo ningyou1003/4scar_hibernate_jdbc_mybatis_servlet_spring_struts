@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>recordsCount.html</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<script src="../../assets/js/common.js" type="text/javascript"></script>
+<link href="../../assets/ui/skins/Aqua/css/ligerui-all.css"
+	rel="stylesheet" type="text/css" />
+<script src="../../assets/ui/js/core/base.js" type="text/javascript"></script>
+<script src="../../assets/ui/js/plugins/ligerGrid.js"
+	type="text/javascript"></script>
+<script src="../../assets/ui/js/plugins/ligerResizable.js"
+	type="text/javascript"></script>
+<script src="../../assets/ui/js/plugins/ligerDrag.js"
+	type="text/javascript"></script>
+<script src="../../assets/js/plugins/DatePicker/WdatePicker.js"
+	type="text/javascript" charset="utf-8"></script>
+<link href="../../assets/js/plugins/DatePicker/skin/WdatePicker.css"
+	rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+	var manager;
+	var vm = avalon.define({
+		$id : "countCtrl",
+		selectId : [],
+		msg : "",
+		notify : "",
+		msgImg : Public.rootPath() + "/images/ticon.png",
+		data : {},
+		count : {// 统计条件
+			startTime : "",
+			endTime : ""
+		},
+		selectDate : {},
+		power : {
+			addpower : 0,
+			editpower : 0,
+			delpower : 0,
+			apppower : 0
+		},
+		isinit : true
+	});
+
+	THISPAGE = {
+		init : function() {
+			this.loadGrid();
+			this.initData();
+			this.addEvent();
+		},
+		initData : function() {
+			Public.ajaxPost(
+					Public.rootPath() + '/record/map/recordCountByTime', {
+						"" : ""
+					}, function(json) {
+						manager.set({
+							data : json
+						});
+						manager.loadData();
+					});
+		},
+		loadGrid : function() {
+			manager = $("#maingrid").ligerGrid({
+				columns : [ {
+					display : '级别',
+					name : 'level',
+					//width : '41%',
+					align : 'left',
+					editor : {
+						type : 'text'
+					}
+				}, {
+					display : ' 市/县名',
+					name : 'regionname',
+					//width : '28%',
+					align : 'center',
+					editor : {
+						type : 'text'
+					}
+				}, {
+					display : '检查次数',
+					name : 'checkTimes',
+					//width : '28%',
+					align : 'center',
+					editor : {
+						type : 'text'
+					}
+				}, {
+					display : '出动人次',
+					name : 'outerNumber',
+					//width : '28%',
+					align : 'center',
+					editor : {
+						type : 'text'
+					}
+				}, {
+					display : '发现问题个数',
+					name : 'problemNumbers',
+					//width : '28%',
+					align : 'center',
+					editor : {
+						type : 'text'
+					}
+				}, {
+					display : '已解决问题个数',
+					name : 'isSolvedNumbers',
+					//width : '28%',
+					align : 'center',
+					editor : {
+						type : 'text'
+					}
+				} ],
+				width : '96%',
+				height : '97%',
+				// data : data,
+				usePager : false,
+				method : 'get',
+				alternatingRow : false,
+				tree : {
+					columnName : 'level'
+				},
+				checkbox : false,
+				autoCheckChildren : false,
+				isScroll : false
+			});
+
+		},
+		imgUrl : function(url) {
+			return htmlRootPath + url;
+		},
+		addEvent : function() {
+
+			$("#maingrid").click(function(e) {
+				manager._onClick(e);
+			});
+			$("#btback").click(function() {
+				window.location = "recordsCountByTime.html";
+			});
+			$("#SelButton").click(function() {
+								if (!vm.isinit) {
+									THISPAGE.loadGrid();
+									vm.isinit = false;
+								}
+								if (vm.count.startTime == ""
+										|| vm.count.endTime == "") {
+									top.openeasydialog("error", "请输入要查询的日期");
+									return;
+								}
+								if (vm.count.startTime > vm.count.endTime) {
+									top.openeasydialog("error",
+											"结束时间早于开始时间，请重新选择");
+									return;
+								}
+
+								Public.ajaxPost(Public.rootPath()
+										+ '/record/map/recordCountByTime', {
+									"startTime" : vm.count.startTime,
+									"endTime" : vm.count.endTime
+								}, function(json) {
+									manager.set({
+										data : json
+									});
+									manager.loadData();
+								});
+								if (vm.count.startTime != null
+										|| vm.count.endTime != null) {
+									/*截取日期*/
+									var startTimeY = vm.count.startTime
+											.substring(0, 4);
+									var startTimeM = vm.count.startTime
+											.substring(5, 7);
+									var endTimeY = vm.count.endTime.substring(
+											0, 4);
+									var endTimeM = vm.count.endTime.substring(
+											5, 7);
+
+									$("#startTimeY").html(startTimeY);
+									$("#startTimeM").html(startTimeM);
+									$("#endTimeY").html(endTimeY);
+									$("#endTimeM").html(endTimeM);
+
+									$(".row-item").hide();
+									$("#btback").show();
+									$("#marketTable").show();
+								}
+							});
+
+			$("#export").click(function() {
+						if (vm.count.startTime != null && vm.count.endTime != null
+						&&vm.count.startTime!=""&&vm.count.endTime!="") {
+						window.location.href="../../record/map/exportExcel?startTime="
+						+vm.count.startTime+"&endTime="+vm.count.endTime;
+							/* Public.ajaxPost(Public.rootPath()//ajax传参不弹出下载提示框，改用window.location.href
+									+ '/record/map/exportExcel', {
+								"startTime" : vm.count.startTime,
+								"endTime" : vm.count.endTime
+							}); */
+						} else {
+							window.location.href="../../record/map/exportExcel?tableType=monthTime";
+							/* Public.ajaxPost(Public.rootPath()
+									+ '/record/map/exportExcel', {
+								"tableType" : "monthTime"
+							}); */
+						}
+					});
+
+		}
+	};
+
+	$(document).ready(function() {
+		THISPAGE.init();
+	});
+</script>
+</head>
+
+<body ms-controller="countCtrl">
+	<div class="formbody">
+		<div id="count1">
+			<div class="formtitle" style="margin-bottom: 10px;">
+				<span>基于时间段的统计表</span>
+			</div>
+			<div>
+				<ul class="seachform">
+					<li class="row-item"><label for="" style="width: 50px;">
+							时间 ：</label> <input name="month" type="text" id="month"
+						ms-duplex="count.startTime" class="dfinput" style="width: 180px;"
+						onfocus="WdatePicker({dateFmt:'yyyy-MM',firstDayOfWeek:1})" />
+						&nbsp;~&nbsp; <input name="month" type="text" id="month"
+						ms-duplex="count.endTime" class="dfinput" style="width: 180px;"
+						onfocus="WdatePicker({dateFmt:'yyyy-MM',firstDayOfWeek:1})" /><font
+						color="red">*</font>
+					</li>
+					<li class="row-item"><label> &nbsp;</label><input
+						type="submit" name="SelButton" value="查询" id="SelButton"
+						class="scbtn" /></li>
+					<li style="display:none;" id="btback"><input type="button"
+						name="btback" value="返回" id="btback" class="btn" />
+					</li>
+					<li><span id="export" style="cursor:pointer;"><font color="blue">导出表格</font></span>
+					</li>
+					<!-- href="../../record/map/exportExcel?tableType=month"  <a id="export"
+						href="../../record/map/exportExcel?tableType=month"></a>-->
+				</ul>
+			</div>
+			<div style="display:none;" id="marketTable">
+
+				<div style="text-align:center;font-size: 32px;">
+					<b style="text-align:center;font-size: 32px;margin-bottom:10px;">市场检查统计表</b>
+				</div>
+				<div style="text-align:left;font-size: 32px;margin-bottom: 10px">
+					<b style="text-align:center;font-size: 32px;"> 时间： <span
+						id="startTimeY" style="text-align:center;font-size: 32px;"></span>年
+						<span id="startTimeM" style="text-align:center;font-size: 32px;"></span>月——
+						<span id="endTimeY" style="text-align:center;font-size: 32px;">
+					</span>年 <span id="endTimeM" style="text-align:center;font-size: 32px;"></span>月
+					</b>
+				</div>
+			</div>
+			<div id="maingrid"></div>
+			<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+		</div>
+	</div>
+</body>
+</html>

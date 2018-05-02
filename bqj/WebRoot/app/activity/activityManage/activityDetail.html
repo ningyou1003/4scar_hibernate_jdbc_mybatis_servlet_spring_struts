@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="../../../assets/js/jquery.js"></script>
+<script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../assets/js/flow.js" type="text/javascript" charset="utf-8"></script>
+<link href="../../../assets/css/style.css" rel="stylesheet" type="text/css" />
+<!-- 附件相关js start, 注意必须在控制器js前引入-->
+<link rel="stylesheet" type="text/css" href="../../../assets/js/swfupload/css/default.css"/>
+<script type="text/javascript" src="../../../assets/js/swfupload/swfupload.js"></script>
+<script type="text/javascript" src="../../../assets/js/swfupload/handlers.js"></script>
+<script type="text/javascript" src="../../../assets/js/swfupload/myswfup.js"></script>
+<!-- 附件相关js end -->
+<script type="text/javascript" src="activityDetail.js" charset="utf-8"></script>
+</head>
+<body style="text-align: center">
+	<div ms-controller="activityDetailCtrl" class="detail">
+		<div style="clear: both;"></div>
+		<div style="text-align: left;">
+			<input type="button" name="flowApproved" value="审核通过"
+				id="flowApproved" class="btn" style="display: none;" /> &nbsp; <input
+				type="button" name="report" value="上报" id=report class="btn"
+				style="display: none;" />&nbsp;
+			<!-- <input type="button" name="flowBack" value="回退" id="flowBack" class="btn" style="display: none;" />&nbsp;  -->
+			<input type="button" name="btback" value="返回" id="btback" class="btn" />
+		</div>
+		<div>
+			<div id="title" class="detail_title"></div>
+			<div>
+				<div id="time" style="text-align: center;">
+					【编辑日期：{{data.createtime}}】</div>
+				<div id="content" class="detail_content"></div>
+				<div class="detail_attList">
+					<label>【附件列表】：</label>
+					<ul id="attList">
+						<li></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

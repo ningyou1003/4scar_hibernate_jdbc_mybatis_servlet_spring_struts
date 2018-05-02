@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>onlineUsers.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	 <link href="../assets/ui/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script src="../assets/ui/jquery/jquery-1.3.2.min.js" type="text/javascript"></script>
+    <script src="../assets/js/jquery.cookie.js" charset="utf-8" type="text/javascript"></script>
+    <script src="../assets/ui/js/core/base.js" type="text/javascript"></script>
+    <script src="../assets/js/common.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    var city=new Array();
+    var usersnum=new Array();
+    var users=[];
+    var n=0;
+    	$(function(){
+    	onlineuser();
+    	/*var t2 = window.setInterval(function(){
+    		if(n==city.length){
+    			window.clearInterval(t2);
+    		}
+    		$("#users").html("");
+			for(var n=0;n<city.length;n++){
+			var tr="<tr><td>"+city[n]+"</td><td>"+usersnum[n]+"</td></tr>";
+			$("#users").html($("#users").html()+tr);
+			
+		}
+    	},500); */
+    	});
+    function onlineuser(){
+			Public.ajaxPost(Public.rootPath() + "/user/getOnlineUser",{},
+			function(json){
+				users=json;
+				xianshi();
+	});
+	}
+	/*
+	function ipArea(ip){
+		if(ip==null){
+			return "未获取到用户ip";
+		}
+		var b=false;
+		var city="未知ip "+ip;
+		$.ajax({
+		 url: 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip='+ip,
+		 type: "GET",
+		 success: function(_result){ 
+		if(remote_ip_info.ret==1){  
+			
+			city=remote_ip_info.province+","+remote_ip_info.city;
+			} else{
+			
+			city= "未知ip"+ip;
+			}
+			console.log(city);
+			xianshi(city);
+	},
+		 dataType: "script",
+		 async: false
+		});
+}
+	*/
+	function xianshi(){
+		for(var i=0;i<users.length;i++){
+			total2(users[i].address);
+	}
+	$("#users").html("");
+	for(var n=0;n<city.length;n++){
+	var tr="<tr><td>"+city[n]+"</td><td>"+usersnum[n]+"</td></tr>";
+	$("#users").html($("#users").html()+tr);
+	
+	}
+	function total(){
+		for(var i=0;i<users.length;i++){
+			ipArea(users[i].uip);
+	}
+	
+}
+	function total2(area){
+			var b=true;
+			for(var j=0;j<city.length;j++){
+				if (area==city[j]) {
+					usersnum[j]=usersnum[j]+1;
+					b=false;
+				}
+			}
+			if (b) {
+				city[city.length]=area+'';
+				usersnum[usersnum.length]=1;
+			}
+		
+	}
+	}
+
+    </script>
+  </head>
+  
+  <body style="text-align: center;padding: 50px;overflow:auto;">
+    <h1>在线用户</h1>
+   
+    <table  class="tablelist" style="table-layout:fixed;width: 80%;margin: 0 auto;">
+		<thead><tr><td>城市</td><td>人数</td></tr></thead>
+			<tbody id="users">
+			
+			</tbody>
+		</table>
+  </body>
+</html>

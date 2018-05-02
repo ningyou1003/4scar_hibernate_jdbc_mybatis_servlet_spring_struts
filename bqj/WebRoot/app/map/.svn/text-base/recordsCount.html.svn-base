@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>recordsCount.html</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<script src="../../assets/js/common.js" type="text/javascript"></script>
+<link href="../../assets/ui/skins/Aqua/css/ligerui-all.css"
+	rel="stylesheet" type="text/css" />
+<script src="../../assets/ui/js/core/base.js" type="text/javascript"></script>
+<script src="../../assets/ui/js/plugins/ligerGrid.js"
+	type="text/javascript"></script>
+<script src="../../assets/ui/js/plugins/ligerResizable.js"
+	type="text/javascript"></script>
+<script src="../../assets/ui/js/plugins/ligerDrag.js"
+	type="text/javascript"></script>
+<script src="../../assets/js/plugins/DatePicker/WdatePicker.js"
+	type="text/javascript" charset="utf-8"></script>
+<link href="../../assets/js/plugins/DatePicker/skin/WdatePicker.css"
+	rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+	var manager;
+	var vm = avalon.define({
+		$id : "countCtrl",
+		selectId : [],
+		msg : "",
+		notify : "",
+		msgImg : Public.rootPath() + "/images/ticon.png",
+		data : {},
+		month : "",//查询月份
+		area : "",//查询地区
+		problem : "",//是否有问题查询
+		selectDate : {},
+		power : {
+			addpower : 0,
+			editpower : 0,
+			delpower : 0,
+			apppower : 0
+		},
+		isinit : true
+	});
+
+	THISPAGE = {
+		init : function() {
+			this.loadGrid();
+			this.initData();
+			this.addEvent();
+		},
+		initData : function() {
+			Public.ajaxPost(Public.rootPath() + '/record/map/recordsCountList',
+					{
+						"" : ""
+					}, function(json) {
+						manager.set({
+							data : json
+						});
+						manager.loadData();
+					});
+		},
+		loadGrid : function() {
+			manager = $("#maingrid").ligerGrid({
+				columns : [ {
+					display : '级别',
+					name : 'regionname',
+					//width : '41%',
+					align : 'left',
+					editor : {
+						type : 'text'
+					}
+				},/*  {
+									display : ' 市/县名',
+									name : 'regionname',
+									//width : '28%',
+									align : 'center',
+									editor : {
+									type : 'text'
+									}
+									},  */{
+					display : ' 出动人次',
+					name : 'outernumber',
+					//width : '28%',
+					align : 'center',
+					editor : {
+						type : 'text'
+					}
+				}, {
+				display:'检查人员',
+				name:'checkName',
+				align:'center',
+				editor:{
+						type : 'text'
+					}
+				},{
+					display : '时间',
+					name : 'time',
+					//width : '28%',
+					align : 'center',
+					editor : {
+						type : 'text'
+					}
+				}, /*{
+											display : '地点',
+											name : 'address',
+											//width : '28%',
+											align : 'center',
+											editor : {
+												type : 'text'
+											}
+										}, {
+											display : '检查点',
+											name : 'title',
+											//width : '28%',
+											align : 'center',
+											editor : {
+												type : 'text'
+											}
+										}, */{
+					display : '检查是否发现问题',
+					name : 'hasproblem',
+					//width : '28%',
+					align : 'center',
+					editor : {
+						type : 'text'
+					}
+				}, {
+					display : '问题描述',
+					name : 'content',
+					//width : '28%',
+					align : 'center',
+					editor : {
+						type : 'text'
+					}
+				}, {
+					display : '问题是否解决',
+					name : 'issolved',
+					//width : '28%',
+					align : 'center',
+					editor : {
+						type : 'text'
+					}
+				},{
+					display: '解决情况',
+					name: 'settle',
+					align: 'center',
+					editor: {
+					type: 'text'
+					}
+				} ],
+				width : '96%',
+				height : '97%',
+				// data : data,
+				usePager : false,
+				method : 'get',
+				alternatingRow : false,
+				rowHeight:'auto',
+				tree : {
+					columnName : 'regionname'
+				},
+				checkbox : false,
+				autoCheckChildren : false,
+				isScroll : false
+			});
+
+		},
+		imgUrl : function(url) {
+			return htmlRootPath + url;
+		},
+		addEvent : function() {
+			$("#maingrid").click(function(e) {
+				manager._onClick(e);
+			});
+			
+			$("#btback").click(function() {
+				window.location = "recordsCount.html";
+			});
+			$("#SelButton").click(function() {
+						if (!vm.isinit) {
+							THISPAGE.loadGrid();
+							vm.isinit = false;
+						}
+						if (vm.month == ""&&vm.area==""&&vm.problem=="") {
+							top.openeasydialog("error", "请输入查询条件");
+							return;
+						}
+						Public.ajaxPost(Public.rootPath()
+								+ '/record/map/recordsCountList', {
+							"month" : vm.month,
+							"area" : vm.area,
+							"problem" : vm.problem
+						}, function(json) {
+							manager.set({
+								data : json
+							});
+							manager.loadData();
+						});
+
+						var month1 = vm.month;			
+						if (month1!=""&&month1!=null) {							
+						var monthY = month1.substring(0,4);
+						
+						var monthM = month1.substring(5,7);
+							$("#monthY").html(monthY);
+							$("#monthM").html(monthM);
+							$("#tableid,#btback").show();
+							//$(".row-item").hide();
+						} else{
+							$("#tableid").hide();
+						} 
+						
+					});
+				$("#export").click(function(){
+				if(vm.month==""&&vm.area==""&&vm.problem==""){
+				window.location.href="../../record/map/exportExcel?tableType=time";
+				}else{
+				window.location.href="../../record/map/exportExcel?month="+vm.month+"&area="+encodeURI(vm.area)+"&problem="+vm.problem;
+				}
+				//if(vm.month!=null&&vm.month!=""){
+				
+				 /* Public.ajaxPost(Public.rootPath()+'/record/map/exportExcel',{//ajax传参不弹出下载提示框，改用window.location.href
+				 	"month":vm.month
+				 }); */
+				/* }else{
+				}*/
+				}); 
+		}
+	};
+	$(document).ready(function() {
+		THISPAGE.init();
+	});
+</script>
+</head>
+
+<body ms-controller="countCtrl">
+	<div class="formbody">
+		<div id="count1">
+			<div class="formtitle">
+				<span>月份统计表</span>
+			</div>
+			<div>
+				<ul class="seachform">
+					<li class="row-item"><label for="" style="width: 50px;">
+							月份 :</label> <input name="month" type="text" id="month" ms-duplex="month"
+						class="dfinput" style="width: 80px;"
+						onfocus="WdatePicker({dateFmt:'yyyy-MM',firstDayOfWeek:1})" />
+					<li class="row-item"><label for="" style="width:50px;">地区:</label>
+						<input name="area" type="text" id="area" ms-duplex="area" class="dfinput" style="width:80px;"/>
+					</li>
+					<li class="row-item">
+						<label for="" style="width:110px;">是否发现问题：</label>
+						<select name="problem" class="dfinput" style="width:80px;" ms-duplex="problem">
+							<option></option>
+							<option value="0" >否</option>
+							<option value="1">是</option>
+						</select>
+					</li>
+					<li class="row-item"><label> &nbsp;</label><input
+						type="submit" name="SelButton" value="查询" id="SelButton"
+						class="scbtn" />
+					</li>
+					<li style="display:none;" id="btback"><input type="button"
+						name="btback" value="返回" id="btback" class="btn" /></li>
+					<li>	<span id="export" style="cursor: pointer;"><font
+							color="blue">导出表格</font> </span></li>
+							<!--<a id="export"
+						href="../../record/map/exportExcel?tableType=time"> </a> -->
+				</ul>
+			</div>
+			<div id="tableid" style="display:none;margin-top:50px;">
+				<div style="text-align:center;font-size: 32px;">
+					<b style="text-align:center;font-size: 32px;">
+					<span id="monthY" style="text-align:center;font-size: 32px;"></span>年
+					<span id="monthM" style="text-align:center;font-size: 32px;"></span>月&nbsp;检查统计表</b>
+				</div>
+				<div style="margin-bottom:10px;font-size: 22px;">
+					<b>单位名称:（公章）</b>
+				</div>
+			</div>
+			<div id="maingrid"></div>
+			<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>欢迎登录后台管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="../assets/js/common.js" charset="utf-8"></script>
+<!--<script src="../assets/js/cloud.js" charset="utf-8"></script>-->
+<script language="javascript">
+	window.history.go(2);
+
+	$(function() {
+		//已经登录,已经写入cookie,重定向到主页
+		var cookieString = $.cookie('zsj_cookie');
+		if (cookieString != '' && cookieString != null
+				&& cookieString != undefined) {
+			window.location = "index.html";
+		}
+
+		$('.loginbox').css({
+			'position' : 'absolute',
+			'right' : ($(window).width() - 692) / 6
+		});
+		$(window).resize(function() {
+			$('.loginbox').css({
+				'position' : 'absolute',
+				'right' : ($(window).width() - 692) / 6
+			});
+		})
+	});
+</script>
+</head>
+<body>
+	<img src="../images/bj-1.jpg" width="100%" height="100%"
+		style="z-index:-100;position:absolute;left:0;top:0" />
+	<div class="logintop">
+		<span>欢迎登录</span>
+	</div>
+	<div class="loginbody" ms-controller="loginCtrl">
+		<span class="systemlogo"></span>
+
+		<div style="text-align:left; margin:100px 0 0 100px;">
+			<img src="../images/login_logo.png" />
+		</div>
+
+		<div class="loginbox" >
+			<ul>
+				<li><label>用户名：</label> <input id="userno" type="text"
+					class="loginuser" ms-duplex="data.userno" /></li>
+				<li><label>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label> <input id="pwd1"
+					type="text" class="loginpwd" ms-duplex="password" /> <input
+					id="pwd" type="password" class="loginpwd" style="display: none;"
+					ms-duplex="data.pwd" /></li>
+				<table cellspacing="10">
+					<tr>
+						<td><label style="padding-left:25px;color: #687f92">验证码：</label>
+							<input id="validCode" type="text" maxlength="5"
+							ms-duplex="data.validCode" class="loginvcoad" />
+						</td>
+						<td>
+							<div id="vcdiv" style="padding-left: 20px;">
+								<img alt="验证码" title="点击刷新验证码" id="ImageCheck" src="" /> <a
+									href="#" title="点击刷新验证码" id="RefImageCheck"
+									style="color: #687f92">换一张图</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<br />
+
+				<li><input name="" type="button" class="loginbtn"
+					ms-click="submit" value="登录" />&nbsp;&nbsp; <span id="msgLabel"
+					style="color: #CC0000;display: inline;" ms-visible="errMsg!=''"
+					class="form-error"> {{errMsg}}</span> <!--<label>
+                        <input
+						id="CheckBox1" type="checkbox" name="CheckBox1" />记住密码</label><label>忘记密码？</label>-->
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="loginbm" style="position: fixed;z-index:-10;">技术支持 2016
+		广西一铭软件股份有限公司 v1.0</div>
+
+	<script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+var vm = avalon.define({
+	$id : "matterCtrl",
+	selectId : [],
+	tableTop : {
+		title : "标题",
+		publishtime : "发布时间",
+		username : "录入人",
+		status : "待办状态",
+		option : "操作"
+	},
+	msg : "",
+	notify : "",
+	msgImg : Public.rootPath() + "/images/ticon.png",
+	data : {},
+	status : "",
+	type : "",
+	power : {
+		addpower : 0,
+		editpower : 0,
+		delpower : 0,
+		checkpower : 0
+	},
+	checkAll : function() {
+		if (this.checked) {
+			for ( var i = 0; i < vm.data.length; i++) {
+				vm.selectId.push(vm.data[i].keyid);
+			}
+			$(".itemCheckBox").prop("checked", "true");
+		} else {
+			vm.selectId.clear();
+			$(".itemCheckBox").removeAttr("checked");
+		}
+	}
+});
+
+THISPAGE = {
+	init : function() {
+		this.initDom();
+		this.loadGrid();
+		this.addEvent();
+	},
+	initDom : function() {
+	},
+	loadGrid : function() {
+		var request = Public.urlRequest();
+		vm.status = request.queryString["status"];
+		var matterPage;
+		if (vm.status==0) {
+			//从cookie获取页码
+			 matterPage = $.cookie('matterPageNumber0');
+			matterPage==null?1:matterPage;
+		}else if(vm.status==1){
+			matterPage = $.cookie('matterPageNumber1');
+			matterPage==null?1:matterPage;
+		}
+		
+		
+		Public.ajaxPost(Public.rootPath() + '/matter/matterList', {
+			'page' : matterPage,
+			"status" : vm.status
+			}, function(json) {
+			if (json.status == 001) {
+	        	$("#checkalls").removeAttr("checked");
+				vm.data = json.data.list;
+				//vm.power = json.data.rp;
+				vm.selectId = [];
+				THISPAGE.initPage(json.data);
+			} else {
+				alert(json.msg);
+			}
+		});
+	},
+	initPage : function(pageData) {
+
+		// 加载分页控件
+		$("#PageInfo").pagePlugin({
+			totalPage : pageData.totalPage,
+			pageNumber : pageData.pageNumber,
+			totalRow : pageData.totalRow,
+			requst : function(index) {
+				if (vm.status==0) {
+					// 存储页码到cookie 
+	            	$.cookie('matterPageNumber0', index, {path: '/'}); 
+				}else if(vm.status==1){
+					// 存储页码到cookie 
+	            	$.cookie('matterPageNumber1', index, {path: '/'}); 
+				}
+				
+            	
+				Public.ajaxPost(Public.rootPath() + '/matter/matterList', {
+					'page' : index,
+					"type" : vm.typeId
+				}, function(json) {
+					if (json.status == 001) {
+			        	$("#checkalls").removeAttr("checked");
+						vm.data = json.data.list;
+						//vm.power = json.data.rp;
+						vm.selectId = [];
+						THISPAGE.initPage(json.data);
+					} else {
+						top.openeasydialog("error", json.msg);
+					}
+				});
+			}
+		});
+	},
+	addEvent : function() {
+		$("#add").click(function(t) {// 添加
+			window.location = "matterAdd.html?status="+vm.status;
+		});
+		
+		$("#delete").click(
+				function(t) {
+
+					if (vm.selectId.length == 0) {
+						top.openeasydialog("warn", "请选择要删除的事项");
+					} else {
+						top.openeasydialog("warning", "确认要删除吗？",
+								function(yes) {
+									if (yes) {
+										Public.ajaxPost(Public.rootPath()
+												+ "/matter/delete", "keyids="
+												+ vm.selectId, function(json) {
+											if (json.status == 001) {
+												THISPAGE.loadGrid();
+											} else {
+												top.openeasydialog("error",
+														"删除事项时出错");
+											}
+										});
+									}
+								});
+					}
+				});
+		$("#SelButton").click(function() {
+			THISPAGE.loadGrid();
+		});
+
+		$("#check").click(function() {
+			if ($("#sel_div").is(":hidden")) {
+				$("#sel_div").fadeIn();
+			} else {
+				$("#sel_div").fadeOut();
+			}
+		});
+	}
+};
+
+$(document).ready(function () {
+    	THISPAGE.init();
+});

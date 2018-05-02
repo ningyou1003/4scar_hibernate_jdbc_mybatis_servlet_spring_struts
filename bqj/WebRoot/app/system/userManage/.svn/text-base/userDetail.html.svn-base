@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script src="userDetail.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div ms-controller="userDetailCtrl">
+		<form name="base_form" method="post" id="base_form">
+			<div>
+				<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE"
+					value="/wEPDwUKMTcyNDEyNzU0NA9kFgICAw9kFgQCFQ8QDxYGHg1EYXRhVGV4dEZpZWxkBQROYW1lHg5EYXRhVmFsdWVGaWVsZAUFS2V5SUQeC18hRGF0YUJvdW5kZ2QQFQQV6K+36YCJ5oup5omA5bGe6KeS6ImyD+ezu+e7n+euoeeQhuWRmA/ml6Dku7vkvZXmnYPpmZAM6aKG5a+85p+l55yLFQQBMCBjNjkxNzE2ODBkNjk0MzI1ODQxYWFjYjE2M2E2YjU2YSA1NTc4OGQ4MGI2MDU0MDM1YmViYjYzMmIwZjczODZlNCAyMjU3MmE0Yzc5NWQ0NjQ4ODk1NzFjNzlkMDkyMzFjNRQrAwRnZ2dnZGQCHw8QDxYGHwAFDkRpY3Rpb25hcnlOYW1lHwEFBUtleUlEHwJnZBAVBhXor7fpgInmi6nmiYDlsZ7ogYzkvY0G6LCD5bqmCeWPuOejheWRmAbnu4/nkIYJ5oC757uP55CGCeWKnuS6i+WRmBUGATAgM2E0M2ZkYmFlNzZkNGEwNTk4Njc1YjViMjBjOWM5MzYgNmU4NzZlYWE5YmJhNGQ4Zjg4ZmZjZjllNmYxOTdlMmEgNTBkODFkMDVjNTA3NDkzMzg1YjUzODdjNzg3ZDYwZjAgYWRjOTYxZjMwYWE5NDFiZDk4ZjRiNjllYWNiYzAyYzIgMmFhOTQ1NmI5Y2I0NDA3ZTg1ZjM1NzhlNGMwNjFiZjcUKwMGZ2dnZ2dnZGRkfkUbCzfHJb4or6hk38XONXKHi+YEwGrD3SpkOeF9IXk=" />
+			</div>
+
+			<div>
+				<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION"
+					value="/wEWGgKw7r2jCAKf3+u/BQKPztTvCQKM54rGBgLxt8THAQL3xJvhBALa9++eDwK1qbSWCwLy9cL8AgKOwILlBwL3k4C5AgLJ+Z6CCAKqwddYAtDzhZULAqzNorQFAsSS7bAIAoTz/boMAu/shNkCArLY9LMLAsK6qOEGAtDaob4DAsO928wCAojjkbUPApChh5gHAu2b2tsGAoS+2qIFc1m92Nxiesgai7WgmnMv7vCTIIME7XeRsMH6JT1gLCM=" />
+				<input type="hidden" name="KeyId" id="KeyId" ms-duplex="data.keyid" />
+			</div>
+			<!-- <div class="place">
+				<span>位置：</span>
+				<ul class="placeul">
+					<li>首页</li>
+					<li>系统设置</li>
+					<li>用户管理</li>
+					<li>用户详细信息</li>
+				</ul>
+			</div> -->
+			<div class="formbody">
+				<div class="formtitle">
+					<input name="sdfdsfdsf" type="text" id="sdfdsfdsf"
+						style="display: none" /> <input name="TB_KeyId" type="text"
+						id="TB_KeyId" style="display: none" /> <span>详细信息</span>
+				</div>
+				<table style="width: 95%">
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label for="UserName"> 用户名 ：</label>
+									<input name="UserName" type="text" id="UserName"
+									ms-duplex="user.username" class="dfinput" maxlength="30"
+									readonly />
+								</li>
+								<li class="row-item"><label for="RelaName"> 真实姓名 ：</label> <input
+									name="RelaName" type="text" id="RelaName"
+									ms-duplex="user.relaname" class="dfinput" readonly />
+								</li>
+								<li class="row-item"><label for="RolesID"> 角色 ：</label><input
+									name="RoleName" type="text" id="RoleName"
+									ms-duplex="user.rolesname " class="dfinput" readonly></input></li>
+								<li class="row-item"><label> 电话 ：</label><input
+									name="Phone" ms-duplex="user.mobile" type="text" id="txtPhone"
+									class="dfinput" readonly />
+								</li>
+								<li class="row-item"><label> Email ：</label> <input
+									name="email" name="Email" ms-duplex="user.email" type="text"
+									id="txtEmail" class="dfinput" readonly />
+								</li>
+							</ul></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<ul class="forminfo">
+								<li><label> &nbsp;</label><input type="button"
+									name="btback" value="返回" id="btback" class="btn" />
+								</li>
+							</ul></td>
+					</tr>
+				</table>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

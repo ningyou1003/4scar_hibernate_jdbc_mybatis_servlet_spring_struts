@@ -1,0 +1,170 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <script src="../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="top.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        function showregarding() {
+            $(parent.parent.rightFrame.document).contents()
+				.find("#myregardingdiv1").fadeIn(200);
+        }
+        //在rightFrame页面里添加一个选项卡
+        function AddTabUrl(Title, Value) {
+            window.parent.frames["rightFrame"].AddItems(Title, Value);
+        }
+
+        function changeLeft(index) {
+            window.parent.frames["leftFrame"].changeMenu(index);
+        }
+
+        function logout() {
+            window.parent.parent.logout(Public.rootPath() + "/logout");
+        }
+
+        function info(id) {
+            window.parent.frames["rightFrame"].AddTab(id, '个人资料', 'system/userManage/userDetail.html?keyid=' + id);
+        }
+        //刷新首页
+        function home() {
+            window.parent.frames["rightFrame"].initHome();
+        }
+    </script>
+</head>
+<body style="background: url(../images/topbg.png) repeat-x;">
+    <form name="form1" method="post" action="top.aspx" id="form1" ms-controller="topCtrl">
+    <div>
+        <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTYzMjU1MzEzNmRkqfLdj98MNWx9Xwt71aBHKYBSxvLQsUxI72NS7cJmR9A=" />
+    </div>
+    <table width="100%">
+        <tr>
+            <td style="width: 510px; vertical-align: top;">
+                <div class="topleft" style="width: 600px;">
+                    <img src="../images/logo2.png" title="系统首页" onclick="home()" />
+                </div>
+            </td>
+            <td>
+            </td>
+            <td style="width: 350px; vertical-align: center; background: url(../images/right1.jpg);
+                background-position: right; background-repeat: no-repeat;">
+                <!-- <ul id="Moremuseul" class="nav" style="display: none">
+						<ul class="nav">
+							<li id="monthli"><a href="#">更多菜单...</a>
+							</li>
+						</ul>
+					</ul>  -->
+                <script type="text/javascript">
+
+                    //                    //监控页面宽度判断是否显示更多菜单...按钮
+                    //                    $(function () {
+                    //                        window.setTimeout(onWidthChange, 1000);
+                    //                    });
+                    //                    function onWidthChange() {
+                    //                        if ($('#mudiv').width() <= 695) {//判断页面宽度
+                    //                            $("#Moremuseul").fadeIn(); //显示按钮
+
+                    //                            $("#monthli").mouseenter(
+                    //										function () {//鼠标进入按钮
+                    //										    var x = $(this).offset().left;
+                    //										    var y = $(this).offset().top
+                    //													+ $(this).height() + 2;
+                    //										    window.parent.parent
+                    //													.monthshow(x, y);
+                    //										});
+                    //                            $("#monthli").mouseleave(function () {//鼠标离开按钮
+                    //                                window.parent.parent.monthhide();
+                    //                            });
+                    //                        } else {
+                    //                            $("#Moremuseul").fadeOut(); //隐藏按钮
+                    //                        }
+                    //                        window.setTimeout(onWidthChange, 1000); //每秒钟执行一次
+                    //                    }
+                </script>
+                <div class="topright">
+                	<p><span id="onlineuser" style="color: white;cursor: pointer;"></span></p>
+                    <div class="user">
+                        <img src="../images/3-2.png" onclick="NewsComment()" style="cursor: pointer; width: 15px;
+                            padding-left: 10px" title="未读评论" /><i style="cursor: pointer;" title="未读评论"><font  
+                                color="yellow" style="font-size: 8px" onclick="NewsComment()">{{vm.comment_todo}}</font></i>
+                        <b onclick="NewsMsg()" style="cursor: pointer;" title="待办事项"></b><i style="cursor: pointer;"
+                            title="待办事项"><font id="flow_todo_number" color="yellow" style="font-size: 8px" onclick="NewsMsg()">{{vm.flow_todo}}</font></i><span
+                                class="user1">欢迎回来，<a href="#" ms-on-click="info(user.keyid)" ms-text="user.relaname">
+                                </a>| <a href="#" ms-click="logout()" target="_parent">退出</a> </span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div style="color: #fff; margin-top: -22px; font-size: 14px">
+                   
+                    <div style="font-size: 14px; float: left; width: 100%;">
+                         <a href="javascript:" style="float: left;color: #ffe000; font-size: 14px" onclick="selArea()">[
+                        切换区域 ]</a><span style="font-size: 14px; float: left;">当前区域：</span><span id="arealink" style="font-size: 14px;
+                            float: left;"> <a href="javascript:" style="color: #fff; font-size: 14px" onclick="xhArea(vm.regionId)">
+                                广西壮族自治区</a></span></div>
+                </div>
+                <script type="text/javascript">
+                    //切换区域
+                    function selArea(e) {
+                        top.openbuttondialog("切换区域", 500, 340, "system/areaManage/TopesallAreaTreeView.html",
+            			false, function (item, dialog) {
+            			    var regioncode = dialog.frame.$("#regioncode").val();
+            			    getLocation(regioncode);
+            			    Public.ajaxPost(Public.rootPath() + '/area/loadAllParentArea?regioncode=' + regioncode, {
+            			}, function (json) {
+            			    vm.data = json.data;
+            			    vm.regionId = dialog.frame.$("#regioncode").val();
+            			    $.cookie('chooseRegionId', vm.regionId, { path: '/' }); //将选择的区域编码写入cookie
+            			    window.parent.frames["rightFrame"].frames["showmessage"].location = "default.html?regionId=" + vm.regionId;
+            			    getLocation(vm.data);
+            			    /*$("#arealink").html("");
+            			    var len = vm.data.length;
+            			    var item = ""
+            			    for (i = 0; i < len; i++) {
+            			    var region = json.data[i].region;
+            			    var regioncode = json.data[i].regioncode;
+            			    item += '<a href="javascript:" style="color: #fff;" onclick="xhArea(' + regioncode + ')">' + region + '</a>>';
+            			    }
+            			    item = item.substring(0, item.length - 1);
+            			    $("#arealink").append(item); */
+            			});
+            			dialog.close();
+           });
+                    }
+
+                    function xhArea(e) {
+                        $.cookie('chooseRegionId', e, { path: '/' }); //将选择的区域编码写入cookie
+                        window.parent.frames["rightFrame"].frames["showmessage"].location = "default.html?regionId=" + e;
+                        Public.ajaxPost(Public.rootPath() + '/area/loadAllParentArea?regioncode=' + $.cookie('chooseRegionId'), {
+                    }, function (json) {
+                        if (json.status == 001) {
+                            getLocation(json.data);
+                        }
+                    });
+                }
+
+                function NewsMsg() {
+                    //                        window.parent.frames["rightFrame"].frames["showmessage"].location = "default.html?regionId="+e;
+                    AddTabUrl("待办事项", "flow/flowManage/flowList.html?status=0");
+                }
+                function NewsComment() {
+                    AddTabUrl("我的互动", "interact/Myinteract.html?type=act&userId=" + vm.user.userid);
+                }                  
+                </script>
+                <div id="mudiv">
+                    <ul id="museul" class="nav">
+                        <ul class="nav" ms-repeat="topMenuList">
+                            <li><a href="#" ms-click="changeLeft(el.keyid)">{{el.name}} </a></li>
+                        </ul>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </table>
+    </form>
+</body>
+</html>

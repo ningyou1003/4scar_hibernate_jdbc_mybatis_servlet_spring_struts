@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+  <title>添加Moble</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var i = 1;
+	$(function() {
+		init();
+
+		$("#mobileImg").click(function() {
+			addTr(i);
+			i++ ;
+		});
+		
+		$("input:text").bind("mouseout", function () {
+			var a = getval();
+  			$("#valStr").val(getval());	
+    	});
+		
+	});
+	  function getval() {
+        var val = "";
+		var mobileVali = /^0?1[3|4|5|8][0-9]\d{8}$/;
+        $("input:text").each(function () {
+        	var value = $(this).val();
+        	var check = mobileVali.test(value);
+        	if(check){//手机号码输入正确
+        		if (val != "") { val += ","; }
+            	val += value;
+       		}else{
+       			val = "";
+       			return false;
+       		}
+            
+        });
+        return val;
+    }
+	
+	function setValue(k){
+			var val = "";
+			for(var j=0;j<k-1;j++){
+				var inputId = "mobile"+ j;
+				var str = "#"+inputId;			
+				var b = $(str).val() ;
+				if(b !=null && b != undefined && b != ""){
+					val += $(str).val() +",";	
+				}
+			}
+			var str = "#mobile"+(k-1);
+			if( $(str).val()  !=null &&  $(str).val()  != undefined &&  $(str).val()  != ""){
+				val += $(str).val() ;
+			}		
+			$("#valStr").val(val)  ;
+		}
+	
+	//初始化页面
+	function init(){
+	//	var i=0;
+		var request = Public.urlRequest();
+		var valStr =  request.queryString["valStr"];
+		
+		if(valStr !=null && valStr != undefined && valStr != "" && valStr !="null"){
+			var arr = valStr.split(',');
+			i = arr.length;
+			if(i==1){
+				$("#mobile0").val(valStr);		
+			} else if(i > 1){
+				for(var j=1;j<i;j++){
+					addTr(j);
+				}
+				for(var j=0;j<i;j++){
+					$("#mobile"+j).val(arr[j]);		
+				}
+			}
+			 setValue(i);
+		}
+		
+	}
+	
+	function addTr(k){		
+		var inputId = "mobile"+k;
+		var str = "#"+inputId;
+		var val = $(str).val();
+		var tr = "<tr ><td class=\"td1\" ></td><td class=\"td2\" >"
+				+ "<input name=\"mobile\" type=\"text\" id=\"mobile"+k+"\"  class=\"dfinput\" data-rule=\"mobile;\" maxlength=\"11\"/>"
+				+ "</td><td><img id=\"moveImg"+k+"\" src=\"../../../images/t07.png\"  style=\"width: 23px;vertical-align:middle;\" onclick=\"deleteTr(this.id)\"/></td></tr>";
+		$("table").append(tr);
+	}
+	
+	function deleteTr(id){
+		var str = "#"+id;
+		$(str).closest('tr').remove();
+	}
+
+</script>
+<style type="text/css"> 
+  .td1{width:80px;}
+   .td2{width:300px;}
+   .td3{width:60px;align: right;}
+</style>
+  </head>
+  
+  <body style="min-width: 300px;">
+    <div class="formbody" ms-controller="ctrlname">
+			<form action="base_form" method="post" id="base_form">
+				<div class="formbody">
+				<table style="width: 95%" id="table" >
+					<tr>
+						<td class="td1">手机号码 ：</td>
+						<td class="td2"><input name="mobile" type="text" id="mobile0"  class="dfinput" data-rule="mobile;" maxlength="11"/> </td>
+						<td class="td3"><img id="mobileImg" src="../../../images/t01.png"  style="width: 23px;vertical-align:middle;" /></td>
+					</tr>
+					</table>
+					<input id="valStr" type="hidden"/>
+				</div>
+			</form>
+		</div>
+  </body>
+</html>

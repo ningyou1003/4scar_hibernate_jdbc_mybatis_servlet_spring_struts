@@ -1,0 +1,404 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../assets/ui/js/core/base.js" type="text/javascript" charset="utf-8"></script>
+    <link href="../../../assets/ui/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script src="../../../assets/ui/js/plugins/ligerTree.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var url = null; //2015-05-05
+        $(function () {
+                       var request = Public.urlRequest();
+                        if (request.queryString["url"] != null
+            				&& request.queryString["url"].length > 0) {
+                            url = request.queryString["url"];
+                        }
+                        var isFirstLoad = false;
+                        var isLeaf = true;
+                        var tree = $("#tree1").ligerTree(
+            				{
+            				    url: Public.rootPath() + "/silhouetteYear/loadYearTree",
+/*             				    idFieldName: 'regioncode', */
+            				    slide: true,
+            				    ajaxType: 'get',
+/*            					    parentIDFieldName: 'parentcode', */
+            				    textFieldName: 'region',
+            				    checkbox: false,
+            				    isExpand: false,
+            				    onSelect: onSelect,
+            				    childIcon: 'folder',
+            				    isLeaf: function (data) {
+            				        if (!data) {
+            				            return true;
+            				        } else {
+            				            return false;
+            				        }
+            				    },
+            				    delay: function (e) {
+            				        var data = e.data;
+            				        return {
+            				            url: Public.rootPath()
+            									+ "/area/getRegionTreeaToSilhouette?isLeaf=" + isLeaf
+            									+ "&year=" + data.region.substring(0,4),
+            				        };
+            				    },
+            				    onSuccess: function () {
+            				    	isLeaf = false;
+            				        tree.selectItem($.cookie('zsj_regionCode')); //加载完后运行选中
+            				        if (isFirstLoad) {
+            				            isFirstLoad = false;
+            				            this.expandAll();
+            				        }
+            			    }
+
+            				});
+                        var h = document.documentElement.clientHeight;
+                        $("#tree").css("height", h - 50);
+            		//$("#tree").css("width", 350);
+        });
+
+        function onSelect(note) {
+        	if(note.data.region.length == "5") {
+        		window.parent.frames["mainFrame1"].location = "silhouetteYear.html";
+			} else {
+				window.parent.frames["mainFrame1"].location = url
+					+ note.data.regioncode
+					+ "&year=" + note.data.year;
+			}
+        }
+	
+    </script>
+</head>
+<body>
+    <div style="background-color: #b1181a; color: #ffffff; text-align: center; font-size: 14px;
+        width: 200px; font-weight: bold;">
+        墙报树信息</div>
+    <div id="tree" style="float: left; overflow: auto; width: 200px; height:600px">
+    	<ul id="tree1">
+        </ul>
+       <!--  <ul id="tree1" class="l-tree" ligeruiid="tree1" style="width: 240px;">
+            <li treedataindex="0" outlinelevel="1" id="512163" class="l-first l-last l-onlychild ">
+                <div class="l-body">
+                    <div class="l-box l-expandable-open">
+                    </div>
+                    <div class="l-box l-tree-icon l-tree-icon-folder-open">
+                    </div>
+                    <span>2016年</span></div>
+                <ul class="l-children">
+                    <li treedataindex="1" outlinelevel="2" id="512164" class="l-first ">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>南宁市</span></div>
+                    </li>
+                    <li treedataindex="2" outlinelevel="2" id="514066" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>柳州市</span></div>
+                    </li>
+                    <li treedataindex="3" outlinelevel="2" id="515410" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>桂林市</span></div>
+                    </li>
+                    <li treedataindex="4" outlinelevel="2" id="517468" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>梧州市</span></div>
+                    </li>
+                    <li treedataindex="5" outlinelevel="2" id="518549" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>北海市</span></div>
+                    </li>
+                    <li treedataindex="6" outlinelevel="2" id="519012" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>防城港市</span></div>
+                    </li>
+                    <li treedataindex="7" outlinelevel="2" id="519375" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>钦州市</span></div>
+                    </li>
+                    <li treedataindex="8" outlinelevel="2" id="520465" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>贵港市</span></div>
+                    </li>
+                    <li treedataindex="9" outlinelevel="2" id="521698" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>玉林市</span></div>
+                    </li>
+                    <li treedataindex="10" outlinelevel="2" id="523311" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>百色市</span></div>
+                    </li>
+                    <li treedataindex="11" outlinelevel="2" id="525332" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>贺州市</span></div>
+                    </li>
+                    <li treedataindex="12" outlinelevel="2" id="526021" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>河池市</span></div>
+                    </li>
+                    <li treedataindex="13" outlinelevel="2" id="527821" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>来宾市</span></div>
+                    </li>
+                    <li treedataindex="14" outlinelevel="2" id="528698" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>崇左市</span></div>
+                    </li>
+                    <li treedataindex="15" outlinelevel="2" id="529629" class="l-last ">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-note-last">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-leaf ">
+                            </div>
+                            <span>南宁铁路局</span></div>
+                    </li>
+                </ul>
+            </li>
+            <li treedataindex="0" outlinelevel="1" id="Li1" class="l-first l-last l-onlychild ">
+                <div class="l-body">
+                    <div class="l-box l-expandable-close">
+                    </div>
+                    <div class="l-box l-tree-icon l-tree-icon-folder">
+                    </div>
+                    <span>2015年</span></div>
+                <ul class="l-children" style="display: none;">
+                    <li treedataindex="1" outlinelevel="2" id="Li2" class="l-first ">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>南宁市</span></div>
+                    </li>
+                    <li treedataindex="2" outlinelevel="2" id="Li3" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>柳州市</span></div>
+                    </li>
+                    <li treedataindex="3" outlinelevel="2" id="Li4" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>桂林市</span></div>
+                    </li>
+                    <li treedataindex="4" outlinelevel="2" id="Li5" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>梧州市</span></div>
+                    </li>
+                    <li treedataindex="5" outlinelevel="2" id="Li6" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>北海市</span></div>
+                    </li>
+                    <li treedataindex="6" outlinelevel="2" id="Li7" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>防城港市</span></div>
+                    </li>
+                    <li treedataindex="7" outlinelevel="2" id="Li8" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>钦州市</span></div>
+                    </li>
+                    <li treedataindex="8" outlinelevel="2" id="Li9" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>贵港市</span></div>
+                    </li>
+                    <li treedataindex="9" outlinelevel="2" id="Li10" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>玉林市</span></div>
+                    </li>
+                    <li treedataindex="10" outlinelevel="2" id="Li11" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>百色市</span></div>
+                    </li>
+                    <li treedataindex="11" outlinelevel="2" id="Li12" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>贺州市</span></div>
+                    </li>
+                    <li treedataindex="12" outlinelevel="2" id="Li13" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>河池市</span></div>
+                    </li>
+                    <li treedataindex="13" outlinelevel="2" id="Li14" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>来宾市</span></div>
+                    </li>
+                    <li treedataindex="14" outlinelevel="2" id="Li15" class="">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-expandable-close">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-folder ">
+                            </div>
+                            <span>崇左市</span></div>
+                    </li>
+                    <li treedataindex="15" outlinelevel="2" id="Li16" class="l-last ">
+                        <div class="l-body">
+                            <div class="l-box">
+                            </div>
+                            <div class="l-box l-note-last">
+                            </div>
+                            <div class="l-box l-tree-icon l-tree-icon-leaf ">
+                            </div>
+                            <span>南宁铁路局</span></div>
+                    </li>
+                </ul>
+            </li> -->
+    </div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />  -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="userList.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            THISPAGE.init();
+            //导航切换
+            $(".imglist li").click(function () {
+                $(".imglist li.selected").removeClass("selected")
+                $(this).addClass("selected");
+            });
+        });
+    </script>
+</head>
+<body ms-controller="userCtrl">
+    <!-- 
+	<div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li>首页</li>
+			<li>系统设置</li>
+			<li>用户管理</li>
+		</ul>
+	</div> -->
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li id="add" ms-if="vm.power.addpower==1"><span><a
+                        href="useradd.html"><img src="../../../images/t01.png" />
+				</span>添加</a></li>
+                <li id="delete" ms-if="vm.power.delpower==1"><span>
+                    <img src="../../../images/t03.png" />
+                </span>删除</li>
+                <!-- 还没有统计相关需求，暂时注释掉 -->
+                <!-- <li><span><img src="../../../images/t04.png" /> </span>统计</li> -->
+            </ul>
+            <ul class="toolbar1">
+                <li id="check"><span>
+                    <img src="../../../images/ico06.png" />
+                </span>查询</li>
+            </ul>
+        </div>
+        <div id="sel_div" style="display: none">
+            <ul class="seachform">
+                <li>
+                    <label>
+                        姓名</label>
+                    <input type="text" ms-duplex="select.name" class="scinput" />
+                </li>
+                <!-- <li>
+                    <label>
+                        部门</label>
+                    <input type="text" ms-duplex="select.department" class="scinput" /></li> -->
+                <li>
+                    <label>
+                        角色</label>
+                    <select class="dfinput" style="width: 200px; padding: 6px 0;" ms-each="vm.selectRole"
+                        ms-duplex="select.role">
+                        <option ms-attr-value="el.keyid">{{el.name}}</option>
+                    </select></li>
+                <li>
+                    <label>
+                        &nbsp;</label><input type="submit" name="SelButton" value="查询" id="SelButton" class="scbtn" />
+                </li>
+            </ul>
+        </div>
+        <table class="tablelist">
+            <thead>
+                <tr>
+                    <th class="checkBoxTh">
+                        <span class="CheckBoxCss">
+                            <input id="checkalls" type="checkbox" ms-click="checkAll" />
+                        </span>
+                    </th>
+                    <th >
+                        {{vm.tableTop.UserName}}
+                    </th>
+                    <th >
+                        {{vm.tableTop.RelaName}}
+                    </th>
+                    <th >
+                        {{vm.tableTop.RegionID}}
+                    </th>
+                    <th >
+                        {{vm.tableTop.Mobile}}
+                    </th>
+                    <th >
+                        {{vm.tableTop.Email}}
+                    </th>
+                    <!-- <th >
+                        {{vm.tableTop.QRCode}}
+                    </th> -->
+                    <th >
+                        {{vm.tableTop.option}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ms-repeat="vm.data">
+                    <td>
+                        <span class="CheckBoxCss">
+                            <input class="itemCheckBox" ms-duplex-string="selectId" type="checkbox" ms-attr-value="el.keyid" />
+                        </span></b>
+                    </td>
+                    <style>
+                        .td
+                        {
+                            overflow: hidden;
+                            white-space: nowrap;
+                        }
+                    </style>
+                    <!-- <td class="autocut">
+                        {{el.username}}
+                    </td> -->
+                    <td class="autocut"><a ms-attr-href="userDetail.html?keyid={{el.keyid}}" onmouseover="this.style.cssText='color:blue;'" onmouseout="this.style.cssText='color:black'">{{el.username}}</a></td>					
+                    <td class="autocut">
+                        {{el.relaname}}
+                    </td>
+                    <td class="autocut">
+                        {{el.regionid}}
+                    </td>
+                    <td class="autocut">
+                        {{el.mobile}}
+                    </td>
+                    <td class="autocut">
+                        {{el.email}}
+                    </td>
+                    <!-- <td>
+                        <img src='../../../images/QRcode.png' ms-click='showInputMsg(el.username,el.keyid)'
+                            style="width: 35px; height: 35px; cursor: pointer;" />
+                    </td> -->
+                    <td class="autocut">
+                    	<li id="edit" ms-if="vm.power.editpower==1" style="float:left;"><a id="edit_a" ms-attr-href="useradd.html?keyid={{el.keyid}}" style="cursor:pointer;"><font color="blue">编辑</font></a></li>
+						<li id="resetpw" ms-if="vm.power.resetPwd==1" style="float:left;"><a id="resetpw_a" ms-click="resetpw(el.keyid)" style="cursor:pointer;"><font color="blue">重置密码</font></a></li>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+        <div id="PageInfo" class="pagin" style="margin-bottom: 20px;">
+        </div>
+    </div>
+</body>
+</html>

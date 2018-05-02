@@ -1,0 +1,97 @@
+package com.emindsoft.zsj;
+
+import cn.dreampie.routebind.RouteBind;
+import cn.dreampie.tablebind.SimpleNameStyles;
+import cn.dreampie.tablebind.TableBindPlugin;
+import com.emindsoft.zsj.base.handler.UploadHandler;
+import com.emindsoft.zsj.base.interceptor.PermissionInterceptor;
+import com.emindsoft.zsj.base.plugin.FlywayPlugin;
+import com.emindsoft.zsj.system.model.Power;
+import com.jfinal.config.*;
+import com.jfinal.core.Const;
+import com.jfinal.core.JFinal;
+import com.jfinal.ext.handler.ContextPathHandler;
+import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
+import com.jfinal.plugin.c3p0.C3p0Plugin;
+
+/**
+ * API引导式配置
+ */
+public class DemoConfig extends JFinalConfig {
+	
+	/**
+	 * 配置常量
+	 */
+	public void configConstant(Constants me) {
+		// 加载少量必要配置，随后可用getProperty(...)获取值
+		loadPropertyFile("config.properties");
+		me.setDevMode(getPropertyToBoolean("devMode", true));
+		me.setMaxPostSize(1000*Const.DEFAULT_MAX_POST_SIZE);//默认10M,此处设置为最大1000M --文件上传
+	}
+	
+	/**
+	 * 配置路由,自动扫描，引用底层RouteBind类
+	 */
+	public void configRoute(Routes routes) {
+		RouteBind routeBind = new RouteBind();
+		routes.add(routeBind);
+	}
+	
+	/**
+	 * 配置插件
+	 */
+	public void configPlugin(Plugins plugins) {
+		//数据库自动升级插件
+		FlywayPlugin flywayPlugin = new FlywayPlugin(getProperty("jdbcUrl"), getProperty("user"), getProperty("password").trim());
+		plugins.add(flywayPlugin);
+
+		// 配置C3p0数据库连接池插件
+		C3p0Plugin c3p0Plugin = new C3p0Plugin(getProperty("jdbcUrl"), getProperty("user"), getProperty("password").trim());
+		plugins.add(c3p0Plugin);
+
+		//Model自动绑定表插件
+		TableBindPlugin tableBindDefault = new TableBindPlugin(c3p0Plugin, SimpleNameStyles.LOWER);
+		tableBindDefault.setContainerFactory(new CaseInsensitiveContainerFactory(true)); //忽略字段大小写
+		//排除或者引入包
+		//tableBindDefault.addExcludePaths("cn.dreampie.function.shop");
+		//tableBindDefault.addIncludePaths("cn.dreampie.function.default");
+		tableBindDefault.setShowSql(getPropertyToBoolean("devMode", false));
+		//非mysql的数据库方言
+		//tableBindDefault.setDialect(new AnsiSqlDialect());
+		plugins.add(tableBindDefault);
+	}
+	
+	/**
+	 * 配置全局拦截器
+	 */
+	public void configInterceptor(Interceptors me) {
+		me.add(new PermissionInterceptor());//权限控制
+	}
+	
+	/**
+	 * 配置处理器
+	 */
+	public void configHandler(Handlers me) {
+		 //该处理器将request.getContextPath()存储在root中，可以解决路径问题
+	  	ContextPathHandler path = new ContextPathHandler("root");
+	  	me.add(path);
+
+		me.add(new UploadHandler());////判断是下载附件的跳过jfinal
+	}
+
+	public void afterJFinalStart(){
+		super.afterJFinalStart();
+
+		//恢复系统菜单表，方便合作开发
+		Power.restoreMenu();
+		Power.restorePowerPermission();
+	}
+	
+	/**
+	 * 建议使用 JFinal 手册推荐的方式启动项目
+	 * 运行此 main 方法可以启动项目，此main方法可以放置在任意的Class类定义中，不一定要放于此
+	 */
+	public static void main(String[] args) {
+		JFinal.start("WebRoot", 7070, "/", 5);
+	}
+}

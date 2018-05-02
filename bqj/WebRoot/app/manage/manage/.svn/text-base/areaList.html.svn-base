@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>无标题文档</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script type="text/javascript" src="areaList.js" charset="utf-8"></script>
+</head>
+
+
+<body ms-controller="areaCtrl">
+
+	<!-- <div class="place">
+		<span>位置：</span>
+		<ul class="placeul">
+			<li>首页</li>
+			<li>系统设置</li>
+			<li>区域管理</li>
+		</ul>
+	</div> -->
+
+	<div class="rightinfo">
+
+		<div class="tools">
+			<ul class="toolbar1" >
+			<li>区域名：<input style="height: 32px;width: 200px;margin: 0 0;padding: 0 0;" type="text" id="areaname"></li>
+			<li>示范：
+			<select id="isDemonstration">
+				<option value="2">全部</option>
+				<option value="1">是</option>
+				<option value="0">否</option>
+			</select>
+			</li>
+				<li  id="checkDemonstration"><span><img
+						src="../../../images/ico06.png" /> </span>查询</li>
+			</ul>
+
+		</div> 
+
+		<div id="sel_div" style="display: none">
+			<ul class="seachform">
+
+			</ul>
+		</div>
+
+		<table class="tablelist">
+			<thead>
+				<tr>
+					<!-- <th class="checkBoxTh"><span class="CheckBoxCss"><input id="checkalls"
+																			type="checkbox" ms-click="checkAll" /> </span>
+					</th> -->
+					<th width="300px" >{{vm.tableTop.region}}</th>
+					<th width= >{{vm.tableTop.description}}</th>
+					<th width= "150px">{{vm.tableTop.option}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ms-repeat="vm.data">
+					<!-- <td><span class="CheckBoxCss"><input
+							class="itemCheckBox" ms-duplex-string="selectId" type="checkbox"
+							ms-attr-value="el.regioncode" /> </span></b>
+					</td> -->
+					<td><!-- <a ms-attr-href="areaView.html?areaId={{el.regioncode}}">{{el.region}}</a> -->
+						{{el.region}}
+					</td>
+					<td>{{el.description}}</td>
+					<td class="autocut">
+					    <li id="detail" style="float:left;"><a id="edit_a" ms-attr-href="areaView.html?areaId={{el.regioncode}}" style="cursor:pointer;"><font color="blue">详情</font></a></li>
+						&nbsp;&nbsp;
+                    	<li id="edit" style="float:left;"><a id="edit_a" ms-attr-href="areaadd.html?areaId={{el.regioncode}}&keyid={{vm.keyid}}" style="cursor:pointer;"><font color="blue">编辑</font></a></li>
+                    </td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+	</div>
+</body>
+</html>

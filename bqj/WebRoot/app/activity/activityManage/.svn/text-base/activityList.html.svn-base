@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>专项活动列表页面</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script type="text/javascript" src="../../../assets/js/jquery.js"></script>
+<script type="text/javascript" src="../../../assets/js/flow.js"></script>
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script type="text/javascript" src="activityList.js" charset="utf-8"></script>
+<script type="text/css">
+	.searchBox{
+		width:285px; height:32px; line-height:32px; 
+		border-top:solid 1px #a7b5bc; border-left:solid 1px #a7b5bc; 
+		border-right:solid 1px #ced9df; border-bottom:solid 1px #ced9df; 
+		background:url(../../images/inputbg.gif) repeat-x; text-indent:10px;
+		background-image: url('../../images/searchBox.png');
+		background-repeat: no-repeat;background-position:7px 8px;padding-left: 15px;}
+</script>
+</head>
+
+
+<body ms-controller="activityCtrl">
+
+	<div class="rightinfo">
+
+		<div class="tools">
+
+			<ul class="toolbar">
+				<li id="add" ms-if="vm.power.addpower==1"><span><img src="../../../images/t01.png" />
+				</span>添加</li>
+				<li id="delete" ms-if="vm.power.delpower==1"><span><img
+						src="../../../images/t03.png" /> </span>删除</li>
+			</ul>
+			<ul class="toolbar1">
+				<li id="check"><span><img
+						src="../../../images/ico06.png" /> </span>查询</li>
+			</ul>
+		</div>
+		<div id="sel_div" style="display: none">
+			<ul class="seachform">
+				<li><label> 标题：</label> <input name="TitleTextBox" type="text"
+					id="title" ms-duplex="select.title" class="scinput" />
+				</li>
+				<li><label> 是否公开：</label> 
+					<select class="dfinput" style="width: 200px; padding: 6px 0;" ms-each="vm.ispublic"
+                        ms-duplex="select.ispublic">
+                        <option ms-attr-value="el.value">{{el.name}}</option>
+                    </select>
+				</li>
+				<li><label> &nbsp;</label><input type="submit" name="SelButton"
+					value="查询" id="SelButton" class="scbtn" />
+				</li>
+			</ul>
+		</div>
+
+		<table class="tablelist" style="table-layout:fixed;">
+			<thead>
+				<tr>
+					<th class="checkBoxTh"><span class="CheckBoxCss"><input id="checkalls" type="checkbox"
+							ms-click="checkAll" /> </span>
+					</th>
+					<th width="40%">{{vm.tableTop.title}}</th>
+					<th width="8%">{{vm.tableTop.ispublic}}</th>
+					<th >{{vm.tableTop.publishtime}}</th>
+					<!-- <th >{{vm.tableTop.status}}</th> -->
+					<th >{{vm.tableTop.inputperson}}</th>
+					<th >{{vm.tableTop.reportperson}}</th>
+					<th >{{vm.tableTop.option}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ms-repeat="vm.data">
+					<td><span class="CheckBoxCss"><input ms-duplex-string="selectId"
+							class="itemCheckBox" type="checkbox" ms-attr-value="el.keyid" />
+					</span></b>
+					</td>
+					<style>
+						.td{overflow:hidden;white-space:nowrap;}
+					</style>
+					<td class="td"><a ms-attr-href="activityDetail.html?keyid={{el.keyid}}"><font color="blue">{{el.title}}</font></a></td>					
+					<td class="td">
+						<li ms-if="el.ispublic=='0'">不公开</li>
+						<li ms-if="el.ispublic=='1'">公开</li>
+					</td>
+					<td class="td">{{el.publishtime}}</td>
+					<!-- <td class="td">
+						<li ms-if="el.status=='0'"><font color="#8E236B">未审批</font></li>
+						<li ms-if="el.status=='3'"><font color="#808080">已上报</font></li>
+						<li ms-if="el.status=='1'"><font color="#215E21">审批通过</font></li>
+					</td> -->
+					<td class="td">{{el.inputperson}}</td>
+					<td class="td">{{el.reportperson}}</td>
+					<td class="td">
+						<li id="edit" ms-if="vm.power.editpower==1" style="float:left;"><a id="edit" ms-click="edit(el.keyid)" style="cursor:pointer;"><font color="blue">编辑</font></a></li>
+						<li id="report" ms-if="vm.power.addpower==1" style="float:left;"><a id="report" ms-click="report(el.keyid)" style="cursor:pointer;"><font color="blue">上报</font></a></li>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+	</div>
+
+	<script type="text/javascript">
+		$('.imgtable tbody tr:odd').addClass('odd');
+	</script>
+</body>
+</html>

@@ -1,0 +1,778 @@
+ #TweetReplyForm #TFormEditor {
+        border: 2px solid #9a130d;
+        padding: 2px;
+        margin: 2px 0 0 0;
+        background: #fff;
+        width: 690px;
+    }
+
+    #TweetReplyForm textarea {
+        border: 0;
+        width: 580px;
+        height: 50px;
+        padding: 5px;
+        font-size: 10pt;
+        overflow: auto;
+        scroll: none;
+        background: #fff;
+    }
+    
+    #TweetReplyForm span.emotion a {
+        background: url('emotion.gif') no-repeat left center;
+        
+    }
+
+:focus
+{
+    outline: 0;
+}
+*
+{
+    padding: 0;
+    margin: 0;
+}
+a
+{
+    color: #4466bb;
+    outline: 0;
+}
+a:hover
+{
+    color: #0000aa;
+}
+ul, ol
+{
+    list-style-type: none;
+}
+img
+{
+    border: 0;
+}
+textarea
+{
+    resize: none;
+}
+body
+{
+    background: #f9f9f9;
+    text-align: center;
+    font-size: 10pt;
+}
+label.SELECTED
+{
+    color: #A00;
+    font-weight: bold;
+}
+.clear
+{
+    clear: both;
+    font-size: 1px;
+    line-height: 0;
+}
+.clearfix:after
+{
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+.clearfix
+{
+    display: inline-block;
+}
+html[xmlns] .clearfix
+{
+    display: block;
+}
+* html .clearfix
+{
+    height: 1%;
+}
+.ostable
+{
+    width: 100%;
+    table-layout: fixed;
+}
+.ostable td
+{
+    vertical-align: top;
+    overflow: hidden;
+}
+.highlight
+{
+    color: #A00;
+    padding: 0 1px;
+    margin: 0 2px;
+}
+.NoData
+{
+    text-align: center;
+    padding: 20px 0;
+    color: #999999;
+}
+a.tag
+{
+    background-color: #E0EAF1;
+    border-bottom: 1px solid #3E6D8E;
+    border-right: 1px solid #7F9FB6;
+    color: #3E6D8E;
+    font-size: 8pt;
+    line-height: 2.4;
+    margin: 2px 2px 2px 0;
+    padding: 2px 4px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+a.tag:hover
+{
+    background-color: #3E6D8E;
+    color: #fff;
+}
+a.project
+{
+    background-color: #cfc;
+    color: #060;
+}
+a.project:hover
+{
+    background-color: #5cc26f;
+    color: #fff;
+}
+a.rndbutton
+{
+    background: #9a130d;
+    color: #fff;
+    text-decoration: none;
+    height: 30px;
+    float: left;
+    margin: 0;
+    border: 0px solid #000;
+    font-weight: bold;
+    cursor: pointer;
+}
+a.rndbutton:hover
+{
+    background: #9a130d;
+}
+a.rndbutton:hover span
+{
+    background: #40ab54;
+    color: #fff;
+}
+a.rndbutton span
+{
+    background: #5cc26f;
+    color: #fff;
+    float: left;
+    margin: 0 0 0 12px;
+    padding: 0 12px 0 0;
+    height: 30px;
+    line-height: 30px;
+}
+
+#OSC_Screen
+{
+    width: 990px;
+    margin: 0px auto;
+    text-align: left;
+    padding: 0 4px;
+    margin-top:30px;
+    margin-left:30px;
+    margin-bottom: 50px;
+    float:left
+}
+
+#OSC_Notification
+{
+    width: 200px;
+    margin-left: 10px;
+    font-size: 9pt;
+}
+
+
+
+#OSC_Content
+{
+    margin: 10px 2px;
+    position: relative;
+}
+#SpaceLeft
+{
+    float: left;
+    width: 220px;
+}
+#SpaceLeft a
+{
+    text-decoration: none;
+}
+#SpaceMain
+{
+    margin: 0 220px 0 230px;
+    word-wrap: break-word;
+}
+#SpaceRight
+{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 210px;
+    word-wrap: break-word;
+}
+.SpaceList
+{
+    margin: 0 0 0 230px;
+    border: 1px solid #eee;
+    padding: 10px 15px;
+    background: #fff;
+    word-wrap: break-word;
+}
+.SpaceList .TopBar
+{
+    margin: 0 0 25px 0;
+    color: #999999;
+    font-size: 9pt;
+    height: 22px;
+    line-height: 22px;
+}
+.SpaceList .TopBar h1
+{
+    color: #333333;
+}
+.Owner
+{
+    background: #5cc26f;
+    padding: 15px 5px 15px 10px;
+    position: relative;
+}
+.Owner a.Img:hover
+{
+    background: none;
+}
+.Owner a
+{
+    color: #fff;
+    padding: 0px;
+}
+.Owner a:hover
+{
+    background: #fff;
+    color: #5cc26f;
+}
+
+.Owner .Img img
+{
+    float: left;
+    width: 56px;
+    height: 56px;
+    background: #fff;
+    padding: 3px;
+    margin: 0 8px 10px 0;
+}
+.Owner .Img:hover img
+{
+    background: #eee;
+}
+.Owner span.U
+{
+    float: left;
+    width: 130px;
+}
+.Owner span.U .Name
+{
+    color: #FFF;
+    font-size: 14pt;
+    display: block;
+    margin: 0 0 12px 0;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+.Owner span.U .Name
+{
+    background: none;
+}
+.Owner span.U .opts
+{
+    color: #fff;
+    font-size: 9pt;
+}
+.Owner span.U .opts a
+{
+    color: #fff;
+}
+.Owner span.U .opts a:hover
+{
+    background-color: #fff;
+    color: #5cc26f;
+}
+.Owner a#gender_icon
+{
+    text-indent: -9999px;
+    background-color: #5cc26f;
+}
+.Owner a#gender_icon:hover
+{
+    background-color: #5cc26f;
+}
+.Owner .stat
+{
+    color: #fff;
+    font-size: 9pt;
+}
+.Owner .stat a
+{
+    margin-right: 3px;
+}
+.Owner .stat a span
+{
+    font-size: 9pt;
+}
+
+.Users ul li
+{
+    float: left;
+}
+.Users ul li a
+{
+    margin: 1px 1px 0 0;
+}
+.Users ul li img
+{
+    width: 36px;
+    height: 36px;
+    border: 1px solid #EAEAEA;
+}
+.Users ul li a:hover img
+{
+    border: 1px solid #5cc26f;
+}
+.Users .more
+{
+    margin: 10px 0;
+    text-align: right;
+    padding: 0 5px 0 0;
+}
+
+#TweetCode pre
+{
+    font-size: 9pt;
+    font-family: Courier New,Arial;
+    border: 1px solid #ddd;
+    border-left: 5px solid #6CE26C;
+    background: #f6f6f6;
+    padding: 5px;
+    margin: 0 0 10px 0;
+}
+.Tweet
+{
+    border-bottom: 1px dashed #cccccc;
+    padding: 0 0 5px 0;
+    margin: 0 0 10px 0;
+}
+.Tweet a
+{
+    text-decoration: none;
+}
+.Tweet .TweetUser
+{
+    width: 48px;
+}
+.Tweet .TweetUser img
+{
+    width: 32px;
+    height: 32px;
+    margin-top: 5px;
+}
+.Tweet .TweetContent
+{
+    color: #333333;
+}
+.Tweet .TweetContent h5
+{
+    font-weight: normal;
+    font-size: 10pt;
+    color: #999999;
+}
+.Tweet .TweetContent .post
+{
+    font-size: 10.5pt;
+    line-height: 22px;
+    margin: 5px 0 0 0;
+    overflow: hidden;
+}
+.Tweet .TweetContent .ref
+{
+    font-size: 9pt;
+    margin: 3px 0 0 0;
+    padding-top: 5px;
+}
+.Tweet .TweetContent .ref .p
+{
+    border: 1px solid #cccccc;
+    background: #f6f6f6;
+    padding: 5px;
+    color: #999999;
+}
+.Tweet .TweetContent .ref .rpost
+{
+    display: block;
+    margin: 3px 0;
+}
+.Tweet .TweetContent .photo
+{
+    margin: 10px 0;
+}
+.Tweet .TweetContent .photo a[class^="rotate-"]
+{
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+}
+.Tweet .TweetContent .photo .rotate-clockwise
+{
+    background-size: 14px 14px;
+}
+.Tweet .TweetContent .photo .rotate-anticlockwise
+{
+    background-size: 14px 14px;
+}
+.Tweet .TweetContent .photo img
+{
+    border: 1px solid #f6f6f6;
+    padding: 1px;
+    max-width: 450px;
+    cursor: pointer;
+}
+.Tweet .TweetContent .photo img:hover
+{
+    border: 1px solid #5cc26f;
+}
+.Tweet .TweetContent .photo .ImgMenu a
+{
+    margin: 0 5px 0 0;
+}
+.Tweet .TweetContent embed
+{
+    margin: 3px 0 0 0;
+}
+.Tweet .TweetContent .video
+{
+    margin: 10px 0;
+}
+.tweet_video_operation
+{
+    display: none;
+}
+.tweet_video_description
+{
+    margin: 0 0 5px 0;
+    font-size: 12px;
+}
+.tweet_thumb_wrapper
+{
+    display: inline-block;
+    border: 1px solid #D2D2D2;
+    background: white;
+    overflow: hidden;
+    padding: 3px;
+    position: relative;
+    cursor: pointer;
+}
+.tweet_play_video
+{
+    opacity: 0.7;
+    display: inline-block;
+    width: 37px;
+    height: 37px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -18px;
+    margin-left: -18px;
+}
+.Tweet .TweetContent pre
+{
+    margin: 5px 0 10px 0;
+}
+.Tweet .TweetContent .bottom
+{
+    margin: 10px 0 0 0;
+    height: 18px;
+}
+.Tweet .TweetContent .opts
+{
+    font-size: 8pt;
+    float: right;
+}
+.Tweet .TweetContent .time
+{
+    font-size: x-small;
+    margin: 0;
+    color: #888;
+    -webkit-text-size-adjust: none;
+}
+.Tweet .LogReplyList
+{
+    margin: 0px 0 5px 0;
+    display: none;
+    padding: 5px 5px 5px 0;
+}
+.Tweet .LogReplyList .TweetRplsWrapper
+{
+    background: #f9f9f9;
+    padding: 10px 10px 20px 10px;
+    border: 1px solid #cccccc;
+}
+.Tweet .LogReplyList .TweetRplsWrapper .loading
+{
+    padding-left: 22px;
+}
+.Tweet .LogReplyList #closeTweetRpls
+{
+    float: right;
+    font-weight: bold;
+    line-height: 8px;
+    height: 8px;
+}
+.Tweet .LogReplyList form
+{
+    margin: 5px 0 0 5px;
+}
+.Tweet .LogReplyList form label
+{
+    font-size: 9pt;
+}
+.Tweet .LogReplyList .TweetReplyOptions
+{
+    margin: 3px 0 0 0;
+}
+.Tweet .LogReplyList .TweetReplyOptions input
+{
+    float: left;
+    margin: 2px 0 0 0;
+}
+.Tweet .LogReplyList .TweetReplyOptions label
+{
+    float: left;
+}
+.Tweet .pager
+{
+    margin: 20px 0 0 2px;
+}
+.TweetRpls h6
+{
+    font-size: 10pt;
+    margin: 10px 0 5px 0;
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 5px;
+}
+.TweetRpls ul
+{
+    font-size: 9pt;
+}
+.TweetRpls li
+{
+    border-bottom: 1px dashed #cccccc;
+    padding: 10px 0 5px 0;
+}
+.TweetRpls li .portrait
+{
+    width: 30px;
+}
+.TweetRpls li .portrait img
+{
+    width: 24px;
+    height: 24px;
+    margin: 5px 0 0 0;
+}
+.TweetRpls li .TweetReplyBody
+{
+    overflow: hidden;
+}
+.TweetRpls li .TweetReplyBody .post
+{
+    line-height: 20px;
+}
+.TweetRpls li .TweetReplyBody .opts
+{
+    float: none;
+    font-size: 8pt;
+    -webkit-text-size-adjust: none;
+    color: #999999;
+    margin: 10px 0 0 0;
+    height: 18px;
+}
+.TweetRpls li .TweetReplyBody .opts .links
+{
+    float: right;
+}
+.TweetRpls li .TweetReplyBody .opts a
+{
+    font-size: 9pt;
+}
+.TweetRpls .all
+{
+    display: block;
+    margin: 10px 0 0 0;
+}
+#TweetReplyPage
+{
+    width: 700px;
+}
+#TweetReplyPage h1
+{
+    font-size: 16pt;
+    margin-bottom: 20px;
+}
+#TweetReplyPage h1 a
+{
+    text-decoration: none;
+}
+#TweetReplyForm
+{
+    margin: 0 0 20px 0px;
+}
+
+#TweetReplyForm .TweetReplyOptions
+{
+    float: right;
+}
+#TweetReplyForm #btn_submit
+{
+    padding: 2px 3px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+#TweetReplyPage #TweetReplies li .TweetReplyBody
+{
+    width: 650px;
+}
+
+
+
+/* paging */
+.pager
+{
+    height: 28px;
+    line-height: 28px;
+    margin: 2px 0;
+}
+.pager li
+{
+    font-size: 14px;
+    text-align: center;
+    margin: 0 2px 0 0;
+    display: inline;
+}
+.pager li a
+{
+    font-family: Courier New,Arial;
+    color: #58595b;
+    background-color: #f0f0f0;
+    padding: 3px 5px;
+    text-decoration: none;
+}
+.pager li a:hover
+{
+    color: #000;
+}
+.pager li.prev a
+{
+    background-color: #cccccc;
+    color: #666666;
+}
+.pager li.next a
+{
+    background-color: #cccccc;
+    color: #666666;
+}
+.pager li.current a
+{
+    color: #fff;
+    background: #7798cb;
+}
+
+/*点赞的样式设置*/
+.love
+{
+    padding-left: 15px;
+}
+/*点赞链接演示*/
+.love a
+{
+    font-size: 14px;
+    color: #9A9A9A;
+}
+.love a:hover
+{
+    color: #6cabe1;
+}
+.TweetUserPic img
+{
+    width: 25px;
+    border-radius: 30px;
+}
+.more
+{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+input.rndbutton
+{
+    background: #9a130d;
+    color: #fff;
+    height: 24px;
+    border: 0px solid #000;
+    cursor: pointer;
+    float: none;
+    margin-top:5px;
+}
+input.rndbutton:hover
+{
+    background-color: #9a130d;
+}
+
+.Tweet .TweetContent pre
+{
+    max-width: 540px;
+    overflow: hidden;
+}
+
+
+.group_sign
+{
+    background: url(/img/group/group.gif?t=1451964198000) no-repeat;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    display: inline-block;
+}
+
+.audio .wechat-audio
+{
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    background: #F1F2F3;
+    border-radius: 8px;
+    width: 90px;
+}
+
+.audio .wechat-audio img
+{
+    height: 28px;
+    margin: 4px 2px;
+}
+
+.audio .wechat-audio .duration
+{
+    font-size: 9px;
+    color: #aaa;
+    font-style: normal;
+    margin-top: 10px;
+    margin-right: 5px;
+    display: inline-block;
+    float: right;
+    line-height: 20px;
+}

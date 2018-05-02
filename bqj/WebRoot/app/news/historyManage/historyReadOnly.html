@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../../../assets/js/jquery.js"></script>
+    <script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <link href="../../../assets/ui/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script src="../../../assets/ui/js/core/base.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerGrid.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerResizable.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerDrag.js" type="text/javascript"></script>
+    <script src="../../../assets/js/plugins/DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+	<link href="../../../assets/js/plugins/DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+	<script src="../../../assets/js/flow.js" type="text/javascript" charset="utf-8"></script>
+	<!-- 附件相关js, 注意必须在控制器js前引入-->
+	<link rel="stylesheet" type="text/css" href="../../../assets/js/swfupload/css/default.css"/>
+	<script type="text/javascript" src="../../../assets/js/swfupload/swfupload.js"></script>
+	<script type="text/javascript" src="../../../assets/js/swfupload/handlers.js"></script>
+	<script type="text/javascript" src="../../../assets/js/swfupload/myswfupreadonly.js"></script>
+	<!-- 附件相关js end -->
+    <script src="historyReadOnly.js" type="text/javascript" charset="utf-8"></script>
+    
+</head>
+<body style="text-align: center">
+	<div ms-controller="historyReadOnlyCtrl" class="detail" >
+        <div style="clear: both;"></div>
+            <div style="margin: 20px 20px; text-align: left;">
+            	<input type="button" name="btback" value="返回" id="btback" class="btn" />
+            	&nbsp;&nbsp;
+            	<b id="approval" style="display: none;">
+            	<!-- <input type="button" name="report" value="上报" id="report" class="btn" />&nbsp;&nbsp; -->
+             	<input type="button" name="review" value="审核通过" id="review" class="btn"/> &nbsp;&nbsp;             	
+             	</b>
+             </div>
+        <div>
+            <div id="title" class="detail_title"></div>
+            <div>
+            	<div id="time" style="text-align: center;">
+            		【编辑日期：{{data.time}}】
+            	</div>
+                
+                <div id="content" class="detail_content"></div>                               			    
+            </div>
+        </div>
+    </div>
+</body>
+</html>

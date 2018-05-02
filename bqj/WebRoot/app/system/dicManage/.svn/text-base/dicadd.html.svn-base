@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../assets/ui/js/plugins/jquery.autocomplete.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="../../../assets/ui/js/plugins/jquery.autocomplete.css" type="text/css" rel="stylesheet"></link>
+<script src="dicadd.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div ms-controller="dicaddCtrl">
+		<form name="base_form" method="post" id="base_form">
+<!-- 			<div class="place">
+				<span>位置：</span>
+				<ul class="placeul">
+					<li>首页</li>
+					<li>系统设置</li>
+					<li>数据字典管理</li>
+					<li>字典编辑</li>
+				</ul>
+			</div> -->
+			<div class="formbody">
+				<div class="formtitle">
+
+					<span>基本信息</span>
+				</div>
+				<ul class="forminfo">
+					<li class="row-item"><label> 名称值 ：</label><input
+						name="txtDictionaryName" type="text" id="txtDictionaryName" maxlength="20"
+						class="dfinput" ms-duplex="data.dictionaryname" data-rule="required;" /><b>*</b><i></i>
+					</li>
+					<li class="row-item"><label> 类型名称 ：</label><input
+						name="txtDictionaryType" type="text" id="txtDictionaryType"
+						class="searchBox" ms-duplex="data.dictionarytype" data-rule="required;" /><b>*</b><i></i>
+					</li>
+					<li class="row-item"><label> 排序 ：</label><input
+						name="txtOrderID" type="text" id="txtOrderID"
+						class="dfinput" ms-duplex="data.orderid"
+						data-rule="required;positive;" placeholder="请输入整数" /><b>*</b>
+					</li>
+					<li><label> &nbsp;</label>
+					    <input type="button" name="Button1"
+						value="确认保存" id="Button1" ms-click="submit()" class="btn" />
+						&nbsp;
+						<input type="button" name="btback" value="返回" id="btback"
+						class="btn" />
+				</ul>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

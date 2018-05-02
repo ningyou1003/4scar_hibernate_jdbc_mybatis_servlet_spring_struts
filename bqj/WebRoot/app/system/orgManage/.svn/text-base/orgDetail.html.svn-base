@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>添加机构</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <link href="../../../assets/ui/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script src="../../../assets/ui/js/core/base.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerGrid.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerResizable.js" type="text/javascript"></script>
+    <script src="../../../assets/ui/js/plugins/ligerDrag.js" type="text/javascript"></script>
+    <script src="orgDetail.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <div ms-controller="orgdetailCtrl">
+        <form name="base_form" method="post" id="base_form">
+        <!-- -----------机构编辑部分----------- -->
+        <div class="formbody">
+            <div class="formtitle">
+                <input name="sdfdsfdsf" type="text" id="sdfdsfdsf" style="display: none" />
+                <input name="TB_KeyId" type="text" id="TB_KeyId" style="display: none" />
+                <span>基本信息 <b ms-if="data.status==2" style="color: black">(暂存)</b> <b ms-if="data.status==1"
+                    style="color: red">(待审核)</b> <b ms-if="data.status==0" style="color: blue">(已通过)</b>
+                    <b ms-if="data.status==-1" style="color: red">(拒绝)</b> </span>
+            </div>
+            <tr>
+                <td colspan="2">
+                    <ul class="forminfo">
+                        <li>
+                            <label>
+                                &nbsp;</label>
+                            <b ms-if="data.issame">
+                                <input ms-if="data.status!=1" type="button" name="Button1" value="暂存" id="Button1"
+                                    ms-click="submit()" class="btn" />
+                                &nbsp;
+                                <input ms-if="data.status==2" type="button" name="applyBtn" value="提交审核" id="applyBtn"
+                                    class="btn" />
+                                &nbsp; </b><b ms-if="(!data.issame) && (data.status==1)">
+                                    <input type="button" name="acceptBtn" value="通过" id="acceptBtn" class="btn" />
+                                    &nbsp;
+                                    <input type="button" name="rejectBtn" value="拒绝" id="rejectBtn" class="btn" />
+                                    &nbsp; </b>
+                            <input type="button" name="btback" value="返回" id="btback" class="btn" />
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <table style="width: 95%">
+                <tr>
+                    <td>
+                        <ul class="forminfo">
+                            <li class="row-item">
+                                <label for="org_fullname">
+                                    机构中文全称 ：</label>
+                                <input name="org_fullname" type="text" id="org_fullname" ms-duplex="data.org_fullname"
+                                    class="dfinput" maxlength="30" data-rule="required;" /><font color="red">*</font>
+                            </li>
+                            <li class="row-item">
+                                <label for="org_fullname_abroad">
+                                    机构英文全称 ：</label>
+                                <input name="org_fullname_abroad" type="text" id="org_fullname_abroad" ms-duplex="data.org_fullname_abroad"
+                                    class="dfinput" maxlength="30" />
+                            </li>
+                            <li class="row-item">
+                                <label for="org_shutcut">
+                                    机构中文简称 ：</label>
+                                <input name="org_shutcut" type="text" id="org_shutcut" ms-duplex="data.org_shutcut"
+                                    class="dfinput" />
+                            </li>
+                            <li class="row-item">
+                                <label for="org_shutcut_abroad">
+                                    机构英文简称 ：</label>
+                                <input name="org_shutcut_abroad" type="text" id="org_shutcut_abroad" ms-duplex="data.org_shutcut_abroad"
+                                    class="dfinput" maxlength="30" />
+                            </li>
+                            <li class="row-item">
+                                <label for="type">
+                                    单位性质 ：</label>
+                                <select name="type" ms-duplex="data.type" id="type" ms-each="vm.type" class="dfinput"
+                                    data-rule="required;">
+                                    <option ms-attr-value="el.dictionaryname">{{el.dictionaryname}}</option>
+                                </select>
+                                <font color="red">*</font> </li>
+                            <li class="row-item">
+                                <label>
+                                    通信地址 ：</label>
+                                <input name="address" type="text" id="address" class="dfinput" ms-duplex="data.address"
+                                    maxlength="50" />
+                            </li>
+                            <li class="row-item">
+                                <label>
+                                    所属区域：</label>
+                                <input type="text" ms-duplex="data.regionname" class="searchBox" onclick="selectArea()" />
+                                <input type="hidden" maxlength="30" ms-duplex="data.regioncode" />
+                            </li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul class="forminfo">
+                            <li class="row-item">
+                                <label>
+                                    邮政编码 ：</label>
+                                <input name="zipcode" type="text" id="zipcode" class="dfinput" maxlength="30" ms-duplex="data.zipcode"
+                                    data-rule="zipcode;" />
+                            </li>
+                            <li class="row-item">
+                                <label>
+                                    官方网站 ：</label><input name="website" ms-duplex="data.website" data-rule="url;" maxlength="30"
+                                        type="text" id="website" class="dfinput" />
+                            </li>
+                            <li class="row-item">
+                                <label>
+                                    图文传真 ：</label><input name="portraiture" ms-duplex="data.portraiture" type="text"
+                                        id="portraiture" class="dfinput" data-rule="tel;" maxlength="30" data-rule="tel;" />
+                            </li>
+                            <li class="row-item">
+                                <label>
+                                    联系电话 ：</label>
+                                <input name="phone" type="text" id="phone" class="dfinput" maxlength="30" ms-duplex="data.phone"
+                                    data-rule="contact;" />
+                            </li>
+                            <li class="row-item">
+                                <label>
+                                    电子邮箱 ：</label>
+                                <input name="email" ms-duplex="data.email" type="text" id="txtEmail" maxlength="30"
+                                    class="dfinput" data-rule="email;" />
+                            </li>
+                            <li class="row-item">
+                                <label>
+                                    官方微信号 ：</label>
+                                <input name="webchat" ms-duplex="data.webchat" type="text" maxlength="30" id="txtAddress"
+                                    class="dfinput" />
+                            </li>
+                            <li class="row-item">
+                                <label>
+                                    官方微博 ：</label>
+                                <input name="twitter" type="text" id="twitter" class="dfinput" maxlength="30" ms-duplex="data.twitter" />
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <ul class="forminfo">
+                            <li class="row-item">
+                                <label>
+                                    工作职能 ：</label>
+                                <textarea id="workarea" name="workarea" cols="20" rows="2" class="dfinput" ms-duplex="data.workarea" style=" height:100px; width:80%;"></textarea>
+                                <!--<input name="workarea" type="text" id="workarea" class="dfinput" ms-duplex="data.workarea"
+                                    maxlength="30" />-->
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- -----------隶属关系部分----------- -->
+        <div class="formbody">
+            <div class="formtitle">
+                <span>隶属关系信息</span>
+            </div>
+            <table style="width: 95%">
+                <tr>
+                    <td>
+                        <b style="margin-left: 32px">上级单位</b>
+                        <ul class="forminfo" style="margin: 10px; border: 1px solid; #000;">
+                            <li class="row-item" style="margin-top: 5px;">
+                                <label for="supname">
+                                    中文全称 ：</label>
+                                <input name="supname" type="text" id="supname" ms-duplex="data.supname" class="dfinput"
+                                    maxlength="30" data-rule="" />
+                            </li>
+                            <li class="row-item">
+                                <label for="supname_e">
+                                    英文全称 ：</label>
+                                <input name="supname_e" type="text" id="supname_e" ms-duplex="data.supname_e" class="dfinput"
+                                    maxlength="30" />
+                            </li>
+                            <li class="row-item">
+                                <label for="supshortname">
+                                    中文简称：</label>
+                                <input name="supshortname" type="text" id="supshortname" maxlength="30" ms-duplex="data.supshortname"
+                                    class="dfinput" data-rule="" />
+                            </li>
+                            <li class="row-item">
+                                <label for="supshortname_e">
+                                    英文简称 ：</label>
+                                <input name="supshortname_e" type="text" id="supshortname_e" ms-duplex="data.supshortname_e"
+                                    class="dfinput" maxlength="30" />
+                            </li>
+                            <li class="row-item">
+                                <label for="suprelation">
+                                    关系属性 ：</label>
+                                <input name="suprelation" type="radio" ms-duplex-string="data.suprelation" maxlength="30"
+                                    value="主管" />主管
+                                <input name="suprelation" type="radio" ms-duplex-string="data.suprelation" maxlength="30"
+                                    value="业务指导" />业务指导
+                                <input name="suprelation" type="radio" ms-duplex-string="data.suprelation" maxlength="30"
+                                    value="业务联系" />业务联系 </li>
+                        </ul>
+                    </td>
+                    <td>
+                        <b style="margin-left: 32px">下级单位</b>
+                        <ul class="forminfo" style="margin: 10px; border: 1px solid; #000;">
+                            <li class="row-item" style="margin-top: 5px;">
+                                <label for="subname">
+                                    中文全称 ：</label>
+                                <input name="subname" type="text" id="subname" ms-duplex="data.subname" class="dfinput"
+                                    maxlength="30" data-rule="" />
+                            </li>
+                            <li class="row-item">
+                                <label for="subname_e">
+                                    英文全称 ：</label>
+                                <input name="subname_e" type="text" id="subname_e" ms-duplex="data.subname_e" class="dfinput"
+                                    maxlength="30" />
+                            </li>
+                            <li class="row-item">
+                                <label for="subshortname">
+                                    中文简称：</label>
+                                <input name="subshortname" type="text" id="subshortname" ms-duplex="data.subshortname"
+                                    class="dfinput" data-rule="" maxlength="30" />
+                            </li>
+                            <li class="row-item">
+                                <label for="subshortname_e">
+                                    英文简称 ：</label>
+                                <input name="subshortname_e" type="text" id="subshortname_e" ms-duplex="data.subshortname_e"
+                                    class="dfinput" maxlength="30" />
+                            </li>
+                            <li class="row-item">
+                                <label for="subrelation">
+                                    关系属性 ：</label>
+                                <input name="subrelation" type="radio" ms-duplex-string="data.subrelation" maxlength="30"
+                                    value="主管" />主管
+                                <input name="subrelation" type="radio" ms-duplex-string="data.subrelation" maxlength="30"
+                                    value="业务指导" />业务指导
+                                <input name="subrelation" type="radio" ms-duplex-string="data.subrelation" maxlength="30"
+                                    value="业务联系" />业务联系 </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        </form>
+        <!-- -----------机构领导层部分----------- -->
+        <div class="formbody">
+            <div class="formtitle">
+                <span>机构领导层信息</span>
+            </div>
+            <tr>
+                <td colspan="2">
+                    <ul class="forminfo">
+                        <li>
+                            <label>
+                                &nbsp;</label>
+                            <b ms-if="data.issame">
+                                <input style="margin-left: -20px;" type="button" name="addleader" value="选择领导" id="addleader"
+                                    onclick="orgPickLeader()" class="btn" />
+                            </b></li>
+                    </ul>
+                </td>
+            </tr>
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <th>
+                            姓名
+                        </th>
+                        <th>
+                            职务
+                        </th>
+                        <th>
+                            联系电话
+                        </th>
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ms-repeat="vm.labor">
+                        <td class="autocut">
+                            {{el.name}}
+                        </td>
+                        <td class="autocut">
+                            {{el.job}}
+                        </td>
+                        <td class="autocut">
+                            {{el.mobile}}
+                        </td>
+                        <td>
+                            <a style="cursor: pointer" id="deleteleader" ms-click="deleteleader(el.id)" ms-if="data.issame">
+                                删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- -----------部门部分----------- -->
+        <div class="formtitle" style="margin-left: 20px;">
+            <span>内设部门</span>
+        </div>
+        <tr>
+            <td colspan="2">
+                <ul class="forminfo">
+                    <li>
+                        <label>
+                            &nbsp;</label>
+                        <b ms-if="data.issame" id="issame">
+                            <input type="button" name="adddep" value="添加部门" id="adddep" onclick="orgAddDep()"
+                                class="btn" />
+                        </b></li>
+                </ul>
+            </td>
+        </tr>
+        <div id="maingrid" style="margin-left: 20px;">
+        </div>
+    </div>
+</body>
+</html>

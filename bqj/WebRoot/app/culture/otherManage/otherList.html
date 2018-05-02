@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无文件名</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script type="text/javascript" src="../../../assets/js/jquery.js"></script>
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script src="../../../assets/js/flow.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="otherList.js" charset="utf-8"></script>
+</head>
+
+
+<body ms-controller="otherCtrl">
+
+	<div class="rightinfo">
+
+		<div class="tools">
+
+			<ul class="toolbar">
+				<li id="add" ms-if="vm.power.addpower==1"><span><img src="../../../images/t01.png" />
+				</span>添加</li>
+<!-- 				<li id="edit" ms-if="vm.power.editpower==1"><span><img
+						src="../../../images/t02.png" /> </span>修改</li> -->
+				<li id="delete" ms-if="vm.power.delpower==1"><span><img
+						src="../../../images/t03.png" /> </span>删除</li>
+			</ul>
+			<ul class="toolbar1">
+				<li id="check"><span><img src="../../../images/ico06.png" /></span>查询
+				</li>
+			</ul>
+		</div>
+		<div id="sel_div" style="display: none">
+			<ul class="seachform">
+				<li><label>标题</label> <input type="text"
+				ms-duplex="select.title" class="scinput" />
+				</li>
+				<li><label>是否公开</label> 
+					<select ms-duplex="type" class="scinput">
+                		<option  ms-repeat="selectType">{{el}}</option>
+            		</select>
+				</li>
+				<li><label> &nbsp;</label><input type="submit" name="SelButton"
+				value="查询" id="SelButton" class="scbtn" />
+				</li>
+			</ul>
+		</div>
+
+		<table class="tablelist" style="table-layout:fixed;">
+			<thead>
+				<tr>
+					<th class="checkBoxTh"><span class="CheckBoxCss"><input id="checkalls" type="checkbox"
+							ms-click="checkAll" /> </span>
+					</th>
+					<th>{{vm.tableTop.title}}</th>
+					<th style="width: 80px;">{{vm.tableTop.ispublic}}</th>
+					<th style="width: 150px;">{{vm.tableTop.releasetime}}</th>
+					<th style="width: 100px;">{{vm.tableTop.createuser}}</th>
+					<th style="width: 100px;">{{vm.tableTop.status}}</th>
+					<th style="width: 150px;">{{vm.tableTop.operation}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ms-repeat="vm.data">
+					<td><span class="CheckBoxCss"><input ms-duplex-string="selectId"
+							class="itemCheckBox" type="checkbox" ms-attr-value="el.keyid" />
+					</span></b>
+					</td>
+					<style>
+						.td{overflow:hidden;white-space:nowrap;}
+					</style>
+					<td class="td"><a ms-attr-href="otherDetail.html?keyid={{el.keyid}}"><font color="blue">{{el.title}}</font></a></td>					
+					<td class="td">
+						<li ms-if="el.ispublic == 0">否</li>
+						<li ms-if="el.ispublic == 1">是</li>
+					</td>
+					<td class="td">{{el.releasetime}}</td>
+					<td class="td">{{el.user}}</td>
+					<td class="td">
+						{{el.reportperson}}
+<!-- 						<li ms-if="el.status==0"><font color="#8E236B">未审核</font></li>
+						<li ms-if="el.status==1">已审核</li>
+						<li ms-if="el.status==3">已上报</li> -->
+					</td>
+					<td class="td">
+						<a ms-attr-href="otherAdd.html?keyid={{el.keyid}}" ms-if="vm.power.editpower==1 && el.status!=3"><font color="blue">编辑</font></a>
+						<a id="report" ms-click="report(el.keyid)" ms-if="vm.power.addpower==1 && el.status!=3" href="#" style="cursor:hand"><font color="blue">上报</font></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+	</div>
+
+	<script type="text/javascript">
+		$('.imgtable tbody tr:odd').addClass('odd');
+	</script>
+</body>
+</html>

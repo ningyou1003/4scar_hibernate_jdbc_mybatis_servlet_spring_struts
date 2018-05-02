@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link href="img/detail.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="img/icon-svg.css" />
+    <script src="../../assets/js/jquery.js" type="text/javascript"></script>
+    <script src="../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="Myinteract.js" charset="utf-8"></script>
+    <style>
+        .relation-data .icon-svg
+        {
+            width: 13px;
+            height: 13px;
+            margin: -2px 3px 0;
+            vertical-align: middle;
+        }
+        .panels-subheading .title a:hover, .panels-subheading .title a.active
+        {
+            color: #fff;
+            background-color: #4eaa4c;
+        }
+        .panels-subheading .title a
+        {
+            display: inline-block;
+            line-height: 26px;
+            padding: 0 20px;
+            border-radius: 13px;
+            font-size: 14px;
+            color: #6a6a6a;
+            margin-right: 10px;
+            background-color: #f0f0f0;
+            -webkit-transition: none;
+            transition: none;
+            text-decoration: none;
+        }
+        
+    </style>
+    <script type="text/javascript">
+        $(function () {
+           
+            $('#two').click(function () {
+                $('#two').addClass('active');
+                $('#one').removeClass('active');
+
+                $('#listsHD').hide();
+                $('#listsPL').show();
+                
+
+            });
+            $('#one').click(function () {
+                $('#one').addClass('active');
+                $('#two').removeClass('active');
+
+                $('#listsHD').show();
+                $('#listsPL').hide();
+
+            });
+        });
+    </script>
+</head>
+<body ms-controller="myInteractCtrl">
+    <div id="OSC_Screen">
+        <div id="OSC_Content">
+            <div class="panels-subheading" id="panels-subheading-pjax">
+                <div class="title clearfix">
+                    <a href="#" id="one" class="active">我的互动</a> <a id="two" href="#">我的评论</a>
+                </div>
+            </div>
+            <table width="100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div id="TweetReplyPage">
+                                <div id="TweetReplies">
+                                    <div class="TweetRpls">
+                                        <div id="listsHD">
+                                            <ul id="lists">
+                                            </ul>
+                                            <div id="PageInfo" class="pagin" style="margin-bottom: 20px; margin-left: -50px;">
+                                            </div>
+                                        </div>
+                                        <div id="listsPL" style="display:none">
+                                            <ul id="comments">
+                                            </ul>
+                                           <div id="PageInfoPL" class="pagin" style="margin-bottom: 20px; margin-left: -50px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

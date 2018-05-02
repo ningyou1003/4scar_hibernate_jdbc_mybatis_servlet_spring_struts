@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>文件列表页面</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+	<!-- 附件相关js end -->
+<script src="../../../assets/js/plugins/DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+<link href="../../../assets/js/plugins/DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../../../assets/js/flow.js"></script>
+<script type="text/javascript" src="docList.js" charset="utf-8"></script>
+</head>
+<body ms-controller="docCtrl" style="position: relative;">
+
+	<div class="rightinfo">
+
+		<div class="tools">
+
+			<ul class="toolbar">
+				<li id="add" ms-if="vm.power.addpower==1"><span><img src="../../../images/t01.png" />
+				</span>添加</li>
+				<!-- <li id="edit" ms-if="vm.power.editpower==1"><span><img
+						src="../../../images/t02.png" /> </span>修改</li> -->
+				<li id="delete" ms-if="vm.power.delpower==1"><span><img
+						src="../../../images/t03.png" /> </span>删除</li>
+				<!-- <li id="check" ms-if="vm.power.checkpower==1"><span><img
+						src="../../../images/t03.png" /> </span>审核</li> -->
+						<li id="check" onclick="summation()"><span><img
+						src="../../../images/t02.png" /> </span>汇总</li>
+			</ul>
+
+		</div>
+
+		<table class="tablelist" style="table-layout:fixed;">
+			<thead>
+				<tr>
+					<th class="checkBoxTh"><span class="CheckBoxCss"><input id="checkalls" type="checkbox"
+							ms-click="checkAll" /> </span>
+					</th>
+					<th >{{vm.tableTop.docname}}</th>
+					<th style="width: 100px;">{{vm.tableTop.uploader}}</th>
+					<th style="width: 150px;">{{vm.tableTop.uploaddate}}</th>
+					<th style="width: 150px;">{{vm.tableTop.option}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ms-repeat="vm.data">
+					<td><span class="CheckBoxCss"><input ms-duplex-string="selectId"
+							class="itemCheckBox" type="checkbox" ms-attr-value="el.keyid" />
+					</span></b>
+					</td>
+					<style>
+						.td{overflow:hidden;white-space:nowrap;}
+					</style>
+					<td class="td"><a ms-attr-href="docDetail.html?keyid={{el.keyid}}"><font color="blue">{{el.docname}}</font></a></td>					
+					<td class="td">{{el.uploader}}</td>
+					<td class="td">{{el.uploaddate}}</td>
+					<td class="td">
+						<li id="edit" ms-if="vm.power.editpower==1" >
+							<a ms-attr-href="docAdd.html?keyid={{el.keyid}}"><font color="blue">编辑</font></a>&nbsp;&nbsp;
+							<a id="report" ms-click="baoming(el.keyid,el.docname)" style="cursor:pointer;"><font color="blue">报名</font></a> &nbsp;&nbsp;
+							<a id="issued" ms-click="issued(el.keyid)" style="cursor:pointer;"><font color="blue">下发</font></a> 
+						</li>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+	</div>
+<!-- 汇总 -->
+<div id="huizongdiv" style="top: 0px;left: 0px;z-index: 99;height: 100%;width: 100%;position: fixed;background-color: #fff;display:none;">
+	<div style="padding: 10px;float: left;"><input type="button" name="btback" value="返回" id="btback" onclick="btback()" class="btn"></div>
+	<div style="text-align: center;">
+		<table  class="tablelist" style="table-layout:fixed;width: 80%;margin: 0 auto;">
+		<thead><tr><td>时间</td><td>数量</td></tr></thead>
+			<tbody id="huizong">
+			
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<!-- 蒙板 -->
+<div id="mengban" style="top: 0px;left: 0px;z-index: 120;height: 100%;width: 100%;position: fixed;filter: Alpha(opacity=30); -moz-opacity: 0.3; -khtml-opacity: 0.3;
+            opacity: 0.1; background-color: #000; text-align: center;display:none;">
+	
+</div>
+
+<!-- 报名  -->
+<div id="ernol" style="background-color: #fff;width: 1200px;height: 500px;margin:auto;position: fixed;
+            left:50%;
+            top:50%;margin-left:-600px;
+            margin-top:-250px; z-index: 121;display:none;">
+            <h2 id="ernoltitle" style="text-align: center;margin-top: 10px;font-size: 20px;">报名</h2>
+            <div style="overflow: auto;height: 400px;">
+           <table class="tablelist" style="width: 1150px;margin-left: 24px;margin-top: 5px;">
+           <thead>
+           	<tr><td style="width: 150px;">姓名</td>
+           	<td style="width: 60px;">性别</td>
+           	<td style="width: 100px;">民族</td>
+           	<td style="width: 130px;">联系方式</td>
+           	<td>职务</td>
+           	<td>交通方式</td>
+           	<td style="width: 170px;">到达时间</td>
+           	<td>到达地点</td>
+           	<td>备注</td>
+           	<td style="width: 62px;">
+	           	<ul class="toolbar">
+					<li id="addNewErnol"  >
+						<span>
+							<img onclick="newTrErnol()" src="../../../images/t01.png" />
+						</span>
+					</li>
+				</ul>
+			</td>
+           	</tr>
+           	</thead>
+           	<tbody id="enrols" >
+           		<tr><td >a</td>
+           		<td >男
+            	</td>
+           		<td >a</td>
+           		<td >a</td>
+           		<td >a</td>
+           		<td >a</td>
+           		<td >a</td>
+           		<td >a</td>
+           		<td >a</td>
+           		
+                <td >
+                	
+                	<ul class="toolbar">
+					<li id="deleteEnrol" onclick="deleteenrol(this)">
+						<span>
+							<img  src="../../../images/t03.png" />
+						</span>
+					</li>
+				</ul>
+				<input type="hidden" name="enrolkey" value="123"/>
+                </td></tr>
+           	</tbody>
+           </table>
+           </div>
+           <ul class="forminfo" style="margin-top: 20px;">
+								<li><label> &nbsp;</label><input type="button"
+									name="Button1" value="确认保存" id="Button1" onclick="saveernol()"
+									class="btn" /> &nbsp;
+									
+									<input type="button" name="btback"
+									value="返回" onclick="btback()" class="btn" /></li>
+							</ul>
+</div>
+	<script type="text/javascript">
+		$('.imgtable tbody tr:odd').addClass('odd');
+	</script>
+</body>
+</html>

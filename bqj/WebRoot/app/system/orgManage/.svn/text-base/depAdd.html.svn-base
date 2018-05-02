@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
+<head>
+<title>depAdd.html</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<script src="../../../assets/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+var vm=avalon.define({
+	$id : "depAddCtrl",
+	data:{
+		keyid : "",
+		parentid : "",
+		parentname:"",
+		departmentname : "",
+		departmenton : "",
+		orgkeyid:"",
+		orgname:"",
+		departmentworkarea : "",
+		departmentleader : "",
+		departmentphone : "",
+		deporder : ""
+	},
+	msg : "",
+	orgid :"",
+	msgImg : Public.rootPath()+"/images/ticon.png",
+	selectdata : {},
+	submit : function(){
+		$("#dep_base_form").trigger("validate");
+	}
+});
+
+
+THISPAGE = {
+		init : function() {
+			this.initDom();
+			this.initData();
+			this.initEvent();
+			this.loadGrid();
+		},
+		loadGrid : function() {
+		},//*/
+		initEvent : function() {
+			$("#parentname").click(
+					function() {
+						top.openbuttondialog("选择部门",400, 400, 
+							"system/orgManage/orgDepTreePick.html?orgid="+vm.data.orgkeyid,
+							false, function(item, dialog) {
+								vm.data.parentid = dialog.frame.$("#keyid").val();
+								vm.data.parentname = dialog.frame.$("#departmentname").val();
+								dialog.close();
+								$("#parentname").isValid();
+						});
+			});//*/
+		},
+		initData : function() {
+			var request = Public.urlRequest();
+			if (request.queryString["orgid"] != null
+					&& request.queryString["orgid"].length > 0) {
+				vm.data.orgkeyid = request.queryString["orgid"];
+			}
+			if (request.queryString["keyid"] != null
+					&& request.queryString["keyid"].length > 0) {
+					
+				vm.data.keyid = request.queryString["keyid"];
+				Public.ajaxPost(Public.rootPath() + "/org/dep/editData", "keyid="
+						+vm.data.keyid, function(json) {
+					if (json.status == 001) {
+						vm.data=json.data;
+					} else {
+						top.openeasydialog("error","获取部门信息失败");
+					}
+				});// */
+			}
+			
+		},
+		initDom : function() {
+			document.getElementById('departmentname').focus();
+		},
+		
+	};
+
+function initValidator() {
+	$("#dep_base_form").validator({
+		messages : {
+			required : "请填写{0}"
+		},
+		display : function(e) {
+			var text = $(e).closest(".row-item").find("label").text().trim();
+			return text.substring(0, text.length - 2);
+		},
+		valid : function() {
+			postData();
+		},
+		ignore : ":hidden",
+		theme : "yellow_bottom",
+		timely : 1,
+		stopOnError : true
+	});
+}
+
+$(document).ready(function(e) {
+	// 需要先初始化表单验证配置
+	initValidator();
+	THISPAGE.init();
+});
+</script>
+</head>
+
+<body style="overflow:hidden;width:540px;">
+	<div ms-controller="depAddCtrl">
+		<form action="dep_base_form" method="post" id="dep_base_form">
+			<div class="formbody">
+				<table style="width: 95%">
+					<tr>
+						<td><ul class="forminfo">
+								<li class="row-item"><label for="parentname">上级部门 ： </label> 
+								<input name="parentname" type="text" id="parentname" ms-duplex="data.parentname" class="searchBox"/> 
+								<input name="parentid" type="text" id="parentid" class="dfinput" ms-duplex="data.parentid" style="display: none" />
+								<input name="keyid" type="text" id="keyid" class="dfinput" ms-duplex="data.keyid" style="display: none" />
+								</li>
+							</ul>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label for="UserName"> 部门名称 ：</label>
+									<input name="departmentname" type="text" id="departmentname"
+									ms-duplex="data.departmentname" class="dfinput" maxlength="30"
+									data-rule="required;" placeholder="请输入部门名称" /><font
+									color="red">*</font>
+								</li>
+							</ul></td>
+					</tr>
+
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 部门编号 ：</label><input
+									name="departmenton" ms-duplex="data.departmenton" type="text"  maxlength="30"
+									id="departmenton" class="dfinput" placeholder="请输入部门编号" />
+								</li>
+							</ul></td>
+					</tr>
+
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 部门工作职能 ：</label><input
+									name="departmentworkarea" ms-duplex="data.departmentworkarea"
+									type="text" id="departmentworkarea" class="dfinput"  maxlength="30"
+									placeholder="请输入部门工作职能" />
+								</li>
+							</ul></td>
+					</tr>
+
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 部门领导 ：</label><input
+									name="departmentleader" ms-duplex="data.departmentleader"
+									type="text" id="departmentleader" class="dfinput" maxlength="30"
+									placeholder="请输入部门领导姓名" />
+								</li>
+							</ul></td>
+					</tr>
+
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 部门联系电话 ：</label><input
+									name="departmentphone" ms-duplex="data.departmentphone"
+									type="text" id="departmentphone" class="dfinput"  maxlength="30"
+									placeholder="请输入部门联系电话" />
+								</li>
+							</ul></td>
+					</tr>
+
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 排序 ：</label><input
+									name="departmentorder" ms-duplex="data.deporder"
+									type="text" id="departmentorder" class="dfinput"  maxlength="30"
+									placeholder="请输入部门排序" />
+								</li>
+							</ul></td>
+					</tr>
+				</table>
+			</div>
+			<div style="display:none">
+				<input id="ok" type="button" value="确定" /> 
+				<input id="clear" type="button" value="清理" />
+			</div>
+		</form>
+	</div>
+</body>
+</html>

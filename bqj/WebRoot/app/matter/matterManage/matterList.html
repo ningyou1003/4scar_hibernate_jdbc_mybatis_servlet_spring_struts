@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>待办列表</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script type="text/javascript" src="matterList.js" charset="utf-8"></script>
+<script type="text/css">
+	.searchBox{
+		width:285px; height:32px; line-height:32px; 
+		border-top:solid 1px #a7b5bc; border-left:solid 1px #a7b5bc; 
+		border-right:solid 1px #ced9df; border-bottom:solid 1px #ced9df; 
+		background:url(../../images/inputbg.gif) repeat-x; text-indent:10px;
+		background-image: url('../../images/searchBox.png');
+		background-repeat: no-repeat;background-position:7px 8px;padding-left: 15px;}
+</script>
+</head>
+
+
+<body ms-controller="matterCtrl">
+
+	<div class="rightinfo">
+		<div class="tools">
+
+			<ul class="toolbar">
+				<li id="add" ><span><img src="../../../images/t01.png" />
+				</span>添加</li>
+				<li id="delete" ><span><img
+						src="../../../images/t03.png" /> </span>删除</li>
+			</ul>
+			<ul class="toolbar1">
+				<li id="check"><span><img
+						src="../../../images/ico06.png" /> </span>查询</li>
+			</ul>
+		</div>
+		<div id="sel_div" style="display: none">
+			<ul class="seachform">
+				<li><label> 标题：</label> <input name="TitleTextBox" type="text"
+					id="title" ms-duplex="select.title" class="scinput" />
+				</li>
+				<li><label> &nbsp;</label><input type="submit" name="SelButton"
+					value="查询" id="SelButton" class="scbtn" />
+				</li>
+			</ul>
+		</div>
+		<table class="tablelist" style="table-layout:fixed;">
+			<thead>
+				<tr>
+					<th class="checkBoxTh"><span class="CheckBoxCss"><input id="checkalls" type="checkbox"
+							ms-click="checkAll" /> </span>
+					</th>
+					<th >{{vm.tableTop.title}}</th>
+					<th style="width: 150px;">{{vm.tableTop.publishtime}}</th>
+					<th style="width: 100px;">{{vm.tableTop.username}}</th>
+					<th style="width: 100px;">{{vm.tableTop.status}}</th>
+					<th style="width: 150px;">{{vm.tableTop.option}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ms-repeat="vm.data">
+					<td><span class="CheckBoxCss"><input ms-duplex-string="selectId"
+							class="itemCheckBox" type="checkbox" ms-attr-value="el.keyid" />
+					</span></b>
+					</td>
+					<style>
+						.td{overflow:hidden;white-space:nowrap;}
+					</style>
+					<td class="td">		
+						<a id="pageChange" ms-attr-href="matterDetail.html?keyid={{el.keyid}}&status={{el.status}}" style="cursor:pointer;"><font color="blue">{{el.title}}</font></a>
+					</td>
+					<td class="td">{{el.publishtime}}</td>
+					<td class="td">{{el.username}}</td>
+					<td class="td">
+						<li ms-if="vm.status==0">待办</li>
+						<li ms-if="vm.status==1">已办</li>
+					</td>
+					<td class="td">
+						<li id="edit"  ><a ms-attr-href="matterAdd.html?keyid={{el.keyid}}&status={{el.status}}"><font color="blue">编辑</font></a></li>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+	</div>
+
+	<script type="text/javascript">
+		$('.imgtable tbody tr:odd').addClass('odd');
+	</script>
+</body>
+</html>

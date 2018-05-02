@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+<link href="../../../assets/ui/skins/Aqua/css/ligerui-all.css"
+	rel="stylesheet" type="text/css" />
+<script src="../../../assets/ui/js/core/base.js" type="text/javascript"></script>
+<script src="../../../assets/ui/js/plugins/ligerGrid1.3.2.js"
+	type="text/javascript"></script>
+<script src="../../../assets/ui/js/plugins/ligerResizable.js"
+	type="text/javascript"></script>
+<script src="../../../assets/ui/js/plugins/ligerDrag.js"
+	type="text/javascript"></script>
+<script src="roleedit.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div ms-controller="roleeditCtrl">
+		<form name="base_form" method="post" id="base_form">
+			<div class="formbody">
+				<div class="formtitle">
+					<input name="sdfdsfdsf" type="text" id="sdfdsfdsf"
+						style="display: none" /> <input name="TB_KeyId" type="text"
+						id="TB_KeyId" style="display: none" ms-duplex="data.keyid" /> <span>基本信息</span>
+				</div>
+				<table style="width: 95%">
+					<tr>
+						<td colspan="2">
+							<ul class="forminfo">
+								<li><label> &nbsp;</label><input type="button"
+									name="Button1" value="确认保存" id="Button1" ms-click="submit()"
+									class="btn" /> &nbsp;<input type="button" name="btback"
+									value="返回" id="btback" class="btn" /></li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label for="UserName"> 角色名称 ：</label>
+									<input name="roleName" type="text" id="roleName" maxlength="100"
+									ms-duplex="data.name" class="dfinput" data-rule="required;"
+									placeholder="请输入100个汉字以内的角色名称" /><font color="red">*</font></li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label for="UserName"> 角色等级 ：</label>
+									<select ms-duplex="selected" class="searchBox">
+                						<option  ms-repeat="vm.Rolelevel">{{el}}</option>
+            						</select></li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 排序 ：</label><input
+									name="orderId" ms-duplex="data.orderid" type="text" maxlength="11"
+									id="orderId" class="dfinput" data-rule="required;positive;"
+									placeholder="请输入排序" /><font color="red">*</font></li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+				<div id="Powerdiv">
+					<div class="formtitle">
+						<span>权限管理</span>
+					</div>
+					<table width="100%">
+						<tr>
+							<td>
+								<div id="maingrid"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			</form>
+	</div>
+</body>
+</html>

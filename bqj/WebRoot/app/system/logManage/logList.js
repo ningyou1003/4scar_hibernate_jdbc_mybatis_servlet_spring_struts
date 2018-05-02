@@ -1,0 +1,184 @@
+var vm = avalon.define({
+	$id : "logCtrl",
+	selectId : [],
+	tableTop : {
+		module : "操作模块",
+		username : "用户帐号",
+//		department : "所属部门",
+		uip : "IP地址",
+		time : "操作时间",
+		ocontent : "操作内容"
+	},
+	msg : "",
+	notify : "",
+	msgImg : Public.rootPath() + "/images/ticon.png",
+	data : {},
+	select : {
+		name : "",
+		region:"",
+		regionCode : "",
+		org:"",
+		orgId : "",
+		beginTime : "",
+		endTime : ""
+	},
+	selectDate : {},
+	power : {
+		addpower : 0,
+		editpower : 0,
+		delpower : 0,
+		apppower : 0
+	},
+	checkAll : function() {
+		if (this.checked) {
+			for(var i=0;i<vm.data.length;i++){
+        		vm.selectId.push(vm.data[i].keyid);
+        	}   
+		} else {
+        	vm.selectId.clear();
+		}
+	}
+});
+
+THISPAGE = {
+	init : function() {
+		this.loadGrid();
+		this.addEvent();
+	},
+	loadGrid : function() {
+		if(vm.select.region==""||vm.select.region==undefined){
+			vm.select.regionCode="";
+		};
+		if(vm.select.org==""||vm.select.org==undefined){
+			vm.select.orgId="";
+		};
+		
+		//从cookie获取页码
+		var logPage = $.cookie('logPageNumber');
+		logPage==null?1:logPage;
+		
+		Public.ajaxPost(Public.rootPath() + '/log/logList', {
+			'page' : logPage,
+			'LogSelectVO' : vm.select.$model
+		}, function(json) {
+        	$("#checkalls").removeAttr("checked");
+			vm.data = json.data.page.list;
+			vm.power = json.data.rp;
+			vm.selectId = [];
+
+			THISPAGE.initPage(json.data.page);
+		});
+	},
+	initPage : function(pageData) {
+		// 加载分页控件
+		$("#PageInfo").pagePlugin({
+			totalPage : pageData.totalPage,
+			pageNumber : pageData.pageNumber,
+			totalRow : pageData.totalRow,
+			requst : function(index) {
+				// 存储页码到cookie 
+            	$.cookie('logPageNumber', index, {path: '/'}); 
+            	
+				Public.ajaxPost(Public.rootPath() + '/log/logList', {
+					'page' : index,
+					'LogSelectVO' : vm.select.$model
+				}, function(json) {
+		        	$("#checkalls").removeAttr("checked");
+					vm.data = json.data.page.list;
+					vm.power = json.data.rp;
+					vm.selectId = [];
+				});
+			}
+		});
+	},
+	imgUrl : function(url) {
+		return htmlRootPath + url;
+	},
+	addEvent : function() {
+		$("#region").click(
+				function() {
+					top.openbuttondialog("选择区域", 400, 400,
+							"system/areaManage/regionTreePick.html", false,
+							function(item, dialog) {
+								vm.select.regionCode = dialog.frame.$("#regioncode").val();
+								vm.select.region = dialog.frame.$("#region").val();
+								dialog.hide();
+								$("#region").isValid();
+							});
+				}
+			);
+		
+
+		$("#edit").click(
+				function(t) {// 查看
+					if (vm.selectId.length == 0) {
+						top.openeasydialog("warn",
+								"请选择要编辑的系统日记");
+					} else {
+						if (vm.selectId.length == 1) {
+							window.location = "dicadd.html?keyid="
+									+ vm.selectId[0];
+						} else {
+							top.openeasydialog("warn", "请不要一次选择多个系统日记编辑");
+						}
+					}
+				});
+
+		$("#delete").click(
+				function(t) {
+					if (vm.selectId.length >= 1) {
+						top.openeasydialog("warning",
+								"确认要删除吗？", function(yes) {
+									if (yes) {
+										Public.ajaxPost(Public.rootPath()
+												+ "/log/deleteLog", "keyids="
+												+ vm.selectId, function(json) {
+											if (json.status == 001) {
+												THISPAGE.loadGrid();
+											} else {
+												top.openeasydialog("error",
+														"删除系统日记时出错");
+											}
+										});
+									}
+								});
+					} else {
+						top.openeasydialog("warn", "请选择要删除的系统日记．");
+					}
+					
+				});
+
+		$("#SelButton").click(function() {
+			THISPAGE.loadGrid();
+		});
+
+		$("#check").click(function() {
+			if ($("#sel_div").is(":hidden")) {
+				$("#sel_div").fadeIn();
+			} else {
+				$("#sel_div").fadeOut();
+			}
+		});
+	}
+};
+
+function selectOrg(){
+	top.openbuttondialog("选择工作单位", 400, 400,
+            "system/areaManage/areaOrgTreeView.html", false,
+            function (item, dialog) {
+                if (dialog.frame.$("#datatype").val() != "isorg") {
+                    top.openeasydialog("warn", "您选择的不是工作单位，请重新选择。");
+                    return;
+                } else {
+                    vm.select.org = dialog.frame.$("#name").val();
+                    vm.select.orgId = dialog.frame.$("#keyid").val();
+                    $("#org").isValid();
+                    dialog.hide();
+                }
+            });
+	
+}
+
+$(document).ready(function() {
+	THISPAGE.init();
+});

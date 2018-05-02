@@ -1,0 +1,79 @@
+package com.emindsoft.zsj.cases.model;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.emindsoft.zsj.base.model.BaseModel;
+import com.emindsoft.zsj.vo.CasesSelectVO;
+import com.jfinal.plugin.activerecord.Page;
+
+import cn.dreampie.tablebind.TableBind;
+
+@TableBind(tableName = "c_case",pkName = "KeyId")
+public class Big extends BaseModel<Big>{
+	
+	private static final long serialVersionUID = 7145502123761776626L;
+	public static Big dao = new Big();
+	public static String table = "c_case";
+	
+	public Big loadBigDetail(String keyid) {
+		if (!StringUtils.isEmpty(keyid)) {
+			return findFirst("select * from c_case c where c.keyid='"+keyid+"' ");
+		} else {
+			return null;
+		}
+	}
+
+	public boolean deleteBigByIds(String[] keyids) {
+		return super.deleteByIds(keyids, table);
+		
+	}
+
+	public Page<Big> page(int pageNo, int pageSize, CasesSelectVO caseVO,String uid,String type,String chooseRegionId,String userRegionId,String ispublic) {
+		if(!StringUtils.isEmpty(chooseRegionId)&& !"undefined".equals(chooseRegionId)&& !chooseRegionId.equals(userRegionId)){
+			String sqlExceptSelect = " FROM c_case c where c.Type='"+type+"' and c.regionId='"+chooseRegionId+"' and status<>0 ";
+			if (!StringUtils.isEmpty(caseVO.getName())) {
+				sqlExceptSelect += " and c.Title like '%" + caseVO.getName()
+						+ "%' ";
+			}
+			if(StringUtils.isNotEmpty(ispublic)){
+				sqlExceptSelect += "and c.ispublic='" +ispublic+"'";
+			}
+			sqlExceptSelect += " ORDER BY c.Time DESC";
+			return this
+					.paginate(
+							pageNo,
+							pageSize,
+							"select c.*,(SELECT u.RelaName FROM s_user u WHERE u.KeyID=c.reportPersonId) as reporter",
+							sqlExceptSelect);
+		}else{
+			String sqlExceptSelect = " FROM c_case c where c.Type='"+type+"' and c.regionId='"+userRegionId+"' and status<>0 ";
+			if (!StringUtils.isEmpty(caseVO.getName())) {
+				sqlExceptSelect += " and c.Title like '%" + caseVO.getName()
+						+ "%' ";
+			}
+			if(StringUtils.isNotEmpty(ispublic)){
+				sqlExceptSelect += "and c.ispublic='" +ispublic+"'";
+			}
+			sqlExceptSelect += " ORDER BY c.Time DESC";
+			return this
+					.paginate(
+							pageNo,
+							pageSize,
+							"select c.*,(SELECT u.RelaName FROM s_user u WHERE u.KeyID=c.reportPersonId) as reporter",
+							sqlExceptSelect);
+		}
+		
+	}
+
+	public Page<Big> page(int pageNo, int pageSize,String type){
+		return this.paginate(pageNo, pageSize, "SELECT *"," FROM c_case WHERE type='" + type + "' AND IsPublic = 1 ORDER BY Time DESC");
+	}
+	
+	public Page<Big> page(int pageNo, int pageSize,String type,String regioncode){
+		return this.paginate(pageNo, pageSize, "SELECT *"," FROM  c_case WHERE regionid='"+regioncode+"' AND type='" + type + "' AND IsPublic = 1 and status<>0  ORDER BY Time DESC");
+	}
+	
+	public Page<Big> pageAndroid(int pageNo, int pageSize,String type,String regionId){
+		return this.paginate(pageNo, pageSize, "SELECT *"," FROM c_case WHERE type='" + type + "' AND IsPublic = 1 AND regionId='" + regionId + "' ORDER BY Time DESC");
+	}
+}

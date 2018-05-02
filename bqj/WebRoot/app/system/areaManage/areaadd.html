@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>areaadd.html</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	<script src="../../../assets/js/common.js" type="text/javascript"></script>
+	<script src="areaadd.js" type="text/javascript"></script>
+</head>
+
+<body>
+	<div ms-controller="areaaddCtrl">
+		<form action="base_form" method="post" id="base_form">
+			<!-- <div class="place">
+				<span>位置：</span>
+				<ul class="placeul">
+					<li>首页</li>
+					<li>系统设置</li>
+					<li>区域管理</li>
+					<li>区域编辑</li>
+				</ul>
+			</div> -->
+
+			<div class="formbody">
+				<div class="formtitle">
+					<input name="sdfdsfdsf" type="text" id="sdfdsfdsf"
+						style="display: none" /> <input name="TB_KeyId" type="text"
+						id="TB_KeyId" style="display: none" /> <span>基本信息</span>
+				</div>
+				<table style="width: 95%">
+
+					<tr>
+						<td><ul class="forminfo">
+								<li class="row-item"><label for="parent">
+										上级归属地 ： </label> <input name="ParentList" data-rule="required;"
+									type="text" id="ParentList" ms-duplex="data.parent" class="searchBox" style="width:280px"/> 
+									<input name="ParentID" type="text"
+									id="ParentID" class="dfinput" ms-duplex="data.parentcode"
+									style="display: none" /><font color="red">*</font></li>
+							</ul>
+							<br />
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label for="AreaName"> 归属地名称 ：</label>
+									<input name="areaName" type="text" id="areaName" maxlength="15"
+									ms-duplex="data.region" class="dfinput" data-rule="required;"
+									placeholder="请输入15个汉字以内的区域名称" /><font color="red">*</font>
+								</li>
+							</ul> <br />
+						<br /></td>
+					</tr>
+					<!-- 后台自动生成区域编码，不需要客户手动添加 -->
+					<!-- <tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 归属地代码 ：</label><input
+									name="areaId" ms-duplex="data.regioncode" type="text"  maxlength="15"
+									id="areaId" class="dfinput" data-rule="required;regionCode;"
+									placeholder="请输入区域编号" /><font color="red">*</font>
+								</li>
+							</ul> <br />
+						<br /></td>
+					</tr> -->
+
+					<tr>
+						<td>
+							<ul class="forminfo">
+								<li class="row-item"><label> 简介 ：</label><textarea
+										name="description" ms-duplex="data.description"
+										id="description" class="dfinput"
+										placeholder="" ></textarea>
+								</li>
+							</ul> <br />
+							<br /></td>
+					</tr>
+
+					<tr>
+						<td colspan="2">
+							<ul class="forminfo">
+								<li><label> &nbsp;</label><input type="button"
+									name="Button1" value="确认保存" id="Button1" ms-click="submit()"
+									class="btn" /> &nbsp;<input type="button" name="btback"
+									value="返回" id="btback" class="btn" />
+								</li>
+							</ul></td>
+					</tr>
+
+
+				</table>
+			</div>
+
+			<!-- 2015.04.15 -->
+			<div class="tip" style="height: 400px;" id="Sel_Seiframe">
+				<div class="tiptop" id="tiptop" title="按住鼠标可拖动">
+					<span>选择上级区域</span><a></a>
+				</div>
+				<div class="tipinfoSel">
+					<iframe frameborder="no" style="height: 100%; width: 95%"
+						id="iframenameSe" name="iframenameSe"> </iframe>
+				</div>
+				<div class="tipbtn">
+					<input name="" id="sureS_Parent" type="button" class="sure"
+						value="确定" />&nbsp; <input name="" id="cancelS_Parent"
+						type="button" class="cancel" value="取消" />
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

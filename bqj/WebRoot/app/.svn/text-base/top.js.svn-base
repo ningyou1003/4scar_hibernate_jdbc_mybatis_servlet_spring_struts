@@ -1,0 +1,110 @@
+var vm = avalon.define({
+    $id: "topCtrl",
+    topMenuList: {},
+    user: {
+        userid: ""
+    },
+    islogout: false,
+    regionId: "450000000",
+    flow_todo: "",
+    data:"",
+    comment_todo: ""
+});
+
+THISPAGE = {
+    init: function () {
+        //		this.initMenu();
+        this.initUser();
+        //		this.addEvent();
+        this.initData();
+    },
+    initData: function () {
+        var a = $.cookie('zsj_cookie');
+        vm.regionId = $.cookie('chooseRegionId');
+        Public.ajaxPost(Public.rootPath() + '/area/loadAllParentArea?regioncode=' + vm.regionId, {
+    }, function (json) {
+        if (json.status == 1) {
+            getLocation(json.data);
+        }
+    });
+    Public.ajaxPost(Public.rootPath() + '/flow/flowList', {//获取待办事项条数
+        "status": 0
+    }, function (json) {
+        if (json.status == 1) {
+            vm.flow_todo = json.data.totalRow;
+        }
+    });
+    Public.ajaxPost(Public.rootPath() + '/interact/reply/getUnReadReply', {//获取未读评论条数
+}, function (json) {
+    if (json.status == 1) {
+        vm.comment_todo = json.data;
+    }
+});
+},
+initMenu: function () {
+    Public.ajaxGet(Public.rootPath() + "/loadTop", {}, function (json) {
+        vm.topMenuList = json;
+    });
+},
+initUser: function () {
+    Public.ajaxGet(Public.rootPath() + "/user/info", {}, function (json) {
+        vm.user = json.data;
+        vm.user.userid = json.data.keyid;
+    });
+},
+addEvent: function () {
+    // 顶部导航切换
+    $("#museul li a").click(function () {
+        $("#museul li a.selected").removeClass("selected")
+        $(this).addClass("selected");
+    });
+}
+
+};
+
+function getComment(data) {
+    vm.comment_todo = 0;
+}
+function getLocation(data) {
+    $("#arealink").html("");
+    var len = data.length;
+    var item = ""
+    for (i = 0; i < len; i++) {
+    	
+        var region = data[i].region;
+       // alert(region);
+        
+        var regioncode = data[i].regioncode;
+        item += '<a href="javascript:" style="color: #fff;font-size:14px"  onclick="xhArea(' + regioncode + ')">' + region + '</a>>';
+    }
+    item = item.substring(0, item.length - 1);
+    $("#arealink").append(item);
+}
+
+function onlineuser(){
+	Public.ajaxPost(Public.rootPath() + "/user/getOnlineUser",{},
+			function(json){
+				$("#onlineuser").html("在线人数："+json.length);
+				$("#onlineuser").click(function(){
+					AddTabUrl("在线用户","onlineUsers.html");
+					
+				});
+	});
+}
+
+function ipArea(ip){
+	$.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip='+ip, function(_result){ 
+		alert(ip);
+		
+		if(remote_ip_info.ret==1){   
+			alert(remote_ip_info.province+","+remote_ip_info.city);
+			} else {   
+			alert("未获取到用户ip");
+			}  
+	});
+}
+$(document).ready(function () {
+    THISPAGE.init();
+    onlineuser();
+    var t1 = window.setInterval(onlineuser,10000); 
+});

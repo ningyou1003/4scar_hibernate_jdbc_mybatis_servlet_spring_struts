@@ -1,0 +1,181 @@
+package com.emindsoft.zsj.flow;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
+import cn.dreampie.tablebind.TableBind;
+
+import com.emindsoft.zsj.base.model.BaseModel;
+import com.emindsoft.zsj.util.PropertiesContent;
+import com.jfinal.plugin.activerecord.ActiveRecordException;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
+
+@TableBind(tableName = "flow_todo", pkName = "KeyId")
+public class Flow extends BaseModel<Flow>{
+	public static Flow dao = new Flow();
+	public static String table = "flow_todo";
+	
+	public Page<Flow> page(int pageNumber, int pageSize, String userId, String status) {
+		String sql = "SELECT DISTINCT FlowType FROM "+table+" WHERE status="+status+"";
+		List<Flow> flowTypes = find(sql);
+		List<String> types = new ArrayList<String>();
+		for(Flow flow:flowTypes){
+			types.add(flow.getStr("flowType"));
+		}
+		List<Flow> flowList = new ArrayList<Flow>();
+		String relatedTable = "";
+		for(String type:types){
+			System.out.println(type);
+			relatedTable = PropertiesContent.get(type);
+			if (relatedTable==null) {
+				continue;
+			}
+			//弃用//sql = "SELECT r.keyid,r.title,f.starttime,f.FlowType,f.finishtime FROM flow_todo f ,"+relatedTable+" r WHERE f.status="+status+" AND f.UserId='"+userId+"' AND f.FlowId=r.keyid ";
+			//增加s_user表，获取RelaName参数
+			//sql = "SELECT r.keyid,r.title,f.starttime,f.FlowType,f.finishtime,s.RelaName,a.Region " +" FROM flow_todo f ,"+relatedTable+" r,s_user s " + " , s_area a " +" WHERE f.status="+status+" AND f.UserId='"+userId+"' AND f.FlowId=r.keyid and s.KeyId=r.reportPersonId  and s.RegionId= a.RegionCode";
+			if ("d_document".equals(relatedTable)) {
+				sql="SELECT COUNT(DISTINCT t1.keyid), t1.*,t2.* FROM "+ 
+						 "(SELECT DISTINCT r1.keyid,r1.docname as title,f1.starttime,f1.FlowType,f1.finishtime,f1.isRead FROM flow_todo f1 ,"+relatedTable+" r1 WHERE f1.status=0 AND f1.UserId='"+userId+"' AND f1.FlowId=r1.keyid ) t1 " +
+						 "LEFT JOIN "+
+						"(SELECT  r2.keyid as keyid2,s.RelaName,a.Region  FROM flow_todo f2 ,"+relatedTable+" r2,s_user s  , s_area a  WHERE f2.status=0 AND f2.UserId='"+userId+"' AND f2.FlowId=r2.keyid and s.KeyId=r2.uploader  and s.RegionId= a.RegionCode) t2 " +
+						" ON t1.keyid=t2.keyid2  group by t1.keyid";
+			}else if("d_notice".equals(relatedTable)){
+				
+				sql="SELECT COUNT(DISTINCT t1.keyid), t1.*,t2.* FROM "+ 
+						 "(SELECT DISTINCT r1.keyid,r1.title,f1.starttime,f1.FlowType,f1.finishtime,f1.isRead FROM flow_todo f1 ,"+relatedTable+" r1 WHERE f1.status=0 AND f1.UserId='"+userId+"' AND f1.FlowId=r1.keyid ) t1 " +
+						 "LEFT JOIN "+
+						"(SELECT  r2.keyid as keyid2,s.RelaName,a.Region  FROM flow_todo f2 ,"+relatedTable+" r2,s_user s  , s_area a  WHERE f2.status=0 AND f2.UserId='"+userId+"' AND f2.FlowId=r2.keyid and s.KeyId=r2.publisherId  and s.RegionId= a.RegionCode) t2 " +
+						" ON t1.keyid=t2.keyid2  group by t1.keyid";
+			}else if("p_silhouette".equals(relatedTable) ){
+				
+				sql="SELECT COUNT(DISTINCT t1.keyid), t1.*,t2.* FROM "+ 
+						 "(SELECT DISTINCT r1.keyid,r1.title,f1.starttime,f1.FlowType,f1.finishtime,f1.isRead FROM flow_todo f1 ,"+relatedTable+" r1 WHERE f1.status=0 AND f1.UserId='"+userId+"' AND f1.FlowId=r1.keyid ) t1 " +
+						 "LEFT JOIN "+
+						"(SELECT  r2.keyid as keyid2,r2.SourceID,s.RelaName,a.Region  FROM flow_todo f2 ,"+relatedTable+" r2,s_user s  , s_area a  WHERE f2.status=0 AND f2.UserId='"+userId+"' AND f2.FlowId=r2.keyid and s.KeyId=r2.reportPersonId  and s.RegionId= a.RegionCode) t2 " +
+						" ON t1.keyid=t2.keyid2  group by t1.keyid";
+			}else if("p_video".equals(relatedTable) ){
+				
+				sql="SELECT COUNT(DISTINCT t1.keyid), t1.*,t2.* FROM "+ 
+						 "(SELECT DISTINCT r1.keyid,r1.title,f1.starttime,f1.FlowType,f1.finishtime,f1.isRead FROM flow_todo f1 ,"+relatedTable+" r1 WHERE f1.status=0 AND f1.UserId='"+userId+"' AND f1.FlowId=r1.keyid ) t1 " +
+						 "LEFT JOIN "+
+						"(SELECT r2.keyid as keyid2,r2.VideoImgID,r2.VideoSourceID,s.RelaName,a.Region  FROM flow_todo f2 ,"+relatedTable+" r2,s_user s  , s_area a  WHERE f2.status=0 AND f2.UserId='"+userId+"' AND f2.FlowId=r2.keyid and s.KeyId=r2.reportPersonId  and s.RegionId= a.RegionCode) t2 " +
+						" ON t1.keyid=t2.keyid2  group by t1.keyid";
+			}else {
+				
+			
+			sql="SELECT COUNT(DISTINCT t1.keyid), t1.*,t2.* FROM "+ 
+			 "(SELECT DISTINCT r1.keyid,r1.title,f1.starttime,f1.FlowType,f1.finishtime,f1.isRead FROM flow_todo f1 ,"+relatedTable+" r1 WHERE f1.status=0 AND f1.UserId='"+userId+"' AND f1.FlowId=r1.keyid ) t1 " +
+			 "LEFT JOIN "+
+			"(SELECT r2.keyid as keyid2,s.RelaName,a.Region  FROM flow_todo f2 ,"+relatedTable+" r2,s_user s  , s_area a  WHERE f2.status=0 AND f2.UserId='"+userId+"' AND f2.FlowId=r2.keyid and s.KeyId=r2.reportPersonId  and s.RegionId= a.RegionCode) t2 " +
+			" ON t1.keyid=t2.keyid2  group by t1.keyid";
+			}
+			flowList.addAll(find(sql));
+			List<Flow> newflowList = new ArrayList<Flow>();
+			
+			
+			
+			System.out.println(sql);
+		}
+		
+		if("0".equals(status)){
+			Collections.sort(flowList, new Comparator<Flow>() {
+				 /*  
+			     * int compare(Flow f1, Flow f2) 返回一个基本类型的整型，  
+			     * 返回负数表示：f1 大于 f2，  
+			     * 返回0 表示：f1 等于 f2，  
+			     * 返回正数表示：f1 小于 f2。  
+			     */  
+
+				@Override
+				public int compare(Flow o1, Flow o2) {
+					Timestamp st1 = o1.getTimestamp("starttime");
+					Timestamp st2 = o2.getTimestamp("starttime");
+			        //按照待办表中startTime升序排列 
+			        if(st1.before(st2)){  
+			            return 1;  
+			        }  
+			        if(st1.after(st2)){  
+			            return -1;  
+			        }  
+			        return 0;  
+				}  
+			});
+		}
+		if("1".equals(status)){
+			Collections.sort(flowList, new Comparator<Flow>() {
+				 /*  
+			     * int compare(Flow f1, Flow f2) 返回一个基本类型的整型，  
+			     * 返回负数表示：f1 大于 f2，  
+			     * 返回0 表示：f1 等于 f2，  
+			     * 返回正数表示：f1 小于 f2。  
+			     */  
+
+				@Override
+				public int compare(Flow o1, Flow o2) {
+					Timestamp st1 = o1.getTimestamp("finishtime");
+					Timestamp st2 = o2.getTimestamp("finishtime");
+			        //按照待办表中startTime升序排列 
+			        if(st1.before(st2)){  
+			            return 1;  
+			        }  
+			        if(st1.after(st2)){  
+			            return -1;  
+			        }  
+			        return 0;  
+				}  
+			});
+		}
+		return paginate(pageNumber, pageSize, flowList);
+	}
+	
+	public Page<Flow> paginate(int pageNumber, int pageSize, List<Flow> flowList) {
+		if (pageNumber < 1 || pageSize < 1)
+			throw new ActiveRecordException("pageNumber and pageSize must be more than 0");
+		
+		long totalRow = 0;
+		int totalPage = 0;
+		List result = flowList;
+		int size = result.size();
+		if (size >= 1)
+			totalRow = result.size();
+		else
+			return new Page<Flow>(new ArrayList<Flow>(0), pageNumber, pageSize, 0, 0);	// totalRow = 0;
+		
+		totalPage = (int) (totalRow / pageSize);
+		if (totalRow % pageSize != 0) {
+			totalPage++;
+		}
+		if (totalRow<pageSize*pageNumber) {
+			pageSize=(int) totalRow%pageSize;
+		}
+		return new Page<Flow>(flowList.subList((pageNumber-1)*pageSize, pageNumber*pageSize), pageNumber, pageSize, totalPage, (int)totalRow);
+	}
+	public void updateTable(String flowType, String flowId){
+		String tableName = PropertiesContent.get(flowType);
+		if(!StringUtils.isEmpty(tableName)){
+			Db.update("UPDATE "+tableName+" SET status=1 WHERE KeyId='"+flowId+"'");
+		}
+	}
+	
+	public void reportTable(String flowType, String flowId){//上报后，对应得数据表 状态变成3，方便前端做判断
+		String tableName = PropertiesContent.get(flowType);
+		if(!StringUtils.isEmpty(tableName)){
+			Db.update("UPDATE "+tableName+" SET status=3 WHERE KeyId='"+flowId+"'");
+		}
+	}
+	
+	public void loadType(String tab , String kid){
+		
+	}
+	
+	public Flow FindByFlowid(String flowid,String userid){
+		String sql="select * from "+table+" where FlowId='"+flowid+"' and UserId='"+userid+"'";
+		return findFirst(sql);
+	}
+}

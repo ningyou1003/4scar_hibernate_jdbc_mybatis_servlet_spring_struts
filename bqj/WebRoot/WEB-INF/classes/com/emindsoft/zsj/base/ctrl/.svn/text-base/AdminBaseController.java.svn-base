@@ -1,0 +1,173 @@
+package com.emindsoft.zsj.base.ctrl;
+
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.fastjson.JSON;
+import com.emindsoft.zsj.system.model.RolePower;
+import com.emindsoft.zsj.system.model.RoleUser;
+import com.emindsoft.zsj.system.model.User;
+import com.emindsoft.zsj.util.PropertiesContent;
+import com.emindsoft.zsj.util.Tools;
+import com.emindsoft.zsj.util.TypeConverter;
+import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.activerecord.Table;
+import com.jfinal.plugin.activerecord.TableMapping;
+
+/**
+ * 后台管理基础Controller
+ * 
+ * @author ym
+ */
+public abstract class AdminBaseController<M extends Model<M>> extends BaseController<M> {
+
+	protected int getPageNo() {
+		return this.getParaToInt("page", 1);
+	}
+
+	protected int getPageSize() {
+		String pageSize = getPara("pageSize");
+		if(StrKit.isBlank(pageSize)){
+			pageSize = getCurrentPageSize();
+		}
+
+		if(StringUtils.isEmpty(pageSize) || pageSize.equals("") || pageSize.equals("null")){
+			return 10;
+		}else{
+			return Integer.parseInt(pageSize);
+		}
+	}
+
+	protected Model<M> get(String id) {
+		if (StringUtils.isEmpty(id))
+			return null;
+		try {
+			Model<M> model_ = modelClass.newInstance();
+			return model_.findById(id);
+		} catch (Exception e) {
+			log.error("查询Model异常，id：" + id, e);
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected M getModel() throws Exception {
+		return (M) getModel2(modelClass);
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected Model getModel2(Class clz) throws Exception {
+		HttpServletRequest request = this.getRequest();
+		try {
+			Model model_ = (Model) clz.newInstance();
+			Table tableInfo = TableMapping.me().getTable(clz);
+			model_.getAttrNames();
+			Enumeration<String> attrNames = request.getParameterNames();
+			while (attrNames.hasMoreElements()) {
+				String attr = attrNames.nextElement();
+				Class<?> colType = null;
+				if (tableInfo.hasColumnLabel(attr.toLowerCase()))
+					colType = tableInfo.getColumnType(attr.toLowerCase());
+				if (tableInfo.hasColumnLabel(attr.toUpperCase())) {
+					colType = tableInfo.getColumnType(attr.toUpperCase());
+				}
+				if (colType != null) {
+					String value = request.getParameter(attr);
+					model_.set(
+							attr.toLowerCase(),
+							value != null ? TypeConverter.convert(colType,
+									value) : null);
+				}
+			}
+			/** 从request流中取json */
+			if (model_.getAttrValues() == null
+					|| model_.getAttrValues().length == 0) {
+				String json = Tools.inputStream2String(this.getRequest()
+						.getInputStream());
+				model_ = JSON.parseObject(json, model_.getClass());
+			}
+			return model_;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	public boolean hasPermission(String userId, String permission){
+		String sql = "select rp.permission from " + User.table + " u, " + RoleUser.table + " ur, " + RolePower.table + " rp " +
+				" where u.keyId=ur.userId and ur.roleId=rp.objectId and u.keyId=?";
+		List<String> list = Db.query(sql, userId);
+		for(String p : list){
+			if(StrKit.isBlank(p)){
+				continue;
+			}
+
+			if(p.contains(permission+",")){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public String getPermission(String pid){
+		return RolePower.dao.getPermission(pid, getCurrentUserId());
+	}
+
+	public void processAttachment(String relateId){
+		String randomNum = getPara("randomNum");
+		if(StrKit.notBlank(randomNum)){
+			Db.update("update base_attachment set relateId=? where relateId=?", relateId, randomNum);
+		}
+	}
+	
+	public void processAttachment(String relateId, String relateId1){
+		String randomNum = getPara("randomNum");
+		String randomNum1 = getPara("randomNum1");
+		if(StrKit.notBlank(randomNum)){
+			Db.update("update base_attachment set relateId=? where relateId=?", relateId, randomNum);
+		}
+		if(StrKit.notBlank(randomNum1)){
+			Db.update("update base_attachment set relateId=? where relateId=?", relateId1, randomNum1);
+		}
+	}
+	
+	public void processAttachment(String relateId, String relateId1, String relateId2){
+		String imgID = getPara("imgID");
+		String videoID = getPara("videoID");
+		String videoSourceID = getPara("videoSourceID");
+		if(StrKit.notBlank(imgID)){
+			Db.update("update base_attachment set relateId=? where relateId=?", relateId, imgID);
+		}
+		if(StrKit.notBlank(videoID)){
+			Db.update("update base_attachment set relateId=? where relateId=?", relateId1, videoID);
+		}
+		if(StrKit.notBlank(videoSourceID)){
+			Db.update("update base_attachment set relateId=? where relateId=?", relateId2, videoSourceID);
+		}
+	}
+	
+	/**
+	 * 根据手机端用户登录状态获取对应的区域编码
+	 * @return
+	 */
+	public String getRegionCodeForApp() {
+		String userid = getCurrentUserId();
+		String regionCode;
+		String chooseRegionId = getPara("regionid");//选择的区域编码
+		if(StringUtils.isEmpty(chooseRegionId)){//如果未选择区域
+			if(!StringUtils.isEmpty(userid)){//如果是登录状态，默认区域为用户所在区域
+				regionCode = getCurrentUserRegionId();
+			} else {
+				regionCode = PropertiesContent.get("gxRegionCode");
+			}
+		} else {
+			regionCode = chooseRegionId;
+		}
+		return regionCode;
+	}
+}

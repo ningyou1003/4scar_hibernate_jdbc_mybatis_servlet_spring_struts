@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无文件名</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <script type="text/javascript" src="../../../assets/js/jquery.js"></script>
+    <script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../assets/js/flow.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="formulaIndex.js" charset="utf-8"></script>
+    <link href="../../../assets/js/magicthumb/magicthumb.css" rel="stylesheet" type="text/css" />
+    <script src="../../../assets/js/magicthumb/magicthumb-packed.js" type="text/javascript"></script>
+    <style>
+        .Contentbox_bar11 li
+        {
+            float: left;
+            display: block;
+            cursor: pointer;
+            width: 100px;
+            height: 166px;
+            line-height: 20px;
+            text-align: left;
+            margin-left: 19px;
+            margin-right: 30px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body ms-controller="formulaIndexCtrl">
+    <div class="rightinfo">
+        <div class="tools" >
+            <ul class="toolbar">
+                <li id="back" onclick="backYear()" >
+                    <span>
+                        <img src="../../../images/import.png" />
+                    </span>返回</li>
+            </ul>
+        </div>
+        <div class="Contentbox_bar11" id="level1" style="margin-top: 10px; height: 370px;">
+            <ul ms-repeat="vm.data">
+                <li>
+                    <div ms-click="nextPage(el.regioncode)">
+                        <img src="../../../images/file01.jpg" width="100px" height="100px" alt=""><tt> <font
+                            color="blue">{{el.region}}</font></tt></div>
+                </li>
+            </ul>
+        </div>
+        <div class="Contentbox_bar11" id="level2" style="margin-top: 10px; height: 370px;
+            display: none">
+            <ul ms-repeat="vm.regionData">
+                <li><span class="CheckBoxCss"><a href="" style="float: right;"><font color="blue">编辑</font></a>
+                </span><div ms-click="nextLevel(el.regioncode)">
+                    <img src="../../../images/file01.jpg" width="100px" height="100px" alt=""></div><tt><a
+                        href="" title=""><font color="blue">{{el.region}}</font></a></tt> </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

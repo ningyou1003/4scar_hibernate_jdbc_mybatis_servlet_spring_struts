@@ -1,0 +1,526 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>areaadd.html</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	<!-- 附件相关js start, 注意必须在控制器js前引入-->
+<!-- <link rel="stylesheet" type="text/css" href="../../../assets/js/swfupload/css/default.css"/> -->
+<script type="text/javascript" src="../../../assets/js/swfupload/swfupload.js"></script>
+<script type="text/javascript" src="../../../assets/js/swfupload/handlers1.js"></script>
+<!--<script type="text/javascript" src="../../../assets/js/swfupload/myswfup.js"></script> -->
+<!-- 附件相关js end -->
+	<script src="../../../assets/js/common.js" type="text/javascript"></script>
+	<script src="areaadd.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div ms-controller="areaaddCtrl">
+	<form action="base_form" method="post" id="base_form">
+		<!-- <div class="place">
+            <span>位置：</span>
+            <ul class="placeul">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>区域管理</li>
+                <li>区域编辑</li>
+            </ul>
+        </div> -->
+
+		<div class="formbody">
+			<div class="formtitle">
+				<input name="sdfdsfdsf" type="text" id="sdfdsfdsf"
+					   style="display: none" /> <input name="TB_KeyId" type="text"
+													   id="TB_KeyId" style="display: none" /> <span>基本信息</span>
+			</div>
+			<table style="width: 95%">
+
+				<tr>
+					<td colspan="2">
+						<ul class="forminfo">
+							<li><label> &nbsp;</label><input type="button"
+															 name="Button1" value="确认保存" id="Button1" ms-click="submit()"
+															 class="btn" /> &nbsp;<input type="button" name="btback"
+																						 value="返回" id="btback" class="btn" />
+							</li>
+						</ul></td>
+				</tr>
+
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label for="AreaName"> 名称 ：</label>
+								<input name="areaName" type="text" id="areaName" maxlength="15"
+									   ms-duplex="data.region" class="dfinput" data-rule="required;"
+									   placeholder="请输入15个汉字以内的区域名称" /><font color="red">*</font>
+							</li>
+						</ul> 
+						<br />
+						<br /></td>
+				</tr>
+				
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label for="AreaName"> 位于 ：</label>
+								<span id="parentArea"></span>
+							</li>
+						</ul> 
+						<br />
+						<br /></td>
+				</tr>
+				
+				<!-- 设置示范下拉框 -->
+				<tr>
+					<td>
+						<ul class="forminfo">
+								<li class="row-item"><label> 示范 ：</label>
+            						<select ms-duplex="data.demonstration" maxlength="15" class="dfinput">
+                						<option  value="0">否</option>
+                						<option  value="1">是</option>
+            						</select>
+								</li>
+							</ul> 
+						<br />
+						<br /></td>
+				</tr>
+				
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label for="AreaName"> 工作情况 ：</label>
+								<textarea name="workingSituation" type="text" id="workingSituation" maxlength="200"
+									   ms-duplex="data.workingsituation" class="textareainput" placeholder="请输入200个汉字以内的工作情况"  ></textarea>
+							</li>
+						</ul> <br />
+						<br /></td>
+				</tr>
+				
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label for="AreaName"> 工作机构 ：</label>
+								<textarea name="workingOrgans" type="text" id="workingOrgans" maxlength="100"
+									   ms-duplex="data.workingorgans" class="textareainput" placeholder="请输入100个汉字以内的工作机构"  ></textarea>
+							</li>
+						</ul> <br />
+						<br /></td>
+				</tr>
+
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label> 简介 ：</label><textarea
+									name="description" ms-duplex="data.description"
+									id="description" class="textareainput"
+									placeholder="" ></textarea>
+							</li>
+						</ul> <br />
+						<br /></td>
+				</tr>
+
+			</table>
+			
+			<div class="formtitle">
+				<span>成员单位及其职责</span>
+			</div>
+			<div class="tools">
+				<ul class="toolbar">
+					<li id="addMember" onclick="addMember(0)"><span>
+                        <img src="../../../images/t01.png" /></span>添加</li>
+					<li id="deleteMember" onclick="deleteMember(0)"><span>
+                        <img src="../../../images/t03.png" />
+                    </span>删除</li>
+                  	<!-- <li>
+                    	<a target="_blank" href="../../../temp/成员单位模板.xls" ><span><img src="../../../images/download.png" /></span>下载模板</a>
+                    </li>-->
+                    <li id="export" onclick="exportExcel(0)"><span>
+                        <img src="../../../images/export.png" />
+                    </span>导出到Excel</li>
+                       <li id="importExcel" onclick="clickImportBtn(0)" class="excelImport"><span>
+                        <img src="../../../images/import.png" />
+                    </span>从Excel导入</li> 
+                    <li id="exportmodel" onclick="exportExcelModel(0)"><span>
+                        <img src="../../../images/export.png" />
+                    </span>导出数据录入Excel模板</li>
+				</ul>
+			</div>
+			<div id="sel_div0" style="display: none" class="sel_div">
+				<ul class="seachform">
+					<li>
+						<div style="text-align: center;margin-top: 50px;" id="importExcel">
+							<form>
+									<div style="display: inline;" class="fileInput">
+										<span id="spanButtonPlaceholder" ></span><input id="btnUpload"
+											type="button" value="导入" onclick="startUploadFile();"
+											class="btn" style="height:28px;" /> <input id="btnCancel"
+											type="button" value="取消" onclick="cancelUpload();"
+											class="btn1" style="cursor:pointer;" />
+									</div>
+								</form>
+								<div id="divFileProgressContainer" style="display: none;"></div>
+								<div id="thumbnails">
+									<table border="0" width="530" id="infoTable0"
+										style="display: inline; padding: 2px;"></table>
+								</div>
+							</div>
+					</li>
+				</ul>
+			</div>
+			<table class="tablelist">
+				<thead>
+				<tr>
+					<th width="40px">
+						&nbsp;
+					</th>
+					<th>
+						成员单位
+					</th>
+					<th>
+						成员单位职责
+					</th>
+					<th width="150px">
+						操作
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ms-repeat="vm.member0">
+					<td>
+                            <span class="CheckBoxCss">
+                                <input ms-duplex-string="memberIds0" type="checkbox" ms-attr-value="el.keyid" />
+                            </span></b>
+					</td>
+					<td>
+						{{el.name}}
+					</td>
+					<td>
+						{{el.job}}
+					</td>
+					<td>
+						<li id="edit" ><a ms-click="editMember(0, el.keyid)" style="cursor:pointer"><font color="blue">编辑</font></a></li>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+
+			<br/>
+			<br/>
+			<br/>
+
+			<div class="formtitle">
+				<span>工作小组（工作站）成员名单</span>
+			</div>
+			<div class="tools">
+				<ul class="toolbar">
+					<li id="addMember" onclick="addMember(1)"><span>
+                        <img src="../../../images/t01.png" /></span>添加</li>
+					<!-- <li id="editMember" onclick="editMember(1)"><span>
+                        <img src="../../../images/t02.png" />
+                    </span>修改</li> -->
+					<li id="deleteMember" onclick="deleteMember(1)"><span>
+                        <img src="../../../images/t03.png" />
+                    </span>删除</li>
+                    <li id="export" onclick="exportExcel(1)"><span>
+                        <img src="../../../images/export.png" />
+                    </span>导出到Excel</li>
+                     <li id="importExcel" onclick="clickImportBtn(1)" class="excelImport"><span>
+                        <img src="../../../images/import.png" />
+                    </span>从Excel导入</li> 
+                    <li id="exportmodel" onclick="exportExcelModel(1)"><span>
+                        <img src="../../../images/export.png" />
+                    </span>导出数据录入Excel模板</li>
+				</ul>
+			</div>
+			<div id="sel_div1" style="display: none" class="sel_div">
+				<ul class="seachform">
+					<li>
+						<div style="text-align: center;margin-top: 50px;" id="importExcel">
+							<form>
+									<div style="display: inline;" class="fileInput">
+										<span id="spanButtonPlaceholder"></span> <input id="btnUpload"
+											type="button" value="导入" onclick="startUploadFile1();"
+											class="btn" style="height:28px;" /> <input id="btnCancel1"
+											type="button" value="取消" onclick="cancelUpload1();"
+											 class="btn1" style="cursor:pointer;" />
+									</div>
+								</form>
+								<div id="divFileProgressContainer" style="display: none;"></div>
+								<div id="thumbnails">
+									<table border="0" width="530" id="infoTable1"
+										style="display: inline; padding: 2px;"></table>
+								</div>
+							</div>
+					</li>
+				</ul>
+			</div>
+			<table class="tablelist">
+				<thead>
+				<tr>
+					<th width="40px">
+						&nbsp;
+					</th>
+					<th>
+						小组职务
+					</th>
+					<th>
+						姓名
+					</th>
+					<th>
+						职务
+					</th>
+					<th>
+						联系电话
+					</th>
+					<th>
+						备注
+					</th>
+					<th width="150px">
+						操作
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ms-repeat="vm.member">
+					<td>
+                            <span class="CheckBoxCss">
+                                <input ms-duplex-string="memberIds" type="checkbox" ms-attr-value="el.keyid" />
+                            </span></b>
+					</td>
+					<td>
+						{{el.job}}
+					</td>
+					<td>
+						{{el.name}}
+					</td>
+					<td>
+						{{el.job2}}
+					</td>
+					<td>
+						{{el.phone}}
+					</td>
+					<td>
+						{{el.remark}}
+					</td>
+					<td >
+						<li id="edit" ><a ms-click="editMember(1, el.keyid)" style="cursor:pointer"><font color="blue">编辑</font></a></li>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+
+			<br>
+			<br>
+			<br>
+
+			<div class="formtitle">
+				<span>工作小组办公室成员名单</span>
+			</div>
+			<div class="tools">
+				<ul class="toolbar">
+					<li onclick="addMember(2)"><span>
+                        <img src="../../../images/t01.png" /></span>添加</li>
+					<!-- <li onclick="editMember(2)"><span>
+                        <img src="../../../images/t02.png" />
+                    </span>修改</li> -->
+					<li onclick="deleteMember(2)"><span>
+                        <img src="../../../images/t03.png" />
+                    </span>删除</li>
+                    <li id="export" onclick="exportExcel(2)"><span>
+                        <img src="../../../images/export.png" />
+                    </span>导出到Excel</li>
+                    <li id="importExcel" onclick="clickImportBtn(2)" class="excelImport"><span>
+                        <img src="../../../images/import.png" />
+                    </span>从Excel导入</li> 
+                    <li id="exportmodel" onclick="exportExcelModel(2)"><span>
+                        <img src="../../../images/export.png" />
+                    </span>导出数据录入Excel模板</li>
+				</ul>
+			</div>
+			<div id="sel_div2" style="display: none" class="sel_div">
+				<ul class="seachform">
+					<li>
+						<div style="text-align: center;margin-top: 50px;" id="importExcel">
+							<form>
+									<div style="display: inline;" class="fileInput">
+										<span id="spanButtonPlaceholder"></span> <input id="btnUpload"
+											type="button" value="导入" onclick="startUploadFile2();"
+											class="btn" style="height:28px;" /> <input id="btnCancel2"
+											type="button" value="取消" onclick="cancelUpload2();"
+											 class="btn1" style="cursor:pointer;" />
+									</div>
+								</form>
+								<div id="divFileProgressContainer" style="display: none;"></div>
+								<div id="thumbnails">
+									<table border="0" width="530" id="infoTable2"
+										style="display: inline; padding: 2px;"></table>
+								</div>
+							</div>
+					</li>
+				</ul>
+			</div>
+			<table class="tablelist">
+				<thead>
+				<tr>
+					<th width="40px">
+						&nbsp;
+					</th>
+					<th>
+						办公室职务
+					</th>
+					<th>
+						姓名
+					</th>
+					<th>
+						职务
+					</th>
+					<th>
+						联系电话
+					</th>
+					<th>
+						备注
+					</th>
+					<th width="150px">
+						操作
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ms-repeat="vm.member2">
+					<td>
+                            <span class="CheckBoxCss">
+                                <input ms-duplex-string="memberIds2" type="checkbox" ms-attr-value="el.keyid" />
+                            </span></b>
+					</td>
+					<td>
+						{{el.job}}
+					</td>
+					<td>
+						{{el.name}}
+					</td>
+					<td>
+						{{el.job2}}
+					</td>
+					<td>
+						{{el.phone}}
+					</td>
+					<td>
+						{{el.remark}}
+					</td>
+					<td>
+						<li id="edit" ><a ms-click="editMember(2, el.keyid)" style="cursor:pointer"><font color="blue">编辑</font></a></li>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+
+			<br>
+			<br>
+			<br>
+
+			<div class="formtitle">
+				<span>文化市场综合执法支队</span>
+			</div>
+			<div class="tools">
+				<ul class="toolbar">
+					<li onclick="addMember(3)"><span>
+                        <img src="../../../images/t01.png" /></span>添加</li>
+					<li onclick="editMember(3)"><span>
+                        <img src="../../../images/t02.png" />
+                    </span>修改</li>
+					<li onclick="deleteMember(3)"><span>
+                        <img src="../../../images/t03.png" />
+                    </span>删除</li>
+                    <li id="export" onclick="exportExcel(3)"><span>
+                        <img src="../../../images/export.png" />
+                    </span>导出到Excel</li>
+                    <li id="importExcel" onclick="clickImportBtn(3)" class="excelImport"><span>
+                        <img src="../../../images/import.png" />
+                    </span>从Excel导入</li> 
+                    <li id="exportmodel" onclick="exportExcelModel(3)"><span>
+                        <img src="../../../images/export.png" />
+                    </span>导出数据录入Excel模板</li>
+				</ul>
+			</div>
+			<div id="sel_div3" style="display: none" class="sel_div">
+				<ul class="seachform">
+					<li>
+						<div style="text-align: center;margin-top: 50px;" id="importExcel">
+							<form>
+									<div style="display: inline;" class="fileInput">
+										<span id="spanButtonPlaceholder"></span> <input id="btnUpload"
+											type="button" value="导入" onclick="startUploadFile3();"
+											class="btn" style="height:28px;" /> <input id="btnCancel3"
+											type="button" value="取消" onclick="cancelUpload3();"
+											class="btn1" style="cursor:pointer;" />
+									</div>
+								</form>
+								<div id="divFileProgressContainer" style="display: none;"></div>
+								<div id="thumbnails">
+									<table border="0" width="530" id = "infoTable3"
+										style="display: inline; padding: 2px;"></table>
+								</div>
+							</div>
+					</li>
+				</ul>
+			</div>
+			<table class="tablelist">
+				<thead>
+				<tr>
+					<th width="40px">
+						&nbsp;
+					</th>
+					<th>
+						支队职务
+					</th>
+					<th>
+						姓名
+					</th>
+					<th>
+						职务
+					</th>
+					<th>
+						联系电话
+					</th>
+					<th>
+						备注
+					</th>
+					<th width="150px">
+						操作
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ms-repeat="vm.member3">
+					<td>
+                            <span class="CheckBoxCss">
+                                <input ms-duplex-string="memberIds3" type="checkbox" ms-attr-value="el.keyid" />
+                            </span></b>
+					</td>
+					<td>
+						{{el.job}}
+					</td>
+					<td>
+						{{el.name}}
+					</td>
+					<td>
+						{{el.job2}}
+					</td>
+					<td>
+						{{el.phone}}
+					</td>
+					<td>
+						{{el.remark}}
+					</td>
+					<td>
+						<li id="edit" ><a ms-click="editMember(3, el.keyid)" style="cursor:pointer"><font color="blue">编辑</font></a></li>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</form>
+		
+	</div>
+</body>
+</html>

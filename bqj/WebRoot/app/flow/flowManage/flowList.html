@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>待办列表</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="../../../assets/js/common.js" type="text/javascript"
+	charset="utf-8"></script>
+<script type="text/javascript" src="../../../assets/js/flow.js" charset="utf-8"></script>	
+<script type="text/javascript" src="flowList.js" charset="utf-8"></script>
+<script type="text/css">
+	.searchBox{
+		width:285px; height:32px; line-height:32px; 
+		border-top:solid 1px #a7b5bc; border-left:solid 1px #a7b5bc; 
+		border-right:solid 1px #ced9df; border-bottom:solid 1px #ced9df; 
+		background:url(../../images/inputbg.gif) repeat-x; text-indent:10px;
+		background-image: url('../../images/searchBox.png');
+		background-repeat: no-repeat;background-position:7px 8px;padding-left: 15px;}
+</script>
+</head>
+
+
+<body ms-controller="flowCtrl">
+	<div class="tools" style="margin-top: 10px;margin-bottom: 3px;">
+            <ul class="toolbar">
+                <li id="FlowApproves" onclick="FlowApproves()"><span>
+                    <img src="../../../images/t01.png" />
+                </span>审核通过</li>              
+                <!-- <li id="edit"><span>
+                    <img src="../../../images/t02.png" />
+                </span>修改</li> -->
+                <li id="ReadFlows" onclick="ReadFlows()"><span>
+                    <img src="../../../images/t03.png" />
+                </span>审核未通过</li>
+            </ul>
+           <!--  <ul class="toolbar1">
+                <li id="check"><span>
+                    <img src="../../../images/ico06.png" />
+                </span>查询</li>
+            </ul>
+             -->
+        </div>
+	<div class="rightinfo">
+		<table class="tablelist" style="table-layout:fixed;">
+			<thead>
+				<tr>
+					 <th class="checkBoxTh"><span class="CheckBoxCss"><input id="checkalls" type="checkbox"
+							ms-click="checkAll" /> </span>
+					</th> 
+					
+					<th >{{vm.tableTop.time}}</th>
+					<th style="width: 150px;">{{vm.tableTop.time}}</th>
+					<th style="width: 200px;">{{vm.tableTop.user}}</th>
+					<th style="width: 150px;">审核操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ms-repeat="vm.data">
+					 <td><span class="CheckBoxCss"><input ms-duplex-string="selectId"
+							class="itemCheckBox" type="checkbox" ms-attr-value="el.keyid+'&'+el.flowtype" />
+					</span></b>
+					</td> 
+					<style>
+						.td{overflow:hidden;white-space:nowrap;}
+					</style>
+					<td class="td">		
+						<a ms-if="el.isread!=1" id="pageChange" ms-click="pageChange(el.flowtype,el.keyid,el.sourceid,el.videoimgid,el.videosourceid)" style="cursor:pointer;"><font color="blue">{{el.title}}</font></a>
+						<a ms-if="el.isread==1" id="pageChange" ms-click="pageChange(el.flowtype,el.keyid,el.sourceid,el.videoimgid,el.videosourceid)" style="cursor:pointer;"><font color="red">{{el.title}}</font></a>
+					</td>
+					<td class="td">
+						<li ms-if="vm.status==0">{{el.starttime}}</li>
+						<li ms-if="vm.status==1">{{el.finishtime}}</li>
+					</td>
+					<td>
+						<!-- <li id="id">{{el.relaname}}</br>({{el.region}})</li> -->
+						
+						<li ms-if="el.relaname!=null" id="id">{{el.relaname}}({{el.region}})</li>
+						<li ms-if="el.relaname==null" id="id"></li>
+					</td>
+					<td>
+						<a ms-click="FlowApprove(el.flowtype,el.keyid)" style="cursor: pointer;"><font color="blue">通过</font></a>
+                   		&nbsp;&nbsp;
+                   		<a   ms-click="ReadFlow(el.keyid)" style="cursor: pointer;"><font color="blue">未通过</font></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+	</div>
+
+	<script type="text/javascript">
+		$('.imgtable tbody tr:odd').addClass('odd');
+	</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+var vm = avalon.define({
+	$id : "zdAddCtrl",
+	data : {
+		keyid : "",
+		title : "",
+		content : "",
+		ispublic  : 1,
+		randomNum : randomNum
+	},
+	msgImg : Public.rootPath() + "/images/ticon.png",
+	submit : function(){
+		$("#base_form").trigger("validate");
+	}
+});
+var flag = 0;//记录是否已保存，0表示尚未保存，1表示已保存
+var kindeditor;
+THISPAGE = {
+	init : function() {
+		this.initDom();
+		this.initEvent();
+		this.initData();
+	},
+	initData : function() {
+		var request = Public.urlRequest();
+		if (request.queryString["keyid"] != null
+				&& request.queryString["keyid"].length > 0) {
+			flag = 1;
+			vm.data.keyid = request.queryString["keyid"];
+			Public.ajaxPost(Public.rootPath() + "/zoneDefence/editData", "keyid="
+					+ vm.data.keyid, function(json) {
+				if (json.status == 001) {
+					vm.data=json.data;
+					/*if(!vm.data.status){//注释掉该端代码，使信息可以多次编辑以及上报
+						document.getElementById("btapprove").style.display = "";
+					}*/
+					var regionid=$.cookie("regionCode");
+					if (regionid!=null && regionid=='450000000000') {
+						$("#report").css("display","none");
+					}
+					kindeditor.html(vm.data.content);
+				} else {
+					top.openeasydialog("error",json.msg);
+				}
+			});
+		} else {
+//			document.getElementById("btapprove").style.display = "";
+			var regionid=$.cookie("regionCode");
+			if (regionid!=null && regionid=='450000000000') {
+				$("#report").css("display","none");
+			}
+		}
+	},
+	initEvent : function() {
+		$("#btback").click(function() {
+			window.location = "zdList.html";
+		});
+		$("#add").click(function() {
+			window.location = "zdAdd.html";
+		});
+		//上报
+		$("#report").click(function() {
+			if(flag==0){
+				top.openeasydialog("warn", "请先保存数据！");
+			} else {
+				flowSend("zoneDefence", vm.data.keyid);
+			}
+			
+		});
+	},
+	initDom : function() {
+	}
+};
+function postData() {
+	var url=null;
+	if(vm.data.keyid != "" && vm.data.keyid != null&& vm.data.keyid !=undefined){
+		url= Public.rootPath() + "/zoneDefence/edit";
+	}else{
+		url= Public.rootPath() + "/zoneDefence/add";
+	}
+	vm.data.content = kindeditor.html();
+	Public.ajaxPost(url, vm.data.$model, function(
+			json) {
+		if (json.status == 001) {
+			vm.data.keyid = json.data;
+			top.openeasydialog("success", json.msg, function(item, dialog){
+				dialog.close();
+				flag = 1;
+//				location.href=htmlRootPath+"/app/zoneDefence/zdManage/zdList.html";
+			});
+		} else {
+			top.openeasydialog("error", json.msg);
+		}
+	});
+}
+function KE(){
+	kindeditor = KindEditor.create('textarea[name="content"]', {
+		resizeType : 1,
+		uploadJson : Public.rootPath() + "/ke/fileUpload",
+		fileManagerJson : Public.rootPath() + "/ke/fileManager",
+		allowPreviewEmoticons : false,
+		allowImageUpload : true,
+		allowImageRemote : true,
+		cssPath : Public.rootPath() + "/assets/js/plugins/kindeditor/plugins/image/imgAuto.css",//图片自适应编辑器
+		filterMode : false
+	});
+}
+function initValidator() {
+	$("#base_form").validator({
+		messages : {
+			required : "请填写{0}"
+		},
+		display : function(e) {
+			var text = $(e).closest(".row-item").find("label").text().trim();
+			return text.substring(0, text.length - 2);
+		},
+		valid : function() {
+			postData();
+		},
+		ignore : ":hidden",
+		theme : "yellow_bottom",
+		timely : 1,
+		stopOnError : true
+	});
+}
+
+$(document).ready(function(e) {
+	// 需要先初始化表单验证配置
+	initValidator();
+	KE();
+	THISPAGE.init();
+	initUpload("z_zonedefence", vm.data.keyid);
+	
+//	$("#btback").click(function(){
+//		 window.history.go(-1); 
+//		 window.location.reload(); 
+//	 });
+	
+	var regionid=$.cookie("regionCode");
+	if (regionid!=null && regionid=='450000000000') {
+		$("#report").css("display","none");
+	}else {
+		$("#report").css("display","");
+	}
+	var request = Public.urlRequest();
+	var status = request.queryString["status"];
+	if (status!=null && status==0) {
+		$("#flowApproved").attr("style","");
+		$("#flowApproved").click(function() {
+			flowApprove("zoneDefence", vm.data.keyid);
+		});
+	}
+});
+//$(function(){
+//	 var regionid=$.cookie("regionCode");
+//		if (regionid!=null && regionid=='450000000000') {
+//			$("#report").css("display","none");
+//		}else {
+//			$("#report").css("display","");
+//		}
+//
+//	 $("#btback").click(function(){
+//		 window.history.go(-1); 
+//		 window.location.reload(); 
+//	 });
+//});

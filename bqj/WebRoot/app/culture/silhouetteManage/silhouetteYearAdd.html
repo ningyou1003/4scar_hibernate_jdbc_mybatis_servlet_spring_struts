@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+    var vm = avalon.define({
+    	$id : "addYearCtrl",
+    	data : {
+    		region : "",
+    	},
+    	keyid : "",
+    });
+    
+    function initPage() {
+    	var request = Public.urlRequest();
+    	if(request.queryString["keyid"] != null
+			&& request.queryString["keyid"].length > 0) {
+			vm.keyid = request.queryString["keyid"];
+    		Public.ajaxPost(Public.rootPath() + "/silhouetteYear/editDataSilhouetteYear", {
+    		'keyid' : vm.keyid,
+    		}, function(json) {
+    			vm.data = json.data;
+    		});
+    	}
+    }
+    
+    $(document).ready(function() {
+    	initPage();
+    });
+    
+    </script>
+
+  </head>
+  
+  <body style="overflow:hidden;height:100%;" >
+    <div class="formbodyet" ms-controller="addYearCtrl">
+    	<ul class="forminfo_3">
+    	<br/>
+    		<li><label>请输入年份：</label>
+    			<input id="year" type="text" class="dfinput" ms-duplex="data.region">
+    		</li>
+    	</ul>
+    </div>
+  </body>
+</html>

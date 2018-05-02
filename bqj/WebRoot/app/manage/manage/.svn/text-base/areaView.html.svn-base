@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>areaadd.html</title><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	<script src="../../../assets/js/common.js" type="text/javascript"></script>
+	<script src="areaadd.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div ms-controller="areaaddCtrl">
+	<form action="base_form" method="post" id="base_form">
+		<!-- <div class="place">
+            <span>位置：</span>
+            <ul class="placeul">
+                <li>首页</li>
+                <li>系统设置</li>
+                <li>区域管理</li>
+                <li>区域编辑</li>
+            </ul>
+        </div> -->
+
+		<div class="formbody">
+			<div class="formtitle">
+				<input name="sdfdsfdsf" type="text" id="sdfdsfdsf"
+					   style="display: none" /> <input name="TB_KeyId" type="text"
+													   id="TB_KeyId" style="display: none" /> <span>基本信息</span>
+			</div>
+			<table style="width: 95%">
+
+				<tr>
+					<td colspan="2">
+						<ul class="forminfo">
+							<li><label> &nbsp;</label><input type="button" name="btback" value="返回" id="btback" class="btn" />
+							</li>
+						</ul></td>
+				</tr>
+
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label for="AreaName"> 名称 ：</label>
+								<input name="areaName" type="text" id="areaName" maxlength="15" readonly="readonly"
+									   ms-duplex="data.region" class="dfinput" data-rule="required;"/><font color="red">*</font>
+							</li>
+						</ul> <br />
+						<br /></td>
+				</tr>	
+				
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label for="AreaName"> 位于 ：</label>
+								<span id="parentArea"></span>
+							</li>
+						</ul> 
+						<br />
+						<br /></td>
+				</tr>
+				
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label> 示范 ：</label>
+            						<input ms-if="data.demonstration=='1'" value="是" readonly="readonly" maxlength="15" class="dfinput">
+            						</input>
+            						<input ms-if="data.demonstration!='1'" value="否" readonly="readonly" maxlength="15" class="dfinput">
+            						</input>
+            			
+						</ul> <br />
+						<br /></td>
+				</tr>	
+				
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label for="AreaName"> 工作情况 ：</label>
+								<textarea name="workingSituation" type="text" id="workingSituation" maxlength="200" readonly="readonly"
+									   ms-duplex="data.workingsituation" class="textareainput" ></textarea>
+							</li>
+						</ul> <br />
+						<br /></td>
+				</tr>
+				
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label for="AreaName"> 工作机构 ：</label>
+								<textarea name="workingOrgans" type="text" id="workingOrgans" maxlength="100" readonly="readonly"
+									   ms-duplex="data.workingorgans" class="textareainput"></textarea>
+							</li>
+						</ul> <br />
+						<br /></td>
+				</tr>
+
+				<tr>
+					<td>
+						<ul class="forminfo">
+							<li class="row-item"><label> 简介 ：</label><textarea
+									name="description" ms-duplex="data.description" readonly="readonly"
+									id="description" class="textareainput"  ></textarea>
+							</li>
+						</ul> <br />
+						<br /></td>
+				</tr>
+
+			</table>
+
+						</table>
+			
+						<div class="formtitle">
+				<span>成员单位及其职责</span>
+			</div>
+			<table class="tablelist">
+				<thead>
+				<tr>
+					<!-- <th width="40px">
+						&nbsp;
+					</th> -->
+					<th width="20%">
+						成员单位
+					</th>
+					<th>
+						成员单位职责
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ms-repeat="vm.member0">
+					<!-- <td>
+                            <span class="CheckBoxCss">
+                                <input ms-duplex-string="memberIds0" type="checkbox" ms-attr-value="el.keyid" />
+                            </span></b>
+					</td> -->
+					<td>
+						{{el.name}}
+					</td>
+					<td>
+						{{el.job}}
+					</td>
+				</tr>

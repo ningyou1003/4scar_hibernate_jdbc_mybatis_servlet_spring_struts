@@ -1,0 +1,30 @@
+﻿@charset "utf-8";
+/* 全局样式 */
+.mncon1 { background: url(../images/nncon1.jpg) no-repeat; height: 323px; width:1050px;border: solid 0px #f00; margin: 6px auto 16px; padding: 5px 14px 0px 5px; position: relative; }
+.mc1_focus { height: 400px; width: 1050px; float:left;border: solid 0px #f00; }
+.mc1_focus .slideBox{ width:600px; height:400px; overflow:hidden; position:relative; }
+.mc1_focus .slideBox .hd{ height: 30px; overflow: hidden; position: absolute; right: 0px; bottom: 0px; z-index: 1; }
+.mc1_focus .slideBox .hd ul{ overflow:hidden; zoom:1; float:left;  }
+.mc1_focus .slideBox .hd ul li{ float: left; width: 26px; height: 30px; line-height: 30px; text-align: center; background: #C2C2C2; cursor: pointer; font-size: 14px; color: #FFF; margin-left: 2px; }
+.mc1_focus .slideBox .hd ul li.on{ background: #993B37; color: #fff; }
+.mc1_focus .slideBox .bd{ position:relative; height:100%; z-index:0;   }
+.mc1_focus .slideBox .bd li{ width:600px; height:400px; position:relative}
+.mc1_focus .slideBox .bd img{ width:600px; height:400px; display:block;  }
+.mc1_ftxt,.mc1_ftxt:hover { font-size: 14px; line-height: 30px; background: url(../../images/focus_bg.png) repeat; text-indent: 15px; height: 30px; width: 100%; position: absolute; left: 0px; bottom: 0px; display: block; color: #FFF; text-decoration: none; }
+.mc1_btnL { background: url(../../images/mc1_btnL.png) no-repeat; height: 86px; width: 42px; position: absolute; left: 0px; top: 140px; z-index: 10; cursor: pointer; }
+.mc1_btnR { background: url(../../images/mc1_btnR.png) no-repeat; height: 86px; width: 42px; position: absolute; right: 0px; top: 140px; z-index: 10; cursor: pointer; }
+.mc1r_t1 { line-height: 38px; height: 38px; border-bottom: 1px solid #B8211B; padding-top: 4px; }
+.mc1r_s1 { font-size: 18px; color: #B8211B; float: left; line-height: 36px; font-weight: bold; }
+.mc1r_t2 { font-size: 16px; line-height: 22px; text-align: center; height: 50px; padding-top: 0px; width:400px; margin:0 auto;}
+.mc1L { float: left; width: 600px;border: solid 0px #f00; text-align:left}
+.mc1R { float: left; width: 440px;border: solid 0px #f00; margin-left:10px}
+.mc1R p { line-height: 24px; text-indent: 24px; height: auto; width:440px; margin:0 auto;border-bottom: solid 1px #9a130d; padding-bottom:10px}
+.mc1r_u1 { width:440px; margin:0 auto; }
+.mc1r_u1 ul li { line-height: 26px; background: url(../../images/mc1_ico1.jpg) no-repeat left center; padding-left: 16px; }
+.mc1r_img { position: absolute; left: -134px; top: 0px; }
+.nav_a1 img { margin-top: 11px; }
+.nav_cut .hidden,.nav_hover .hidden { display: block; }
+.nav_cut .block,.nav_hover .block { display: none; }
+.fr {
+    float: right;
+}

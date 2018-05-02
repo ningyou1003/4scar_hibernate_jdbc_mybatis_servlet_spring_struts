@@ -1,0 +1,99 @@
+package com.emindsoft.zsj.news.ctrl;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+
+import cn.dreampie.routebind.ControllerKey;
+
+import com.emindsoft.zsj.base.anatation.PowerBind;
+import com.emindsoft.zsj.base.ctrl.AdminBaseController;
+import com.emindsoft.zsj.news.model.Leader;
+import com.emindsoft.zsj.system.model.RolePower;
+import com.emindsoft.zsj.system.model.User;
+import com.emindsoft.zsj.util.Tools;
+import com.emindsoft.zsj.vo.ApageVO;
+import com.emindsoft.zsj.vo.LeaderSelectVO;
+import com.jfinal.aop.Before;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.tx.Tx;
+
+@ControllerKey("leader")
+public class LeaderCtrl extends AdminBaseController<Leader>{
+	
+	public LeaderCtrl(){
+		this.modelClass = Leader.class;
+	}
+	
+	@Before(Tx.class)
+	public void add() throws Exception{
+		Leader leader;
+		try {
+			leader=(Leader)getModel();
+			leader.set("keyid", Leader.dao.getId());
+			Date date = new Date();
+			String nowdate = new String(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
+			leader.set("time", nowdate);
+			String creator = getCurrentUserId();
+			User u = User.dao.loadUserDetail(creator);
+			leader.set("creator", u.getStr("relaname"));//生成创建者
+			leader.set("createuserid", creator);
+			leader.set("status", 4);
+			leader.set("regionId", u.getStr("RegionId"));
+			leader.save();
+			processAttachment(leader.getStr("keyid"));
+			success(leader.getStr("keyid"));
+		} catch (Exception e) {
+			log.error("保存异常", e);
+			this.error(801);
+			throw e;
+		}
+	}
+	@PowerBind(code = "1204_EditPower", funcName = "编辑历届领导")
+	public void edit(){
+		Leader leader;
+		try{
+			leader=(Leader)getModel();
+			leader.update();
+			success(leader.getStr("keyid"));
+		} catch (Exception e) {
+			log.error("保存异常", e);
+			this.rendJson(false, null, "保存数据异常！");
+		}
+	}
+	@PowerBind(code = "1204_DelPower", funcName = "删除历届领导")
+	@Before(Tx.class)
+	public void delete(){
+		String[] keyids = getPara("keyids").split(",");
+		Leader.dao.deleteLeaderByIds(keyids);
+		success();
+	}
+	
+	public void editData() {			
+		String keyid = getPara("keyid");
+		Leader l = Leader.dao.loadLeaderDetail(keyid);
+		success(l);
+	}
+	
+	public void listPage(){
+		RolePower rp ;
+		String chooseRegionId = getChooseRegionId();
+		String fid = getCurrentUserId();
+		String userRegionId = getCurrentUserRegionId();
+		String ispublic = getPara("ispublic");
+		if(StringUtils.isEmpty(chooseRegionId)||"undefined".equals(chooseRegionId)||userRegionId.equals(chooseRegionId)){
+			rp = RolePower.dao.getOperPower("500", getCurrentUserId());
+		} else {
+			rp = RolePower.dao.getLookPower("500", getCurrentUserId());;
+		}		
+		
+		LeaderSelectVO leaVO = Tools.getSubVO(LeaderSelectVO.class, getRequest());
+		Page<Leader> leaPage=Leader.dao.page(getPageNo(), getPageSize(), leaVO,fid,chooseRegionId,userRegionId,ispublic);
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("aPage", new ApageVO(leaPage,rp));
+		success(map);
+	}
+}

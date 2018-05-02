@@ -1,0 +1,432 @@
+package com.emindsoft.zsj.system.ctrl;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
+import cn.dreampie.routebind.ControllerKey;
+
+import com.emindsoft.zsj.base.anatation.PowerBind;
+import com.emindsoft.zsj.base.ctrl.AdminBaseController;
+import com.emindsoft.zsj.system.model.Area;
+import com.emindsoft.zsj.system.model.RolePower;
+import com.emindsoft.zsj.system.model.User;
+import com.emindsoft.zsj.system.vo.AreaSelectVO;
+import com.emindsoft.zsj.util.Tools;
+import com.emindsoft.zsj.vo.PageVO;
+import com.jfinal.aop.ClearInterceptor;
+import com.jfinal.aop.ClearLayer;
+import com.jfinal.plugin.activerecord.Page;
+
+/**
+ * Created by ym on 15-3-9.
+ */
+@ControllerKey("area")
+public class AreaCtrl extends AdminBaseController<Area> {
+
+	public AreaCtrl() {
+		this.modelClass = Area.class;
+	}
+
+	/**
+	 * 加载区域树形结构 2015-05-25
+	 */
+	public void loadAreaTree() {
+		String regioncode = getAttr("regioncode");
+		String currentUserId = getCurrentUserId();
+		List<Area> areaList = Area.dao.loadArea(regioncode, currentUserId);	
+		Area.resetRegion(areaList);
+		this.renderJson(areaList);
+	}
+	/**
+	 * 加载所有的区域
+	 * */
+	public void loadAllArea() {
+		String regioncode = getAttr("regioncode");
+		List<Area> areaList = Area.dao.loadAllArea(regioncode);	
+		Area.resetRegion(areaList);
+		this.renderJson(areaList);
+	}
+	
+	
+	public void loadActAreaTree() {
+		String regioncode = getAttr("regioncode");
+		List<Area> areaList = Area.dao.loadActArea(regioncode);	
+		Area.resetRegion(areaList);
+		this.renderJson(areaList);
+	}
+	/**
+	 * 获取顶级区域信息
+	 */
+	/*public void getTopParent(){
+		String currentUserId = getCurrentUserId();
+		User u = User.dao.findById(currentUserId);
+		Area  area = Area.dao.findById(u.getStr("RegionId"));
+		success(area);
+	}*/
+	
+	/**
+	 * 获取父级区域信息
+	 */
+	public void getParent(){
+		String parentcode = getAttr("parentcode");
+		Area  area = new Area();
+		if(StringUtils.isEmpty(parentcode)){
+			String currentUserId = getCurrentUserId();
+			User u = User.dao.findById(currentUserId);
+			area = Area.dao.findByRegionCode(u.getStr("RegionId"));
+		} else {
+			area = Area.dao.findByParentcode(parentcode);
+		}		
+		success(area);
+	}
+	
+	/**
+	 * 获取区域信息
+	 */
+	public void getArea(){
+		String regioncode = getAttr("regioncode");
+		Area area = new Area();
+		if(StringUtils.isEmpty(regioncode)){
+			String currentUserId = getCurrentUserId();
+			User u = User.dao.findById(currentUserId);
+			area = Area.dao.findByRegionCode(u.getStr("RegionId"));
+		} else {
+			area = Area.dao.findByRegionCode(regioncode);
+		}
+		success(area);
+	}
+	
+	/**
+	 * 根据登录用户所在的区域编码加载区域树形结构
+	 */
+	public void loadAreaTreeByUserRegionId() {
+		String chooseRegionId = getChooseRegionId();
+		String userRegionId = getCurrentUserRegionId();
+		String regioncode = getAttr("regioncode");
+		if(!StringUtils.isEmpty(chooseRegionId) && !"undefined".equals(chooseRegionId)){		
+			userRegionId = chooseRegionId;
+		} 
+		List<Area> areaLIst=Area.dao.loadAreaByUserGegionId(regioncode,userRegionId);
+		Area.resetRegion(areaLIst);
+		this.renderJson(areaLIst);
+		// rendJson(true, 200, "操作成功", Area.dao.loadArea(regioncode));
+	}
+
+	/**
+	 * 区域分页列表 2015-05-13
+	 */
+	@PowerBind(code = "817_LookPower", funcName = "加载区域分页列表")
+	public void areaListPage() {
+		String currentUserId = getCurrentUserId();
+		RolePower rp = RolePower.dao.getOperPower("817", currentUserId);
+		AreaSelectVO asVO = Tools.getSubVO(AreaSelectVO.class, getRequest());
+		String isDemonstration=getPara("isDemonstration");
+		String areaname=getPara("areaname");
+		int Demonstration=3;
+		try {
+			if (isDemonstration!=null && isDemonstration.length()>0) {
+				Demonstration=Integer.parseInt(isDemonstration);
+			}
+		} catch (Exception e) {
+			Demonstration=2;
+		}
+		//System.out.println(isDemonstration+"======================");
+		Page<Area> areaList = Area.dao.page(getPageNo(), getPageSize(), asVO, currentUserId,areaname,Demonstration);
+		Area.resetRegion(areaList.getList());
+		rendJson(true, 200, "操作成功", new PageVO(areaList, rp));
+	}
+	
+	/**
+	 * 添加区域
+	 */
+	@PowerBind(code = "817_AddPower", funcName = "添加区域")
+	public void add() {
+		Area area;
+		try {
+			area = getModel();
+			String parent = area.getStr("parentcode");
+			int operlevel = area.getInt("operlevel");
+			String regioncode = autoGetRegionCode(operlevel, parent);//自动生成区域编码
+			Area maxIdArea = Area.dao.findMaxId();
+			int maxId = maxIdArea.getInt("max");
+			area.set("id", maxId+1);
+			area.set("regioncode", regioncode);
+			area.set("IsAvailable",0);
+			area.save();
+			success(area);
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	/*public void deleteCheck(){
+		String[] regioncodes = getPara("regioncodes").split(",");
+		for(String regioncode : regioncodes){
+			List<Area> areaList = Area.dao.getChildrenList(regioncode);
+			if(areaList.size()>0){
+				error(814);
+				return;
+			}else{
+				success();
+			}
+		}
+	}*/
+
+	/**
+	 * 删除区域
+	 */
+	@PowerBind(code = "817_DelPower", funcName = "删除区域")
+	public void delete() {
+		String[] regioncodes = getPara("regioncodes").split(",");
+		for (String regioncode : regioncodes) {
+			Area.dao.deleteByRegioncode(regioncode);
+		}
+		success(id);
+	}
+
+	/**
+	 * 修改区域信息
+	 */
+	@PowerBind(code = "817_EditPower", funcName = "修改区域信息")
+	public void edit() {
+		Area area;
+		try {
+			area = getModel();
+			String regioncode = area.getStr("regioncode");
+			//Area oldarea= Area.dao.findById(area.getStr("keyid"));
+			
+			
+			Area rearea = Area.dao.findByRegionCode(regioncode);
+			
+			if(rearea.getInt("demonstration")==null){
+				rearea.set("demonstration",0);
+			}
+			if(rearea.getInt("demonstration")!=area.getInt("demonstration")){
+				User u=getCurrentUser();
+				if (!u.getStr("UserName").equals("admin")) {
+					this.rendJson(false, null, "不是管理员，没有权限修改’示范‘");
+				}
+			}
+			
+			if(rearea!=null){//如果区域存在并且两个区域的id不相同
+				boolean b = area.getInt("id").equals(rearea.getInt("id"));
+				if( b==false){
+					error(812);
+				}else{
+					area.update();
+					success(001);	
+				}
+			}else{
+				area.update();
+				success(001);	
+			}
+				
+		} catch (Exception e) {
+			log.error("更新用户异常", e);
+			this.rendJson(false, null, "更新数据异常！");
+		}
+	}
+
+	/**
+	 * 获取需要修改的区域的相关信息
+	 */
+	public void editData() {
+		String regioncode = getPara("areaId");
+		Area area = Area.dao.findByRegion(regioncode);
+		success(area);
+	}
+	/**
+	 * 获取区域下的机构，树形图显示。
+	 * 
+	 * */
+	public void loadAreaAndOrgTree(){
+		String regioncode = getAttr("regioncode");
+		String userRegionId = getCurrentUserRegionId();
+		List<Area> area_org = Area.dao.loadAreaAndOrg(regioncode,userRegionId);
+		Area.resetRegion(area_org);
+		this.renderJson(area_org);
+	}
+	/**
+	 * 获取区域下的机构，树形图显示。
+	 * 
+	 * */
+	public void loadAreaTreePickByUserRegionCode(){
+		String regioncode = getAttr("regioncode");
+		String userId = getCurrentUserId();
+		String userRegionId = getCurrentUserRegionId();
+		List<Area> area_org = Area.dao.loadAreaTreePickByUserRegionCode(regioncode,userId,userRegionId);
+		Area.resetRegion(area_org);
+		this.renderJson(area_org);
+	}
+	
+	public void loadAllParentArea(){
+		String regioncode = getAttr("regioncode");
+		if(StringUtils.isEmpty(regioncode)||"undefined".equals(regioncode)||"null".equals(regioncode)){
+			regioncode = getCurrentUserRegionId();
+		}
+		Area area = Area.dao.findByRegionCode(regioncode);
+		List<Area> pList = new ArrayList<Area>();
+		pList = Area.dao.loadAllParentArea(pList, regioncode);
+		pList.add(0, area);
+		Collections.reverse(pList);
+		//Area.resetRegion(pList);
+		for (Area a:pList) {
+			if (a.getInt("demonstration")!=null && a.getInt("demonstration")==1) {
+				a.set("Region", a.getStr("Region")+"(示范)");
+				System.out.println("1"+a.getStr("Region"));
+				
+			}
+			
+		}
+		success(pList);
+	}
+	
+	/**
+	 * 根据用户所在或选择区域加载区域树形结构
+	 * 文化宣传-墙报树形结构数据
+	 */
+	public void getRegionTreeaToSilhouette() {
+		//获取字节点依据
+		String isLeaf = getPara("isLeaf");
+		//获取年份
+		String year = getPara("year");
+	
+		String userRegionId = getCurrentUserRegionId();
+		String chooseRegionId =getChooseRegionId();
+		//确定区域ID
+		if(!StringUtils.isEmpty(chooseRegionId) && !"undefined".equals(chooseRegionId))	 {
+			userRegionId = chooseRegionId;
+		}
+		//判断树形目录是否存在字节点，否则返回空list
+		List<Area> list = new ArrayList<Area>();
+		if("true".equals(isLeaf)) {
+			list = Area.dao.loadRegionToSilhouette(year, userRegionId, userRegionId);
+		}
+		Area.resetRegion(list);
+		this.renderJson(list);
+	}
+	
+	/**
+	 * 获取区域数据集
+	 * 文化宣传-墙报数据
+	 */
+	public void getRegionListToSilhouette() {
+		String userRegionId = getCurrentUserRegionId();
+		String chooseRegionId =getChooseRegionId();
+		//确定查询区域ID
+		if(!StringUtils.isEmpty(chooseRegionId) && !"undefined".equals(chooseRegionId)) {
+			userRegionId = chooseRegionId;
+		}
+		List<Area> regionList = Area.dao.loadRegionListToSilhouette(userRegionId, userRegionId);
+		Area.resetRegion(regionList);
+		success(regionList);
+	}
+	
+	/**
+	 * 根据父级区域编码和区域等级自动生成区域编码
+	 * @param operLevel 等级
+	 * @param parentCode 父级区域编码
+	 * @return
+	 */
+	public String autoGetRegionCode(int operLevel, String parentCode){
+		String pre = "";
+		String regionCode = "";
+		if(operLevel <=2 ){
+			pre = parentCode.substring(0, 2*operLevel);
+			for(int i=1 ; i<99 ; i++){
+				String mid = StringUtils.leftPad(i+"", 2, "0");
+				regionCode = StringUtils.rightPad(pre+mid, 12, "0");
+				Area area = Area.dao.findByRegionCode(regionCode);
+				if(area == null){
+					return regionCode;
+				}
+			}
+		}
+		if(operLevel > 2 ){
+			pre = parentCode.substring(0, 2*3+(operLevel-3)*3);
+			for(int i=1 ; i<999 ; i++){
+				String mid = StringUtils.leftPad(i+"", 3, "0");
+				regionCode = StringUtils.rightPad(pre+mid, 12, "0");
+				Area area = Area.dao.findByRegionCode(regionCode);
+				if(area == null){
+					return regionCode;
+				}
+			}
+		}
+		return null;
+	}
+	
+	@ClearInterceptor(ClearLayer.ALL)
+	public void loadProvinceArea(){
+		String sql = "SELECT ID,Region,RegionCode,ParentCode FROM s_area WHERE OperLevel=0";
+		List<Area> listProvince = Area.dao.find(sql);
+		success(listProvince);
+		
+	}
+	
+	@ClearInterceptor(ClearLayer.ALL)
+	public void loadCityArea(){
+		String sql = "SELECT ID,Region,RegionCode,ParentCode FROM s_area WHERE ParentCode='450000000000'";
+		List<Area> listCity = Area.dao.find(sql);
+		success(listCity);
+		
+	}
+	
+	@ClearInterceptor(ClearLayer.ALL)
+	public void loadDistrictArea(){
+		String str = getPara("str");
+		String sql = "SELECT ID,Region,RegionCode,ParentCode FROM s_area WHERE ParentCode=(SELECT RegionCode FROM s_area WHERE Region='"+str+"')";
+		List<Area> listDistrict = Area.dao.find(sql);
+		success(listDistrict);
+		
+	}
+	
+	@ClearInterceptor(ClearLayer.ALL)
+	public void loadTownsArea(){
+		String strCity = getPara("strCity");
+		String strArea = getPara("strArea");
+		String sql = "SELECT ID,Region,RegionCode,ParentCode FROM s_area WHERE ParentCode=(SELECT RegionCode FROM s_area WHERE Region='"+strArea+"' AND ParentCode=(SELECT RegionCode FROM s_area WHERE Region='"+strCity+"'))";
+		List<Area> listTowns = Area.dao.find(sql);
+		success(listTowns);
+	}
+	
+	@ClearInterceptor(ClearLayer.ALL)
+	public void loadFinalAllArea(){
+		String str = getPara("str");
+		String strArea = getPara("strArea");
+		String strTowns = getPara("strTowns");
+		String sql = "SELECT RegionCode FROM s_area WHERE Region = '"+strTowns+"' AND ParentCode=(SELECT RegionCode FROM s_area WHERE Region='"+strArea+"' AND ParentCode=(SELECT RegionCode FROM s_area WHERE Region='"+str+"'))";
+		Area a = Area.dao.findFirst(sql);
+		success(a);
+	}
+	
+	@ClearInterceptor(ClearLayer.ALL)
+	public void loadFinalTwoArea(){
+		String str = getPara("str");
+		String strArea = getPara("strArea");
+		String sql = "SELECT RegionCode FROM s_area WHERE Region = '"+strArea+"' AND ParentCode= (SELECT RegionCode FROM s_area WHERE Region='"+str+"')";
+		Area a = Area.dao.findFirst(sql);
+		success(a);
+	}
+	
+	@ClearInterceptor(ClearLayer.ALL)
+	public void loadFinalOneArea(){
+		String str = getPara("str");
+		String sql = "SELECT RegionCode FROM s_area WHERE Region = '"+str+"'";
+		Area a = Area.dao.findFirst(sql);
+		success(a);
+	}
+	
+	@ClearInterceptor(ClearLayer.ALL)
+	public void loadFinalZeroArea(){
+		String sql = "SELECT RegionCode FROM s_area WHERE Region = '广西壮族自治区'";
+		Area a = Area.dao.findFirst(sql);
+		success(a);
+	}
+	
+}

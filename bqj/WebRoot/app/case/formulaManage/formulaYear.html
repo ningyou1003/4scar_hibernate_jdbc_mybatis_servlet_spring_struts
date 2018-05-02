@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无文件名</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <script src="../../../assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="formulaYear.js" charset="utf-8"></script>
+    <style>
+        .Contentbox_bar11 li
+        {
+            float: left;
+            display: block;
+            cursor: pointer;
+            width: 100px;
+            height: 166px;
+            line-height: 20px;
+            text-align: left;
+            margin-left: 19px;
+            margin-right: 30px;
+            margin-top: 15px;
+        }
+    </style>
+  </head>
+  
+  <body ms-controller="formulaYearCtrl">
+  <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li id="add" ms-if="vm.power.addpower==1"><span>
+                    <img src="../../../images/t01.png" />
+                </span>添加</li>
+                				<li id="editShow" ms-if="vm.power.editpower==1"><span><img
+						src="../../../images/t02.png" /> </span>编辑</li>
+                <li id="deleteShow" ms-if="vm.power.delpower==1"><span>
+                    <img src="../../../images/t03.png" />
+                </span>删除</li>
+            </ul>
+        </div>
+  	<div class="Contentbox_bar11" id="level1" style="margin-top: 10px; height: 370px;">
+    	<ul ms-repeat="vm.data">
+        	<li>
+            	<div ms-click="nextRegion(el.region)">
+                	<img src="../../../images/file01.jpg" width="100px" height="100px" alt="">
+                	<tt> <font  color="blue">{{el.region}}</font></tt>
+               　</div>
+               <div>
+               	    <tt> <font class="edit"  style="color: blue; display: none;" ms-click="edit(el.keyid)">编辑</font></tt>
+                	<tt> <font class="delete" style="color: blue; display: none;" ms-click="deletes(el.keyid)">删除</font></tt>
+               </div>
+            </li>
+        </ul>
+    </div>
+    <div id="PageInfo" class="pagin" style="margin-bottom: 20px;"></div>
+  </div>
+  </body>
+</html>

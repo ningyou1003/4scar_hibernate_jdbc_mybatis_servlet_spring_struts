@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+	
+	<resultMap id="rsUser" type="User">
+		<result property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="sex" column="SEX" />
+		<result property="birthday" column="BIRTHDAY" />
+		<result property="username" column="USERNAME" />
+		<result property="password" column="PASSWORD" />
+		<result property="loginFlag" column="LOGIN_FLAG" />
+		<result property="filePath" column="FILE_PATH" />
+		<result property="createDate" column="CREATE_DATE" />
+		<result property="roleId" column="ROLE_ID" />
+	</resultMap>
+	
+	<sql id="sql_column_items">
+		ID, 
+		NAME, 
+		SEX, 
+		BIRTHDAY, 
+		USERNAME, 
+		PASSWORD, 
+		LOGIN_FLAG, 
+		FILE_PATH, 
+		CREATE_DATE, 
+		ROLE_ID
+	</sql>
+	
+	
+	<select id="findById" resultMap="rsUser" parameterType="java.lang.Long">
+		select  <include refid="sql_column_items"/> from t_user
+		<where>
+			ID = #{id}
+		</where>
+	</select>
+	
+	
+	<select id="findList" resultMap="rsUser">
+		select  <include refid="sql_column_items"/> from t_user
+		<where>
+			<if test="User != null and User.id != null ">  
+				and ID = #{User.id}
+			</if>
+			<if test="User != null and User.name != null and User.name != '' ">  
+				and NAME = #{User.name}
+			</if>
+			<if test="User != null and User.sex != null and User.sex != 0 ">  
+				and SEX = #{User.sex}
+			</if>
+			<if test="birthdayBegin != null" >
+				<![CDATA[
+				and BIRTHDAY >= #{birthdayBegin} 
+				]]> 
+			</if>
+			<if test="birthdayEnd != null" > 
+				<![CDATA[
+				and BIRTHDAY <= #{birthdayEnd}
+				]]> 
+			</if>
+			<if test="User != null and User.username != null and User.username != '' ">  
+				and USERNAME = #{User.username}
+			</if>
+			<if test="User != null and User.password != null and User.password != '' ">  
+				and PASSWORD = #{User.password}
+			</if>
+			<if test="User != null and User.loginFlag != null  and User.loginFlag != 0">  
+				and LOGIN_FLAG = #{User.loginFlag}
+			</if>
+			<if test="User != null and User.filePath != null and User.filePath != '' ">  
+				and FILE_PATH = #{User.filePath}
+			</if>
+			<if test="createDateBegin != null" >
+				<![CDATA[
+				and CREATE_DATE >= #{createDateBegin} 
+				]]> 
+			</if>
+			<if test="createDateEnd != null" > 
+				<![CDATA[
+				and CREATE_DATE <= #{createDateEnd}
+				]]> 
+			</if>
+			<if test="User != null and User.roleId != null ">  
+				and ROLE_ID = #{User.roleId}
+			</if>
+		</where>
+		<if test="order != null and order != '' ">  
+			order by ${order} ${sort}
+		</if>
+	</select>
+	
+	<insert id="add" parameterType="User">
+		insert into t_user 
+			(
+			ID, 
+			NAME, 
+			SEX, 
+			BIRTHDAY, 
+			USERNAME, 
+			PASSWORD, 
+			LOGIN_FLAG, 
+			FILE_PATH, 
+			CREATE_DATE, 
+			ROLE_ID
+			) 
+		values
+			(
+			seq_t_user.nextval, 
+			#{name, jdbcType=VARCHAR}, 
+			#{sex, jdbcType=NUMERIC}, 
+			#{birthday, jdbcType=TIMESTAMP}, 
+			#{username, jdbcType=VARCHAR}, 
+			#{password, jdbcType=VARCHAR}, 
+			#{loginFlag, jdbcType=NUMERIC}, 
+			#{filePath, jdbcType=VARCHAR}, 
+			sysdate, 
+			#{roleId, jdbcType=NUMERIC}
+			)
+	</insert>
+	
+	<update id="update" parameterType="User">
+		update t_user
+			 <set> 
+				<if test=" name != null ">NAME = #{name, jdbcType=VARCHAR}, </if>
+				<if test=" sex != null and sex != 0 ">SEX = #{sex, jdbcType=NUMERIC}, </if>
+				<if test=" birthday != null ">BIRTHDAY = #{birthday, jdbcType=TIMESTAMP}, </if>
+				<if test=" username != null ">USERNAME = #{username, jdbcType=VARCHAR}, </if>
+				<if test=" password != null ">PASSWORD = #{password, jdbcType=VARCHAR}, </if>
+				<if test=" loginFlag != null and loginFlag != 0">LOGIN_FLAG = #{loginFlag, jdbcType=NUMERIC}, </if>
+				<if test=" filePath != null ">FILE_PATH = #{filePath, jdbcType=VARCHAR}, </if>
+				<if test=" createDate != null ">CREATE_DATE = #{createDate, jdbcType=TIMESTAMP}, </if>
+				<if test=" roleId != null ">ROLE_ID = #{roleId, jdbcType=NUMERIC}, </if>
+				ID = #{id}
+			<where>
+				ID = #{id}
+			</where>
+		</set>
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.Long">
+		delete from t_user
+		<where>
+			ID = #{id}
+		</where>
+	</delete>
+	
+</mapper>

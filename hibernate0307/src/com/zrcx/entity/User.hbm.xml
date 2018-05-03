@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.zrcx.entity">
+	<class name="User" table="T_HBM_USER">
+		<id name="id" column="ID">
+			<!-- 配置ID生成器 -->
+			<generator class="increment"/><!-- 组件，新增的时候用，查找最大的ID -->
+		</id>		<!-- 实体类的属性 ,数据库的名字 -->
+		<property name="name" column="NAME" />
+		<property name="username" column="username" />
+		<property name="password" column="password" />
+		<property name="birthday" column="birthday" />
+		<property name="loginFlag" column="login_Flag" />
+		<property name="sex" column="sex" />
+		<property name="roleId" column="role_Id" />
+		<property name="filePath" column="file_Path" />
+		<property name="createDate" column="createDate" />
+	</class>
+</hibernate-mapping>
+

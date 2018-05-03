@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="D:/studio_lib/mybatis-3.4.2/pager/pagehelper-3.2.1.jar"/>
+	<classpathentry kind="lib" path="D:/studio_lib/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="D:/studio_lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="D:/studio_lib/mybatis-3.4.2/mybatis-3.4.2.jar"/>
+	<classpathentry kind="lib" path="D:/studio_lib/测试单元扎包/Junit4.12/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="D:/studio_lib/测试单元扎包/Junit4.12/junit-4.12.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.zrcx.entity">
+	<class name="Tclass" table="T_HBM_TCLASS" >   
+		<id name="id" column="ID">
+			<!-- 配置ID生成器 -->
+			<generator class="increment"/><!-- 组件，新增的时候用，查找最大的ID -->
+		</id>		
+		<property name="name" column="NAME" />
+		<property name="charger" column="CHARGER" />
+		<property name="createDate" column="CREATE_DATE" />
+		<!-- 配置一对多关联 -->
+			<!-- 一对多关联 cascade(级联操作none/all/save-update/delete -->
+		<set name="students" cascade="none" inverse="true" order-by="BIRTHDAY DESC"><!-- DESC倒叙 --><!-- inverse="true"要交出控制权吗 -->
+			<key column="CLASS_ID"></key>
+			<one-to-many class="Student"/>
+		</set>
+	</class>
+</hibernate-mapping>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

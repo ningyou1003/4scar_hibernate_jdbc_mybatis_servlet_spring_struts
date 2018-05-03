@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" 
+"http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+    <!-- action后缀为.do -->
+    <constant name="struts.action.extension" value="do"/> 
+    <!-- 编码方式 -->
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <!-- 默认的视图主题 -->
+    <constant name="struts.ui.theme" value="simple" />
+    <constant name="struts.ui.templateDir" value="template" />
+    <constant name="struts.ui.templateSuffix" value="ftl" />
+    <!-- 缓存 -->
+    <constant name="struts.serve.static.browserCache" value="false"/>
+    <!-- 修改自动加载 -->
+    <constant name="struts.configuration.xml.reload" value="true"/> 
+    <constant name="struts.multipart.saveDir" value="/tmp"/> 
+    <!-- 可上传文件大小(byte)默认2M，52428880＝5*1024*1024=5M -->
+    <constant name="struts.multipart.maxSize" value="52428880"/>
+    <!-- 开发模式下使用,这样可以打印出更详细的错误信息 -->  
+    <constant name="struts.devMode" value="true" /> 
+    <!-- 由spring来创建 -->
+    <constant name="struts.objectFactory" value="spring" />
+    
+    <!-- 父类包，声明全局的异常处理类 -->
+	<package name="common" namespace="/" extends="json-default">
+		<!-- 配置拦截器 -->
+		<interceptors>
+			<interceptor name="login" class="com.entor.common.LoginIntercepter" />
+			<!-- 拦截器栈 -->
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="login" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<!-- 包的默认拦截器 -->
+		<default-interceptor-ref name="myStack" />
+		<!-- 全局跳转 -->
+		<global-results>
+			<result name="login">/common/login.jsp</result>
+			<result name="index">/common/index.jsp</result>
+			<result name="input">/common/showError.jsp</result>
+			<result name="exception">/common/exception.jsp</result>
+			<!-- 结果类型为json -->
+			<result type="json" name="json">
+				<param name="root">jsonText</param>
+			</result>
+		</global-results>
+		<!-- 异常处理 -->
+		<global-exception-mappings>
+			<!-- 所有java.lang.Exception类或子类的异常交给 exception结果进行处理 -->
+			<exception-mapping result="exception" exception="java.lang.Exception" />
+		</global-exception-mappings>
+		<!-- 系统管理 -->
+	    <action name="sys_*" class="sysAction" method="{1}">
+	      <!-- 这个配置是为了让该action不被动默认拦截器拦截 -->
+	      <interceptor-ref name="defaultStack"/>
+	      <result name="index">/common/index.jsp</result>
+	    </action>
+	</package>
+    
+    <package name="init" namespace="/" extends="common">
+       <!-- 用户管理 -->
+       <action name="user_*" class="userAction" method="{1}">
+          <result name="list">/system/user/list.jsp</result>
+          <result name="pwdupdate">/system/user/pwdupdate.jsp</result>
+          <result name="result">/system/user/result.jsp</result>
+          <result name="update">/system/user/update.jsp</result>
+          <result name="add">/system/user/add.jsp</result>
+       </action>
+       <!-- 部门管理 -->
+       <action name="dept_*" class="deptAction" method="{1}">
+          <result name="list">/system/dept/list.jsp</result>
+          <result name="update">/system/dept/update.jsp</result>
+          <result name="add">/system/dept/add.jsp</result>
+       </action>
+       <!-- 角色管理 -->
+       <action name="role_*" class="roleAction" method="{1}">
+          <result name="list">/system/role/list.jsp</result>
+          <result name="update">/system/role/update.jsp</result>
+          <result name="add">/system/role/add.jsp</result>
+       </action>
+       <!-- 菜单管理 -->
+       <action name="menu_*" class="menuAction" method="{1}">
+          <result name="list">/system/menu/list.jsp</result>
+          <result name="update">/system/menu/update.jsp</result>
+          <result name="add">/system/menu/add.jsp</result>
+          <result name="menuTree">/system/menu/menuTree.jsp</result>
+       </action>
+       <!-- 字典管理 -->
+       <action name="dict_*" class="dictAction" method="{1}">
+          <result name="list">/system/dict/list.jsp</result>
+          <result name="update">/system/dict/update.jsp</result>
+          <result name="add">/system/dict/add.jsp</result>
+       </action>
+       <!-- 整车管理 -->
+       <action name="car_*" class="carAction" method="{1}">
+        <!--  <interceptor-ref name="fileUpload"/>
+		 默认拦截器
+		 <interceptor-ref name="defaultStack" /> -->
+          <result name="list">/basic/car/list.jsp</result>
+          <result name="select">/basic/car/select.jsp</result>
+          <result name="update">/basic/car/update.jsp</result>
+          <result name="add">/basic/car/add.jsp</result>
+       </action>
+       <!-- 供应商管理 -->
+       <action name="supplier_*" class="supplierAction" method="{1}">
+          <result name="list">/basic/supplier/list.jsp</result>
+          <result name="update">/basic/supplier/update.jsp</result>
+          <result name="add">/basic/supplier/add.jsp</result>
+       </action>
+       <!-- 配件管理 -->
+       <action name="fittings_*" class="fittingsAction" method="{1}">
+          <result name="list">/basic/fittings/list.jsp</result>
+          <result name="select">/basic/fittings/select.jsp</result>
+          <result name="update">/basic/fittings/update.jsp</result>
+          <result name="add">/basic/fittings/add.jsp</result>
+       </action>
+       <!-- 客户管理 -->
+       <action name="customer_*" class="customerAction" method="{1}">
+          <result name="list">/customer/customer/list.jsp</result>
+          <result name="update">/customer/customer/update.jsp</result>
+          <result name="add">/customer/customer/add.jsp</result>
+          <result name="select">/customer/customer/select.jsp</result>
+       </action>
+       <!-- 返馈管理 -->
+       <action name="feedback_*" class="feedbackAction" method="{1}">
+          <result name="list">/customer/feedback/list.jsp</result>
+          <result name="update">/customer/feedback/update.jsp</result>
+          <result name="add">/customer/feedback/add.jsp</result>
+       </action> 
+       <!-- 整车进货单管理 -->
+       <action name="carInorder_*" class="carInorderAction" method="{1}">
+          <result name="list">/inorder/car/list.jsp</result>
+          <result name="update">/inorder/car/update.jsp</result>
+          <result name="add">/inorder/car/add.jsp</result>
+       </action>
+       <!-- 配件进货单管理 -->
+       <action name="fitInorder_*" class="fitInorderAction" method="{1}">
+          <result name="list">/inorder/fittings/list.jsp</result>
+          <result name="update">/inorder/fittings/update.jsp</result>
+          <result name="add">/inorder/car/fittings.jsp</result>
+       </action>
+       <!-- 整车销售单管理 -->
+       <action name="carSellorder_*" class="carSellorderAction" method="{1}">
+          <result name="list">/sellorder/car/list.jsp</result>
+          <result name="update">/sellorder/car/update.jsp</result>
+          <result name="add">/sellorder/car/add.jsp</result>
+       </action>
+       <!-- 配件进货单管理 -->
+       <action name="fitSellorder_*" class="fitSellorderAction" method="{1}">
+          <result name="list">/sellorder/fittings/list.jsp</result>
+          <result name="update">/sellorder/fittings/update.jsp</result>
+          <result name="add">/sellorder/car/fittings.jsp</result>
+       </action>
+       <!-- 整车库存管理 -->
+       <action name="carStock_*" class="carStockAction" method="{1}">
+          <result name="list">/stock/car/list.jsp</result>
+       </action>
+       <!-- 配件库存管理 -->
+       <action name="fitStock_*" class="fitStockAction" method="{1}">
+          <result name="list">/stock/fittings/list.jsp</result>
+       </action>             
+    </package>
+</struts>
+
+
+

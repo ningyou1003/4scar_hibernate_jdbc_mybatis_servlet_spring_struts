@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.zrcx.entity">
+	<class name="Dict" table="T_HBM_DICT" select-before-update="true">   <!-- select-before-update="true"更新时进行数据比对，相同就不更新，不同就更新  name=""类名 table=""数据库表名 联系数据库里的表 -->
+		<id name="id" column="ID">
+			<!-- 配置ID生成器 -->
+			<generator class="increment"/><!-- 组件，新增的时候用，查找最大的ID -->
+			<!-- <generator class="native"/> -->
+			<!-- <generator class="assigned"/> -->
+			<!-- <generator class="sequence">
+				<param name="sequence">seq_t_dict</param>
+			</generator> -->
+		</id>		<!-- 实体类的属性 ,数据库的名字 -->
+		<property name="dictName" column="DICT_NAME" />
+		<property name="ckey" column="CKEY" />
+		<property name="cvalue" column="CVALUE" /><!-- insert="false" update="false"新增和新增忽略这个字段 -->
+		<property name="useFlag" column="USE_FLAG" />
+		<property name="orderNo" column="ORDER_NO" />
+		<property name="createDate" column="CREATE_DATE" />
+	</class>
+</hibernate-mapping>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

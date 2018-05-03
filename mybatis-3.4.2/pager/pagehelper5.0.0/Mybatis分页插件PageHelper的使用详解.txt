@@ -1,0 +1,76 @@
+    <plugins>  
+        <!-- com.github.pagehelper为PageHelper类所在包名 -->  
+        <plugin interceptor="com.github.pagehelper.PageHelper">  
+            <!-- 4.0.0以后版本可以不设置该参数 -->  
+            <property name="dialect" value="oracle"/>  
+            <!-- 该参数默认为false -->  
+            <!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用 -->  
+            <!-- 和startPage中的pageNum效果一样-->  
+            <property name="offsetAsPageNum" value="true"/>  
+            <!-- 该参数默认为false -->  
+            <!-- 设置为true时，使用RowBounds分页会进行count查询 -->  
+            <property name="rowBoundsWithCount" value="true"/>  
+            <!-- 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 -->  
+            <!-- （相当于没有执行分页查询，但是返回结果仍然是Page类型）-->  
+            <property name="pageSizeZero" value="true"/>  
+            <!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 -->  
+            <!-- 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页 -->  
+            <!-- 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据 -->  
+            <property name="reasonable" value="true"/>  
+            <!-- 3.5.0版本可用 - 为了支持startPage(Object params)方法 -->  
+            <!-- 增加了一个`params`参数来配置参数映射，用于从Map或ServletRequest中取值 -->  
+            <!-- 可以配置pageNum,pageSize,count,pageSizeZero,reasonable,orderBy,不配置映射的用默认值 -->  
+            <!-- 不理解该含义的前提下，不要随便复制该配置 -->  
+            <property name="params" value="pageNum=start;pageSize=limit;"/>  
+            <!-- 支持通过Mapper接口参数来传递分页参数 -->  
+            <property name="supportMethodsArguments" value="true"/>  
+            <!-- always总是返回PageInfo类型,check检查返回类型是否为PageInfo,none返回Page -->  
+            <property name="returnPageInfo" value="check"/>  
+        </plugin>  
+    </plugins>
+---------------------------------------------------------------------
+这篇文章主要介绍了Mybatis分页插件PageHelper的相关资料,
+该插件目前支持Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库分页需要的朋友可以参考下:
+1.说明
+如果你也在用Mybatis，建议尝试该分页插件，这个一定是最方便使用的分页插件。
+该插件目前支持Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库分页。
+2.使用方法
+第一步：在Mybatis配置xml中配置拦截器插件:
+<plugins>
+  <!-- com.github.pagehelper为PageHelper类所在包名 -->
+  <plugin interceptor="com.github.pagehelper.PageHelper">
+    <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->    
+    <property name="dialect" value="mysql"/>
+  </plugin>
+</plugins>
+第二步：在代码中使用
+1、设置分页信息：
+//获取第1页，10条内容，默认查询总数count
+PageHelper.startPage(1, 10);
+ //紧跟着的第一个select方法会被分页
+List<Country> list = countryMapper.selectIf(1);
+2、取分页信息
+//分页后，实际返回的结果list类型是Page<E>，如果想取出分页信息，需要强制转换为Page<E>，
+Page<Country> listCountry = (Page<Country>)list;
+listCountry.getTotal();
+3、取分页信息的第二种方法
+//获取第1页，10条内容，默认查询总数count
+PageHelper.startPage(1, 10);
+List<Country> list = countryMapper.selectAll();
+//用PageInfo对结果进行包装
+PageInfo page = new PageInfo(list);
+//测试PageInfo全部属性
+//PageInfo包含了非常全面的分页属性
+assertEquals(1, page.getPageNum());
+assertEquals(10, page.getPageSize());
+assertEquals(1, page.getStartRow());
+assertEquals(10, page.getEndRow());
+assertEquals(183, page.getTotal());
+assertEquals(19, page.getPages());
+assertEquals(1, page.getFirstPage());
+assertEquals(8, page.getLastPage());
+assertEquals(true, page.isFirstPage());
+assertEquals(false, page.isLastPage());
+assertEquals(false, page.isHasPreviousPage());
+assertEquals(true, page.isHasNextPage());
+ 

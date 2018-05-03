@@ -1,0 +1,22 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<!-- 会话工厂配置 -->
+<session-factory>
+	<!-- 方言，告诉hibernate是哪种数据库 -->
+	<property name="dialect">
+		org.hibernate.dialect.OracleDialect
+	</property>
+	<!-- 是否打印sql -->
+	<property name="show_sql">true</property>
+	<!-- 是否让hibernate创建表结构 --><!-- update自动创建和更新表结构，validate验证表结构是否一致，不一致就抛异常 -->
+	<property name="hbm2ddl.auto">update</property>
+	<!-- 配置映射文件 -->
+	<property name="format_sql">flase</property><!-- sql格式化 -->
+	<!-- 抓取策略，每次抓取多少条 -->
+	<property name="jdbc.fetch_size">5</property>
+	<!-- <mapping resource="com/zrcx/entity/Dict.hbm.xml" /> -->
+</session-factory>
+
+</hibernate-configuration>

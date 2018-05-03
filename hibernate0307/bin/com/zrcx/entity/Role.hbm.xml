@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.zrcx.entity">
+	<class name="Role" table="T_HBM_ROLE">
+		<id name="id" column="ID">
+			<!-- 配置ID生成器 -->
+			<generator class="increment"/><!-- 组件，新增的时候用，查找最大的ID -->
+		</id>		<!-- 实体类的属性 ,数据库的名字 -->
+		<property name="name" column="NAME" />
+		<property name="createDate" column="CREATE_DATE" />
+		<!-- 多对多配置 -->
+		<set name="menus" table="T_HBM_ROLE2MENU">
+			<key column="ROLE_ID"></key>
+			<many-to-many class="Menu" column="MENU_ID"></many-to-many>
+		</set>
+		
+	</class>
+</hibernate-mapping>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

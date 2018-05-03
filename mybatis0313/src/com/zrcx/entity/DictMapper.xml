@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DictMapper">
+    <!-- 设置缓存 -->
+   <!--  <cache/> -->
+    <!-- 可重用的SQL语句段 -->
+    <sql id="col">
+       ID, DICT_NAME, CKEY, CVALUE, USE_FLAG, ORDER_NO, CREATE_DATE
+    </sql>
+    <!-- 结果映射 -->
+    <resultMap id="rs1" type="Dict">
+      <!-- 属性和字段名一致的，不用配置 -->
+      <result property="dictName" column="DICT_NAME"/>
+      <result property="useFlag" column="USE_FLAG"/>
+      <result property="createDate" column="CREATE_DATE"/>
+      <result property="orderNo" column="ORDER_NO"/>
+    </resultMap>
+	<!-- 查询 -->
+	<select id="select01" parameterType="map"  resultType="Dict">
+		SELECT <include refid="col"/> FROM T_DICT 
+	</select>
+	<!-- #{属性名}在sql中要用占位符替代，${属性名}直接文本替换 -->
+	<select id="select02"  resultMap="rs1">
+		SELECT <include refid="col"/> FROM T_DICT 
+		WHERE DICT_NAME like '%${dictName}%'
+		<!-- where DICT_NAME like #{dictName}  -->
+		<!-- and use_flag = #{useFlag} and create_date &lt; #{createDate} -->
+	</select>
+	<select id="select03" parameterType="Dict"  resultMap="rs1">
+	   <!-- 在XML文件中 ，用<![CDATA[文本 ]]> 包裹的文本被当成普通文本-->
+	   <![CDATA[
+		SELECT * FROM T_DICT where use_flag = #{useFlag} and create_date < #{createDate}
+	   ]]>
+	</select>
+    <select id="selectById" parameterType="int" resultType="Dict">
+		SELECT * FROM T_DICT where id = #{id}
+    </select>
+    <!-- 新增 -->
+    <insert id="insert01" parameterType="Dict">
+       INSERT INTO T_DICT
+  		(<include refid="col"/>)
+		VALUES
+  		(seq_t_dict.nextval,#{dictName},#{ckey},#{cvalue},#{useFlag},#{orderNo},sysdate)       
+    </insert>
+    <!-- 更新 -->
+    <update id="update01" parameterType="Dict">
+        update t_dict t 
+        set 
+        t.dict_name = #{dictName},
+        t.ckey = #{ckey},
+        t.cvalue = #{cvalue},
+        t.use_flag = #{useFlag}
+        where t.id = #{id}
+    </update>
+    <!-- 删除 -->
+    <delete id="delete01" parameterType="long">
+       delete from t_dict where id = #{id}
+    </delete>
+</mapper>
+
+
+
+
+
+
+
+

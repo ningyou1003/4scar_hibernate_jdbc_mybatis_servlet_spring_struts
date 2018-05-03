@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">  
+<configuration>
+  <!-- 把数据库配置属性读取放到上下文 --> 
+  <properties resource="db.properties">
+    <!-- <property name="name" value="abc"/> -->
+  </properties>
+  <!-- 常量设置 -->
+  <settings>
+     <!--按照以下规则映射:把表字段名的下划线删除，并且单词首字母变大写,得到相应属性名 -->
+     <setting name="mapUnderscoreToCamelCase" value="true" />
+     <!-- 开启全局二级缓存,默认false -->
+     <setting name="cacheEnabled" value="true"/>
+  </settings>
+  <!-- 别名设置 -->
+  <typeAliases>
+    <!-- <typeAlias alias="Dict" type="com.zrcx.entity.Dict" /> -->
+    <!-- 指定实体所在的包路径，mybatis会自己到这里来找 -->  
+    <package name="com.zrcx.entity"/>
+  </typeAliases> 
+  <!-- 插件 -->
+  <plugins>  
+      <!-- mybatis分页插件   -->
+      <plugin interceptor="com.github.pagehelper.PageHelper">  
+         <property name="dialect" value="oracle"/>  
+      </plugin>  
+   </plugins>
+  <environments default="development">  
+        <environment id="development">  
+            <transactionManager type="JDBC" />  
+            <dataSource type="POOLED">  
+                <property name="driver" value="${driver}" />  
+                <property name="url" value="${url}" />  
+                <property name="username" value="${username}" />  
+                <property name="password" value="${password}" />  
+            </dataSource>  
+        </environment>  
+    </environments>  
+    <!-- 映射文件配置 -->
+    <mappers>  
+        <mapper resource="com/zrcx/entity/DictMapper.xml" />
+        <mapper resource="com/zrcx/entity/TclassMapper.xml" />
+        <mapper resource="com/zrcx/entity/StudentMapper.xml" />
+    </mappers>  
+</configuration> 

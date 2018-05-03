@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+  <!-- 加载spring容器 -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!-- 配置启动运行servlet -->
+  <servlet>
+    <servlet-name>InitServlet</servlet-name>
+    <servlet-class>com.entor.common.InitServlet</servlet-class>
+    <!-- 一般填写1、2、3、4...代表启动的顺序 -->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>com.entor.common.EncodingFilter</filter-class>
+    <init-param>
+      <param-name>encodingType</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+	<!-- 登录验证过滤器 -->
+	<filter>
+		<filter-name>LoginFilter</filter-name>
+		<filter-class>com.entor.common.LoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>LoginFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+  <!-- 配置Struts2过滤器 -->
+  <filter>
+    <filter-name>struts2</filter-name>
+    <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
+	  </filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>struts2</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- 配置欢迎页面 -->
+  <welcome-file-list>
+    <welcome-file>common/login.jsp</welcome-file>
+  </welcome-file-list>
+	<!-- 自定义标签部署 -->
+	<jsp-config>
+		<taglib>
+			<!-- Jsp通过Uri直接引用标签库 -->
+			<taglib-uri>mt-uri</taglib-uri>
+			<!-- 默认在WEB－INF下查找 -->
+			<taglib-location>taglib/mt-rt.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+</web-app>

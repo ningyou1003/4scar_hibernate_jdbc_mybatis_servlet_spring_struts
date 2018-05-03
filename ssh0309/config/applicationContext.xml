@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+http://www.springframework.org/schema/beans/spring-beans-3.1.xsd   
+http://www.springframework.org/schema/context   
+http://www.springframework.org/schema/context/spring-context-3.1.xsd
+http://www.springframework.org/schema/aop 
+http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-3.1.xsd"
+	default-lazy-init="true">
+
+	<!-- 打开注解功能 -->
+	<context:annotation-config />
+	<!-- 打开自动扫描功能 -->
+	<context:component-scan base-package="com.zrcx" />
+
+	<!-- 加载db.properties配置文件 -->
+	<context:property-placeholder location="classpath:db.properties" />
+	<!-- 配置数据源需要commons-dbcp.jar和commons-pool.jar- -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${driver}" /><!-- 对应数据库的驱动 -->
+		<property name="url" value="${url}" />
+		<property name="username" value="${username1}" />
+		<property name="password" value="${password1}" />
+		<!-- 连接池启动时的初始值 -->
+		<property name="initialSize" value="${initialSize}" />
+		<!-- 连接池的最大值 -->
+		<property name="maxActive" value="${maxActive}" />
+		<!-- 最大空闲值.当经过一个高峰时间后,连接池可以慢慢将已经用不到的连接慢慢释放一部分,一直减少到maxIdle为止 -->
+		<property name="maxIdle" value="${maxIdle}" />
+		<!-- 最小空闲值.当空闲的连接数少于阀值时,连接池就会预申请去一些连接,以免洪峰来时来不及申请 -->
+		<property name="minIdle" value="${minIdle}" />
+	</bean>
+	
+	<!-- 创建会话工厂对象 -->
+	<bean id="sessionFactory" 
+		  class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<!-- 注入数据源 -->
+	<property name="dataSource" ref="dataSource"/>
+	
+	<!-- hibernate 配置文件的路径 -->
+	<property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+	
+	<!-- hibernate属性配置 -->
+	<!-- <property name="hibernateProperties">
+		<value>
+			hibernate.dialect=org.hibernate.dialect.OracleDialect
+			hibernate.show_sql=true
+			hibernate.hbm2ddl.auto=validate
+			hibernate.format_sql=false
+		</value> 
+	</property>-->
+	
+	<!-- 实体类映射文件配置 -->
+	<!-- <property name="mappingResources">
+		<list>
+			<value>com/zrcx/entity/User.hbm.xml</value>
+		</list>
+	</property> -->
+	
+	<!-- 配置hibernate映射文件的路径，可以使用通配符 -->
+	<property name="mappingLocations" value="classpath:com/zrcx/entity/*.hbm.xml"/>
+	
+	</bean> 
+	
+	<!-- 事务管理器配置 -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- 基于注解事务管理配置 -->
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
+	<!-- 定义事务通知,指定事务管理器 -->
+	<tx:advice id="transactionAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- 设置事务行为 --><!-- dao里面所有涉及会话的都要加事务 -->
+			<tx:method name="list*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<!-- 其它方法是用默认的事务行为 -->
+			<tx:method name="*" propagation="NOT_SUPPORTED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<!-- 定义切入点,确定要拦截的方法 -->
+		<aop:pointcut id="pc" expression="execution(* com.zrcx.dao.*.*(..))" />
+		<!-- 定义事务通知 -->
+		<aop:advisor pointcut-ref="pc" advice-ref="transactionAdvice" />
+	</aop:config>
+</beans>
+

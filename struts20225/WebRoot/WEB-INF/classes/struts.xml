@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <!-- 系统常量 -->
+    <!-- 请求URL的后缀 -->
+    <constant name="struts.action.extension" value="do"/>
+    <!-- 动态方法调用配置，默认false,建议不开启 -->
+    <constant name="struts.enable.DynamicMethodInvocation" value="fasle"/>
+    <!-- 当struts的配置文件修改后,系统是否自动重新加载该文件,默认值为false(生产环境下使用),开发阶段最好打开 -->
+    <constant name="struts.configuration.xml.reload" value="true"/>
+    <!--  开发模式下使用,这样可以打印出更详细的错误信息 -->
+ 	<constant name="struts.devMode" value="true" />
+ 	<!--默认的视图主题  simple-->
+    <constant name="struts.ui.theme" value="xhtml" />
+	<package name="p1" namespace="/" extends="struts-default">
+	    <!-- 拦截器配置 -->
+	    <interceptors>
+	       <interceptor name="mi1" class="com.zrcx.common.MyInterceptor1"/>
+	       <interceptor name="mi2" class="com.zrcx.common.MyInterceptor2"/>
+	       <!-- 拦截器栈 -->
+			<interceptor-stack name="myStack">
+				<!-- 引用拦截器 -->
+				<interceptor-ref name="mi1" />
+				<interceptor-ref name="mi2" />
+				<!-- 默认拦截器栈 -->
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+	    </interceptors>
+	    <!-- 默认拦截器 -->
+	    <default-interceptor-ref name="myStack"/>
+	    <!-- 全局结果跳转,必须在拦截器下面配置-->
+	    <global-results>
+	       <result name="index">/index.jsp</result>
+	       <result name="login">/login.jsp</result>
+	    </global-results>
+		<action name="registerAction" class="com.zrcx.action.RegisterAction" method="execute">
+			<!-- /代表web应用的根路径 -->
+			<result name="input">/index.jsp</result>
+			<!-- 引用拦截器 -->
+			<interceptor-ref name="mi1"/>			
+		</action>
+		<action name="test01Action" class="com.zrcx.action.Test01Action" method="execute">
+			<!-- 配置初始化参数 -->
+			<param name="name">我是注入参数</param>
+			<!-- /代表web应用的根路径 -->
+			<result name="test01">/test01.jsp</result>
+		</action>
+		<!-- 通配符的使用 -->
+		<action name="test02_*" class="com.zrcx.action.Test02Action" method="{1}">
+			<result name="index">/index.jsp</result>
+		</action>
+	</package>
+</struts>

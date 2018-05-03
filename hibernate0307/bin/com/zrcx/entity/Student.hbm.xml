@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.zrcx.entity">
+	<class name="Student" table="T_HBM_STUDENT">
+		<id name="id" column="ID">
+			<!-- 配置ID生成器 -->
+			<generator class="increment"/><!-- 组件，新增的时候用，查找最大的ID -->
+		</id>		<!-- 实体类的属性 ,数据库的名字 -->
+		<property name="name" column="NAME" />
+		<property name="sex" column="sex" />
+		<property name="birthday" column="BIRTHDAY" />
+		<property name="snative" column="NATIVE" />
+		<!-- <property name="classId" column="CLASS_ID" /> 级联不配置关联ID -->
+		<property name="createDate" column="CREATE_DATE" />
+		<!-- 多对一关联  cascade(级联操作none/all/save-update/delete) 一般配none，删除一个学生不能删除整个班级 -->
+		<many-to-one name="tclass" column="CLASS_ID" cascade="none"></many-to-one>
+	</class>
+</hibernate-mapping>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

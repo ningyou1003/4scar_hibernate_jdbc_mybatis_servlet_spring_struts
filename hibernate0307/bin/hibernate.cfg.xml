@@ -1,0 +1,36 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<!-- 会话工厂配置 -->
+<session-factory>
+	<property name="connection.driver_class">
+		oracle.jdbc.driver.OracleDriver
+	</property>
+	<property name="connection.url">
+		jdbc:oracle:thin:@127.0.0.1:1521:XE
+	</property>
+	<property name="connection.username">u01</property>
+	<property name="connection.password">u01</property>
+	<!-- 方言，告诉hibernate是哪种数据库 -->
+	<property name="dialect">
+		org.hibernate.dialect.OracleDialect
+	</property>
+	<!-- 是否打印sql -->
+	<property name="show_sql">true</property>
+	<!-- 是否让hibernate创建表结构 --><!-- update自动创建和更新表结构，validate验证表结构是否一致，不一致就抛异常 -->
+	<property name="hbm2ddl.auto">update</property>
+	<!-- 配置映射文件 -->
+	<property name="format_sql">flase</property><!-- sql格式化 -->
+	<!-- 抓取策略，每次抓取多少条 -->
+	<property name="jdbc.fetch_size">5</property>
+	<mapping resource="com/zrcx/entity/Dict.hbm.xml" />
+	<mapping resource="com/zrcx/entity/Tclass.hbm.xml" />
+	<mapping resource="com/zrcx/entity/Student.hbm.xml" />
+	<mapping resource="com/zrcx/entity/Menu.hbm.xml" />
+	<mapping resource="com/zrcx/entity/Role.hbm.xml" />
+	<mapping resource="com/zrcx/entity/Teacher.hbm.xml" />
+	<mapping resource="com/zrcx/entity/User.hbm.xml" />
+</session-factory>
+
+</hibernate-configuration>

@@ -1,0 +1,29 @@
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">  
+   <!-- 根据bean名称来映射,可以配置多个，用空格隔开 -->
+   <!-- 设置name属性表示url,必须以/开头 -->
+   <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+   <!--当请求到达控制器类的前提下，再加上参数方法名解析器,用于处理一个类有多个方法的情况 -->
+   <bean id="ParameterMethodNameResolver"
+         class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+      <!-- 参数名,在请求时加上参数=方法名 -->
+      <property name="paramName" value="mtd"/>
+   </bean>
+   <bean name="/user1.do" class="com.zrcx.controller.User1Controller" > 
+       <!-- 设置方法解析器 -->
+       <property name="methodNameResolver" ref="ParameterMethodNameResolver"/>
+   </bean>  
+   <!-- 视图解析配置  -->
+   <bean id="viewResolver"
+	     class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	  <property name="prefix" value="/"/>
+	  <property name="suffix" value=".jsp"/>
+   </bean>
+</beans>
+
+

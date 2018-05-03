@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- 系统常量 -->
+	<!-- 请求URL的后缀 -->
+	<constant name="struts.action.extension" value="do" />
+	<!-- 动态方法调用配置，默认false,建议不开启 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="fasle" />
+	<!-- 当struts的配置文件修改后,系统是否自动重新加载该文件,默认值为false(生产环境下使用),开发阶段最好打开 -->
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<!-- 开发模式下使用,这样可以打印出更详细的错误信息 -->
+	<constant name="struts.devMode" value="true" />
+	<!--默认的视图主题 simple -->
+	<constant name="struts.ui.theme" value="xhtml" />
+	<!-- 允许访问静态常量 -->
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+	<!-- 上传文件临时存放路径 -->
+	<constant name="struts.multipart.saveDir" value="/tmp" />
+	<!-- 上传文件最大值 5M -->
+	<constant name="struts.multipart.maxSize" value="5242880" />
+
+
+	<package name="p1" namespace="/" extends="json-default">
+		<!-- 全局结果跳转,必须在拦截器下面配置 -->
+		<global-results>
+			<result name="index">/index.jsp</result>
+			<result name="input">/index2.jsp</result>
+		</global-results>
+		
+		<action name="test01Action" class="com.zrcx.action.Test01Action"
+			method="execute">
+			<!-- /代表web应用的根路径 -->
+			<result name="test01">/test01.jsp</result>
+		</action>
+		<action name="test03Action" class="com.zrcx.action.Test03Action"
+			method="execute">
+			<!-- /代表web应用的根路径 -->
+			<result name="test03">/test03.jsp</result>
+		</action>
+		<action name="uploadAction" class="com.zrcx.action.UploadAction"
+			method="execute">
+			<result name="upload">/upload.jsp</result>
+		</action>
+
+		<!-- 文件下载action -->
+		<action name="downloadAction" class="com.zrcx.action.DownloadAction"
+			method="execute">
+			<result type="stream" name="success">
+				<!-- 配置attachment弹出下载窗口让用户选择保存 , 不配置则浏览器会判断能不能打开，能则打开，不能则提示下载 -->
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<!-- 对应用action获取输入流的属性名 -->
+				<param name="inputName">downloadFile</param>
+			</result>
+		</action>
+		<!-- ajax -->
+		<action name="ajaxAction" class="com.zrcx.action.AjaxAction"
+			method="execute">
+			<!-- 结果类型为json -->
+			<result type="json" name="success">  <!-- success 后台return要对应 -->
+				<param name="root">jsonTest</param> <!-- 与后台的jsonTest要对应 -->
+			</result>
+		</action>
+
+	</package>
+</struts>

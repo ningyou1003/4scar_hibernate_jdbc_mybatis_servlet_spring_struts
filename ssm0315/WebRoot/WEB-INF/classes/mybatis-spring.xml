@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">  
+<configuration>
+  <settings>
+     <!-- 将数据库字段命名规则A_COLUMN转换为Java使用的驼峰式命名规则aCloumn --> 
+     <setting name="mapUnderscoreToCamelCase" value="true" />
+     <!-- 打开二级缓存 -->
+     <setting name="cacheEnabled" value="false"/> 
+  </settings>
+  <typeAliases>
+    <!-- 指定实体所在的包路径，mybatis会自己到这里来找 -->  
+    <package name="com.zrcx.entity"/> 
+  </typeAliases>
+  <!-- 插件 -->
+  <plugins>  
+      <!-- mybatis分页插件 -->  
+      <plugin interceptor="com.github.pagehelper.PageHelper">  
+         <property name="dialect" value="oracle"/>  
+      </plugin>  
+   </plugins>
+</configuration> 
